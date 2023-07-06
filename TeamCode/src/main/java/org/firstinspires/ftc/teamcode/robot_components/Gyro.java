@@ -51,6 +51,7 @@ public class Gyro {
     public void resetHeading() {
         gyro.resetYaw();
     }
+
     private double[] getOrientation(AngleUnit unit) {
         angles = gyro.getRobotYawPitchRollAngles();
         double yaw = angles.getYaw(unit);
