@@ -7,9 +7,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class BallDrive {
-    DcMotor leftDrive;
-    DcMotor rightDrive;
-    DcMotor backDrive;
+    private DcMotor leftDrive;
+    private DcMotor rightDrive;
+    private DcMotor backDrive;
+
+    private double lp;
+    private double rp;
+    private double bp;
 
     Telemetry telemetry;
 
@@ -25,15 +29,17 @@ public class BallDrive {
         rightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void setDrivePowers(double lp, double rp, double bp){
+    public void calculateDrivePowers(double x, double y, double rot){
+        bp = x;
+        lp = y - rot;
+        rp = y + rot;
+
+        setMotorPowers();
+    }
+
+    private void setMotorPowers(){
         leftDrive.setPower(lp);
         rightDrive.setPower(rp);
         backDrive.setPower(bp);
-    }
-
-    public void setDrivePowers(double[] powers){
-        leftDrive.setPower(powers[0]);
-        rightDrive.setPower(powers[1]);
-        backDrive.setPower(powers[2]);
     }
 }
