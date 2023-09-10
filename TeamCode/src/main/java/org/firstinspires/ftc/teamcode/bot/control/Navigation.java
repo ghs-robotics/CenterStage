@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.robot.control;
+package org.firstinspires.ftc.teamcode.bot.control;
 
-import org.firstinspires.ftc.teamcode.robot.components.Gyro;
-import org.firstinspires.ftc.teamcode.robot.components.drive.Drivebase;
+import org.firstinspires.ftc.teamcode.bot.components.Gyro;
+import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 
 public class Navigation {
     private int x;
@@ -14,6 +14,10 @@ public class Navigation {
     public Navigation(Drivebase drive, Gyro gyro){
         this.drive = drive;
         this.gyro = gyro;
+    }
+
+    public void updatePosition(){
+
     }
 
     public int getX(){

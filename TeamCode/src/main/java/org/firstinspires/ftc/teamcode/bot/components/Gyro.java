@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot.components;
+package org.firstinspires.ftc.teamcode.bot.components;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 
