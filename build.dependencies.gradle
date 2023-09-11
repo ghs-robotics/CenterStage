@@ -4,6 +4,9 @@ repositories {
     flatDir {
         dirs rootProject.file('libs')
     }
+    maven {
+        url = 'https://maven.brott.dev/'
+    }
 }
 
 dependencies {
@@ -28,5 +31,6 @@ dependencies {
 
     // dashboard
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.12'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
 }
 
