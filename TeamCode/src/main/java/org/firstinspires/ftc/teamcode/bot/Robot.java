@@ -27,6 +27,7 @@ public class Robot {
         drive = new BallDrive(hardwareMap);
         gyro = new Gyro(hardwareMap);
 
+        nav = new Navigation(drive, gyro);
     }
 
     public void init(){
