@@ -5,9 +5,17 @@ import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 
 public class Navigation {
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private double heading;
+
+    private int leftEncoder;
+    private int rightEncoder;
+    private int backEncoder;
+
+    private final double leftTrackingDistance = 4;
+    private final double rightTrackingDistance = 4;
+    private final double backTrackingDistance = 4;
 
     Drivebase drive;
     Gyro gyro;
@@ -20,20 +28,38 @@ public class Navigation {
     }
 
     public void updatePosition(){
-        this.x = (int) Math.round(drive.getEncoderTicks()[0]);
-        this.y = (int) Math.round(drive.getEncoderTicks()[1]);
-        this.heading = gyro.getHeading(AngleUnit.DEGREES);
+        updateEncoders();
+
+        // update x position
+        this.x = 2 * (backEncoder / heading + backTrackingDistance) * (Math.sin(heading / 2));
+
+        // update y position
+        this.y = 2 * (rightEncoder / heading + rightTrackingDistance) * (Math.sin(heading / 2));
+
+        // update rotation using encoders in rads
+        this.heading = (leftEncoder - rightEncoder) / (leftTrackingDistance + rightTrackingDistance);
+
+        this.heading = gyro.getHeading(AngleUnit.RADIANS);
 
     }
 
-    public int getX(){
+    private void updateEncoders() {
+        leftEncoder = (int) Math.round(drive.getEncoderTicks()[0]);
+        rightEncoder = (int) Math.round(drive.getEncoderTicks()[1]);
+        backEncoder = (int) Math.round(drive.getEncoderTicks()[2]);
+    }
+
+    public double getX(){
         return x;
     }
 
-    public int getY(){
+    public double getY(){
         return y;
     }
 
+    /**
+     * @return heading of the robot in only radians
+     */
     public double getHeading(){
         return heading;
     }

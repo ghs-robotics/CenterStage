@@ -15,7 +15,7 @@ public class Robot {
     Telemetry telemetry;
 
     public Drivebase drive;
-    Gyro gyro;
+    private Gyro gyro;
 
     Navigation nav;
 
@@ -32,5 +32,16 @@ public class Robot {
 
     public void init(){
         //init cameras
+    }
+
+    public void getTelemetry(){
+        positionTelemetry();
+    }
+
+    private void positionTelemetry(){
+        telemetry.addData("x pos: ", nav.getX());
+        telemetry.addData("y pos: ", nav.getY());
+        telemetry.addData("heading: ", nav.getHeading());
+        telemetry.addLine();
     }
 }
