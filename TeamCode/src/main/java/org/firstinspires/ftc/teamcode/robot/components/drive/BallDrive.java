@@ -23,7 +23,7 @@ public class BallDrive implements Drivebase {
         backDrive = hardwareMap.get(DcMotor.class, "back");
 
         leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        backDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        backDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
