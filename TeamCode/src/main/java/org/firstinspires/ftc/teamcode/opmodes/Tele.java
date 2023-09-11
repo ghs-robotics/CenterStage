@@ -3,16 +3,19 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.bot.Robot;
 
 @TeleOp
 public class Tele extends LinearOpMode {
-    Robot robot = new Robot(hardwareMap, telemetry);
+    Robot robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot = new Robot(hardwareMap, telemetry);
 
         waitForStart();
+        telemetry.addLine("Initializing");
+        telemetry.update();
 
         while (opModeIsActive()){
 

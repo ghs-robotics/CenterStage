@@ -1,9 +1,7 @@
-package org.firstinspires.ftc.teamcode.robot.components.drive;
+package org.firstinspires.ftc.teamcode.bot.components.drive;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumDrive implements Drivebase{
 
@@ -14,10 +12,10 @@ public class MecanumDrive implements Drivebase{
 
 
     public MecanumDrive(HardwareMap hardwareMap){
-        frontLeft = hardwareMap.get(DcMotor.class,"FLDrive");
-        backLeft = hardwareMap.get(DcMotor.class,"BLDrive");
-        frontRight = hardwareMap.get(DcMotor.class,"FRDrive");
-        backRight = hardwareMap.get(DcMotor.class,"BRDrive");
+//        frontLeft = hardwareMap.get(DcMotor.class,"FLDrive");
+//        backLeft = hardwareMap.get(DcMotor.class,"BLDrive");
+//        frontRight = hardwareMap.get(DcMotor.class,"FRDrive");
+//        backRight = hardwareMap.get(DcMotor.class,"BRDrive");
     }
 
     @Override

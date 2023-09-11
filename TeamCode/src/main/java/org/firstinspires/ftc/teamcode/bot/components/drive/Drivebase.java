@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot.components.drive;
+package org.firstinspires.ftc.teamcode.bot.components.drive;
 
 public interface Drivebase {
     void calculateDrivePowers(double x, double y, double rot);
