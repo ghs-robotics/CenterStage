@@ -22,6 +22,8 @@ public class Robot {
     Intake intake;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
+        this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
         drive = new BallDrive(hardwareMap);
         gyro = new Gyro(hardwareMap);
 

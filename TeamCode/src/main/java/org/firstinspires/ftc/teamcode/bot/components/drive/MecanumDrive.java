@@ -12,10 +12,10 @@ public class MecanumDrive implements Drivebase{
 
 
     public MecanumDrive(HardwareMap hardwareMap){
-        frontLeft = hardwareMap.get(DcMotor.class,"FLDrive");
-        backLeft = hardwareMap.get(DcMotor.class,"BLDrive");
-        frontRight = hardwareMap.get(DcMotor.class,"FRDrive");
-        backRight = hardwareMap.get(DcMotor.class,"BRDrive");
+//        frontLeft = hardwareMap.get(DcMotor.class,"FLDrive");
+//        backLeft = hardwareMap.get(DcMotor.class,"BLDrive");
+//        frontRight = hardwareMap.get(DcMotor.class,"FRDrive");
+//        backRight = hardwareMap.get(DcMotor.class,"BRDrive");
     }
 
     @Override
