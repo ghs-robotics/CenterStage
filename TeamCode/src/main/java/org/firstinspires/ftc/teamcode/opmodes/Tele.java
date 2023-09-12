@@ -13,9 +13,12 @@ public class Tele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
 
-        waitForStart();
+        robot.init();
+
         telemetry.addLine("Initializing");
         telemetry.update();
+
+        waitForStart();
 
         while (opModeIsActive()){
 
@@ -37,6 +40,7 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
+            robot.update();
             robot.getTelemetry();
             telemetry.update();
         }

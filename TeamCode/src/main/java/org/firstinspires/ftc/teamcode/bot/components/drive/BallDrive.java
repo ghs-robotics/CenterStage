@@ -13,7 +13,6 @@ public class BallDrive implements Drivebase {
     private double rp;
     private double bp;
 
-
     public BallDrive(HardwareMap hardwareMap) {
 
         leftDrive = hardwareMap.get(DcMotor.class, "left");
@@ -21,7 +20,7 @@ public class BallDrive implements Drivebase {
         backDrive = hardwareMap.get(DcMotor.class, "back");
 
         leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        backDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        backDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
@@ -39,6 +38,17 @@ public class BallDrive implements Drivebase {
         int[] ticks = {leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition(),
                 backDrive.getCurrentPosition()};
         return ticks;
+    }
+
+    @Override
+    public void resetEncoders() {
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private void setMotorPowers(){

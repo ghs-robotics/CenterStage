@@ -32,6 +32,11 @@ public class Robot {
 
     public void init(){
         //init cameras
+        drive.resetEncoders();
+    }
+
+    public void update(){
+        nav.updatePosition();
     }
 
     public void getTelemetry(){
@@ -41,7 +46,8 @@ public class Robot {
     private void positionTelemetry(){
         telemetry.addData("x pos: ", nav.getX());
         telemetry.addData("y pos: ", nav.getY());
-        telemetry.addData("heading: ", nav.getHeading());
+        telemetry.addData("odo heading: ", Math.toDegrees(nav.getOdoHeading()));
+        telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));
         telemetry.addLine();
     }
 }
