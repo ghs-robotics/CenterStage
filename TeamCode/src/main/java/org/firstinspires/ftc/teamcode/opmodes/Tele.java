@@ -20,8 +20,8 @@ public class Tele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
         intake = new Intake(hardwareMap, telemetry);
-        lift = new Lift(hardwareMap, telemetry);
-        outtake = new Outtake(hardwareMap, telemetry);
+//        lift = new Lift(hardwareMap, telemetry);
+//        outtake = new Outtake(hardwareMap, telemetry);
 
 
         waitForStart();
@@ -42,29 +42,30 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
-            if (gamepad2.dpad_left) {
-                intake.pixelIn();
-            }
+            intake.pixelIn(gamepad2.dpad_left);
+            telemetry.addData("intake", gamepad2.dpad_left);
 
-            if (gamepad2.dpad_up) {
-                lift.raiseLift();
-            }
 
-            if (gamepad2.dpad_right) {
-                outtake.pixelOut();
-            }
+//            if (gamepad2.dpad_up) {
+//                lift.raiseLift();
+//            }
 
-            if (gamepad2.a) {
-                lift.setLow();
-            }
+//            if (gamepad2.dpad_right) {
+//                outtake.pixelOut();
+//            }
 
-            if (gamepad2.x) {
-                lift.setMid();
-            }
-
-            if (gamepad2.y) {
-                lift.setHigh();
-            }
+//            if (gamepad2.a) {
+//                lift.setLow();
+//            }
+//
+//            if (gamepad2.x) {
+//                lift.setMid();
+//            }
+//
+//            if (gamepad2.y) {
+//                lift.setHigh();
+//            }
+            telemetry.update();
         }
     }
 }

@@ -15,11 +15,11 @@ public class Lift {
     public static final int MID = 400;
     public static final int HIGH = 600;
 
-    public Lift (HardwareMap hardwareMap, Telemetry telemetry) {
-        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
-        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
-        telemetry.update();
-    }
+//    public Lift (HardwareMap hardwareMap, Telemetry telemetry) {
+//        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
+//        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
+//        telemetry.update();
+//    }
 
     public void raiseLift () {
         if (liftMotor1.getCurrentPosition() >= MIN && liftMotor1.getCurrentPosition() <= MAX) {

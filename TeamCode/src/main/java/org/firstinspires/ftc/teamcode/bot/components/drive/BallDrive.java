@@ -44,6 +44,6 @@ public class BallDrive implements Drivebase {
     private void setMotorPowers(){
         leftDrive.setPower(lp);
         rightDrive.setPower(rp);
-        backDrive.setPower(-bp);
+        backDrive.setPower(bp);
     }
 }

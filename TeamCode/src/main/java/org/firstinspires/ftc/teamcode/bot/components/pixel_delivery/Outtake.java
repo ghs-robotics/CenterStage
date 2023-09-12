@@ -8,10 +8,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Outtake {
     CRServo outServo;
 
-    public Outtake (HardwareMap hardwareMap, Telemetry telemetry) {
-        outServo = hardwareMap.get(CRServo.class, "outServo");
-        telemetry.update();
-    }
+//    public Outtake (HardwareMap hardwareMap, Telemetry telemetry) {
+//        outServo = hardwareMap.get(CRServo.class, "outServo");
+//        telemetry.update();
+//    }
 
     public void pixelOut () {
         outServo.setPower(1);
