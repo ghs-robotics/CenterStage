@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
-import android.graphics.HardwareRenderer;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -14,19 +12,43 @@ public class Intake {
     DcMotor intakeMotor;
     Servo intakeServo;
 
+    // TODO: make one position for each pixel (5 in each stack) (2 more)
+    double[] pos = {0.02, 0.07, 0.1};
 
+    int intakeLvl = 60;
 
     public Intake (HardwareMap hardwareMap, Telemetry telemetry) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+        intakeServo = hardwareMap.get(Servo.class, "intakeServo");
+
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         telemetry.update();
     }
 
     public void pixelIn (boolean press) {
         if (press) {
-            intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             intakeMotor.setPower(0.5);
         } else {
             intakeMotor.setPower(0);
         }
+    }
+
+    private void setHeight () {
+        intakeServo.setPosition(pos[Math.abs(intakeLvl % pos.length)]);
+    }
+
+    public void changeIntakeHeight(boolean decrease, boolean increase) {
+        if (decrease) {
+            intakeLvl -= 1;
+        }
+        if (increase) {
+            intakeLvl += 1;
+        }
+        setHeight();
+    }
+
+    public double getServoPos () {
+        return intakeServo.getPosition();
     }
 }
