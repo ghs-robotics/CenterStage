@@ -9,11 +9,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 // todo needs renaming
 public class Intake {
-    DcMotor intakeMotor;
-    Servo intakeServo;
+    private DcMotor intakeMotor;
+    private Servo intakeServo;
 
     // TODO: make one position for each pixel (5 in each stack) (2 more)
-    double[] pos = {0.02, 0.07, 0.1};
+    double[] pos = {0.01, 0.07, 0.1};
 
     int intakeLvl = 60;
 

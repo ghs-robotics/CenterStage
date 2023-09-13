@@ -6,8 +6,8 @@ public class AutoActions {
     public static final int MOVE = 0;
     public static final int INTAKE = 1;
     public static final int DELIVER = 2;
-    public static final int PLACE = 4;
-    public static final int ALIGN = 5;
+    public static final int PLACE = 3;
+    public static final int ALIGN = 4;
 
     private int identity;
     private boolean endAction;

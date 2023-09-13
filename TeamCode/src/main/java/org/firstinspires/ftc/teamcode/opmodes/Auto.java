@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoRunner;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
 
 @Autonomous
-public class Auto extends LinearOpMode {
+public class  Auto extends LinearOpMode {
     Robot robot = new Robot(hardwareMap, telemetry);
     AutoRunner runner = new AutoRunner(robot);
 
