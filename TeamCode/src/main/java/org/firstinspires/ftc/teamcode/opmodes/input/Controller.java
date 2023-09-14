@@ -25,35 +25,23 @@ public class Controller {
     public double left_trigger;
     public double right_trigger;
 
-    ArrayList<Button> buttons;
-    ArrayList<Boolean> gamepadButtons;
-
-
     public Controller(Gamepad gamepad){
         this.gamepad = gamepad;
-
-        buttons = new ArrayList<Button>();
-        gamepadButtons = new ArrayList<Boolean>();
-
-        buttons.add(a);
-        buttons.add(b);
-        buttons.add(x);
-        buttons.add(y);
-        buttons.add(left_bumper);
-        buttons.add(right_bumper);
-        buttons.add(dpad_left);
-        buttons.add(dpad_right);
-        buttons.add(dpad_up);
-        buttons.add(dpad_down);
 
         update();
     }
 
     public void update(){
-        updateButtons();
-
-        for (int i = 0; i < buttons.size(); i++)
-            buttons.get(i).update(gamepadButtons.get(i));
+        a.update(gamepad.a);
+        b.update(gamepad.b);
+        x.update(gamepad.x);
+        y.update(gamepad.y);
+        left_bumper.update(gamepad.left_bumper);
+        right_bumper.update(gamepad.right_bumper);
+        dpad_left.update(gamepad.dpad_left);
+        dpad_right.update(gamepad.dpad_right);
+        dpad_up.update(gamepad.dpad_up);
+        dpad_down.update(gamepad.dpad_down);
 
         left_stick_x = gamepad.left_stick_x;
         left_stick_y = gamepad.left_stick_y;
@@ -63,21 +51,4 @@ public class Controller {
         right_trigger = gamepad.right_trigger;
 
     }
-
-    private void updateButtons(){
-        gamepadButtons.clear();
-
-        gamepadButtons.add(gamepad.a);
-        gamepadButtons.add(gamepad.b);
-        gamepadButtons.add(gamepad.x);
-        gamepadButtons.add(gamepad.y);
-        gamepadButtons.add(gamepad.left_bumper);
-        gamepadButtons.add(gamepad.right_bumper);
-        gamepadButtons.add(gamepad.dpad_left);
-        gamepadButtons.add(gamepad.dpad_right);
-        gamepadButtons.add(gamepad.dpad_up);
-        gamepadButtons.add(gamepad.dpad_down);
-    }
-
-
 }
