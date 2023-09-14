@@ -28,7 +28,7 @@ public class AutoRunner {
         actionList.add(new AutoActions(action, params));
     }
     public void add(int action){
-        actionList.add(new AutoActions(action, new ParamHandler(action)));
+        actionList.add(new AutoActions(action));
     }
 
     private void nextAction(){

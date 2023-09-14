@@ -5,7 +5,7 @@ public class ParamHandler {
     private double[] targetPosition = new double[3];
 
 
-    public ParamHandler(int action){
+    public ParamHandler(){
         hasParams = false;
     }
 
