@@ -1,4 +1,11 @@
 package org.firstinspires.ftc.teamcode.cv;
 
-public class TeamPropPipeline {
+import org.opencv.core.Mat;
+import org.openftc.easyopencv.OpenCvPipeline;
+
+public class TeamPropPipeline extends OpenCvPipeline {
+    @Override
+    public Mat processFrame(Mat input) {
+        return null;
+    }
 }
