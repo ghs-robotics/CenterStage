@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
 
+import org.firstinspires.ftc.teamcode.bot.Robot;
+
 public class AutoActions {
     // identities
     public static final int MOVE = 0;
@@ -13,14 +15,17 @@ public class AutoActions {
     private boolean endAction;
 
     private int zone;
-    ParamHandler params;
 
-    public AutoActions(int id){
+    ParamHandler params;
+    private Robot robot;
+
+    public AutoActions(int id, Robot robot){
         this.identity = id;
+        this.robot = robot;
     }
 
-    public AutoActions(int id, ParamHandler params){
-        this.identity = id;
+    public AutoActions(int id, Robot robot,ParamHandler params){
+        this(id, robot);
         this.params = params;
     }
 
@@ -46,11 +51,7 @@ public class AutoActions {
     }
 
     private void moveTo(){
-        // get current pos
-        // calculate diff
-        // set power
-        // repeat until diff is 0 or in an acceptable range
-        // set endAction to true
+        robot.nav.runToPosition(params.x, params.y, params.heading);
     }
 
     private void runIntake(){
@@ -82,11 +83,16 @@ public class AutoActions {
         return endAction;
     }
 
-    // checks which action this object will execute
+    /**
+     * @return the action this object will execute
+     */
     public int getIdentity() {
         return identity;
     }
 
+    /**
+     * @return the area the
+     */
     public int getZone(){
         return zone;
     }

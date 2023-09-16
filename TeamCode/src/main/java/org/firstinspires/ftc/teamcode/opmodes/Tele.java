@@ -4,32 +4,26 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-
-import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
-import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Lift;
-import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Outtake;
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
 public class Tele extends LinearOpMode {
     Robot robot;
-    Intake intake;
-    Lift lift;
-    Outtake outtake;
     Controller con1;
     Controller con2;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
-//        lift = new Lift(hardwareMap, telemetry);
-//        outtake = new Outtake(hardwareMap, telemetry);
         con1 = new Controller(gamepad1);
         con2 = new Controller(gamepad2);
 
-        waitForStart();
+        robot.init();
+
         telemetry.addLine("Initializing");
         telemetry.update();
+
+        waitForStart();
 
         while (opModeIsActive()){
             con1.update();
@@ -46,19 +40,16 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
-            intake.pixelIn(con2.dpad_left.pressing());
-            telemetry.addData("intake", con2.dpad_left.pressing());
 
-            intake.changeIntakeHeight(con2.left_bumper.pressed(), con2.right_bumper.pressed());
 
-            telemetry.addData("servo down", con2.left_bumper.pressed());
-            telemetry.addData("servo up", con2.right_bumper.pressed());
 
-            telemetry.addData("intakeServoPos", intake.getServoPos());
-
-//            if (gamepad2.dpad_up) {
-//                lift.raiseLift();
-//            }
+            //-------------------------------------------------------------------------------------
+            //                                  TELEMETRY
+            //-------------------------------------------------------------------------------------
+            robot.update();
+            robot.getTelemetry();
+            telemetry.update();
+        }
 
 //            if (gamepad2.dpad_right) {
 //                outtake.pixelOut();

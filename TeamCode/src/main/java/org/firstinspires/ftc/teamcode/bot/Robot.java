@@ -16,9 +16,9 @@ public class Robot {
     Telemetry telemetry;
 
     public Drivebase drive;
-    Gyro gyro;
+    public Navigation nav;
+    private Gyro gyro;
 
-    Navigation nav;
 
     Intake intake;
     Lift lift;
@@ -29,6 +29,7 @@ public class Robot {
         drive = new BallDrive(hardwareMap);
         gyro = new Gyro(hardwareMap);
 
+        nav = new Navigation(drive, gyro);
         intake = new Intake(hardwareMap);
         lift = new Lift(hardwareMap);
 
@@ -36,5 +37,22 @@ public class Robot {
 
     public void init(){
         //init cameras
+        drive.resetEncoders();
+    }
+
+    public void update(){
+        nav.updatePosition();
+    }
+
+    public void getTelemetry(){
+        positionTelemetry();
+    }
+
+    private void positionTelemetry(){
+        telemetry.addData("x pos: ", nav.getX());
+        telemetry.addData("y pos: ", nav.getY());
+        telemetry.addData("odo heading: ", Math.toDegrees(nav.getOdoHeading()));
+        telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));
+        telemetry.addLine();
     }
 }

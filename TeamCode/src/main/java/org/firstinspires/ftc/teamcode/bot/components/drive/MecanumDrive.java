@@ -36,6 +36,11 @@ public class MecanumDrive implements Drivebase{
         return ticks;
     }
 
+    @Override
+    public void resetEncoders() {
+
+    }
+
     private void setMotorPowers(double fl, double bl, double fr, double br){
             frontLeft.setPower(fl);
             backLeft.setPower(bl);
