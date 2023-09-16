@@ -22,7 +22,6 @@ public class Tele extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
-        intake = new Intake(hardwareMap, telemetry);
 //        lift = new Lift(hardwareMap, telemetry);
 //        outtake = new Outtake(hardwareMap, telemetry);
         con1 = new Controller(gamepad1);

@@ -6,25 +6,29 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Lift {
-    DcMotor liftMotor1;
-    DcMotor liftMotor2;
+    private DcMotor liftMotor1;
+    private DcMotor liftMotor2;
 
     public static final int MIN = 0;
-    public static final int MAX = 1000;
-    public static final int LOW = 200;
-    public static final int MID = 400;
-    public static final int HIGH = 600;
+    public static final int MAX = 500;
+    public static final int LOW = 100;
+    public static final int MID = 200;
+    public static final int HIGH = 500;
 
-//    public Lift (HardwareMap hardwareMap, Telemetry telemetry) {
-//        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
-//        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
-//        telemetry.update();
-//    }
+    public Lift (HardwareMap hardwareMap) {
+        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
+        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
+    }
 
     public void raiseLift () {
         if (liftMotor1.getCurrentPosition() >= MIN && liftMotor1.getCurrentPosition() <= MAX) {
             liftMotor1.setPower(1);
         }
+    }
+
+    public void driveLift(double power){
+        liftMotor1.setPower(power);
+        liftMotor2.setPower(power);
     }
 
     public void setLow () {
@@ -37,5 +41,9 @@ public class Lift {
 
     public void setHigh () {
         liftMotor1.setTargetPosition(HIGH);
+    }
+
+    public int getLiftPosition(){
+        return liftMotor1.getCurrentPosition();
     }
 }
