@@ -46,4 +46,12 @@ public class Lift {
     public int getLiftPosition(){
         return liftMotor1.getCurrentPosition();
     }
+
+    public void resetEncoders(){
+        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }

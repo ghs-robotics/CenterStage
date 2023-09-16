@@ -19,9 +19,8 @@ public class Robot {
     public Navigation nav;
     private Gyro gyro;
 
-
-    Intake intake;
-    Lift lift;
+    public Intake intake;
+    public Lift lift;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
@@ -38,6 +37,7 @@ public class Robot {
     public void init(){
         //init cameras
         drive.resetEncoders();
+        lift.resetEncoders();
     }
 
     public void update(){
@@ -45,6 +45,7 @@ public class Robot {
     }
 
     public void getTelemetry(){
+        liftTelemetry();
         positionTelemetry();
     }
 
@@ -53,6 +54,11 @@ public class Robot {
         telemetry.addData("y pos: ", nav.getY());
         telemetry.addData("odo heading: ", Math.toDegrees(nav.getOdoHeading()));
         telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));
+        telemetry.addLine();
+    }
+
+    private void liftTelemetry(){
+        telemetry.addData("lift position: ", lift.getLiftPosition());
         telemetry.addLine();
     }
 }
