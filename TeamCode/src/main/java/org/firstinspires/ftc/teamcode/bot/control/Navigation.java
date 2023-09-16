@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 
 public class Navigation {
+    // axis based on the robot's starting position
     private double x;
     private double y;
     private double odoHeading;
@@ -36,6 +37,10 @@ public class Navigation {
         this.drive = drive;
         this.gyro = gyro;
 
+        this.x = 0;
+        this.y = 0;
+
+        gyro.resetHeading();
         updatePosition();
     }
 

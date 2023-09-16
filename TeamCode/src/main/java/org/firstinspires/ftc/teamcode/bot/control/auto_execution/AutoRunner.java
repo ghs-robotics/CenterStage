@@ -25,10 +25,11 @@ public class AutoRunner {
     }
 
     public void add(int action, ParamHandler params){
-        actionList.add(new AutoActions(action, params));
+        actionList.add(new AutoActions(action, robot, params));
     }
+
     public void add(int action){
-        actionList.add(new AutoActions(action));
+        actionList.add(new AutoActions(action, robot));
     }
 
     private void nextAction(){

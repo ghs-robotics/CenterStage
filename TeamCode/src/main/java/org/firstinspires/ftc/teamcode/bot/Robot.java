@@ -15,9 +15,9 @@ public class Robot {
     Telemetry telemetry;
 
     public Drivebase drive;
+    public Navigation nav;
     private Gyro gyro;
 
-    Navigation nav;
 
     Intake intake;
 
