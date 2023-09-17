@@ -17,13 +17,11 @@ public class Intake {
 
     int intakeLvl = 60;
 
-    public Intake (HardwareMap hardwareMap, Telemetry telemetry) {
+    public Intake (HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
         intakeServo = hardwareMap.get(Servo.class, "intakeServo");
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        telemetry.update();
     }
 
     public void pixelIn (boolean press) {
