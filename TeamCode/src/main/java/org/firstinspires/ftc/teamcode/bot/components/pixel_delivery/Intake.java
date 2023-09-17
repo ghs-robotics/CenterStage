@@ -13,7 +13,7 @@ public class Intake {
     private Servo intakeServo;
 
     // TODO: make one position for each pixel (5 in each stack) (2 more)
-    double[] pos = {0.01, 0.07, 0.1};
+    double[] pos = {0.01, 0.06, 0.09, 0.13, 0.16, 0.2};
 
     int intakeLvl = 60;
 
@@ -34,10 +34,6 @@ public class Intake {
         }
     }
 
-    private void setHeight () {
-        intakeServo.setPosition(pos[Math.abs(intakeLvl % pos.length)]);
-    }
-
     public void changeIntakeHeight(boolean decrease, boolean increase) {
         if (decrease) {
             intakeLvl -= 1;
@@ -51,4 +47,9 @@ public class Intake {
     public double getServoPos () {
         return intakeServo.getPosition();
     }
+
+    private void setHeight () {
+        intakeServo.setPosition(pos[Math.abs(intakeLvl % pos.length)]);
+    }
 }
+

@@ -10,10 +10,10 @@ public class Lift {
     DcMotor liftMotor2;
 
     public static final int MIN = 0;
-    public static final int MAX = 1000;
-    public static final int LOW = 200;
-    public static final int MID = 400;
-    public static final int HIGH = 600;
+    public static final int MAX = 100;
+    public static final int LOW = 20;
+    public static final int MID = 40;
+    public static final int HIGH = 60;
 
 //    public Lift (HardwareMap hardwareMap, Telemetry telemetry) {
 //        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
@@ -27,15 +27,15 @@ public class Lift {
         }
     }
 
-    public void setLow () {
+    public void moveToLow () {
         liftMotor1.setTargetPosition(LOW);
     }
 
-    public void setMid () {
+    public void moveToMid () {
         liftMotor1.setTargetPosition(MID);
     }
 
-    public void setHigh () {
+    public void moveToHigh () {
         liftMotor1.setTargetPosition(HIGH);
     }
 }

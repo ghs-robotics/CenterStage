@@ -66,15 +66,15 @@ public class Tele extends LinearOpMode {
 //            }
 
 //            if (gamepad2.a) {
-//                lift.setLow();
+//                lift.moveToLow();
 //            }
 //
 //            if (gamepad2.x) {
-//                lift.setMid();
+//                lift.moveToMid();
 //            }
 //
 //            if (gamepad2.y) {
-//                lift.setHigh();
+//                lift.moveToHigh();
 //            }
             telemetry.update();
         }
