@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.bot.Robot;
 
 import java.util.ArrayList;
 
-public class AutoRunner {
+public class AutoActionHandler {
     private ArrayList<AutoActions> actionList;
     private AutoActions current;
 
@@ -12,7 +12,7 @@ public class AutoRunner {
 
     private int zone;
 
-    public AutoRunner(Robot robot){
+    public AutoActionHandler(Robot robot){
         this.actionList = new ArrayList<AutoActions>();
         this.robot = robot;
     }
