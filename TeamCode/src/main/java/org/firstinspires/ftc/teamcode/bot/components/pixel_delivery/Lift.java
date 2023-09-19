@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -18,6 +19,8 @@ public class Lift {
     public Lift (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
+
+        liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void raiseLift () {

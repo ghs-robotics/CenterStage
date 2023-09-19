@@ -23,14 +23,14 @@ public class  Auto extends LinearOpMode {
         robot.init();
 
         // create list of actions to run
-        runner.add(MOVE, new ParamHandler());
+        runner.add(MOVE);
         for (int i = 0; i < cycle; i++) {
             runner.add(DELIVER);
-            runner.add(MOVE, new ParamHandler());
+            runner.add(MOVE);
             runner.add(INTAKE);
-            runner.add(MOVE, new ParamHandler());
+            runner.add(MOVE);
         }
-        runner.add(MOVE, new ParamHandler());
+        runner.add(MOVE);
         runner.add(PLACE);
         runner.add(MOVE);
 
