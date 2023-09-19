@@ -18,7 +18,6 @@ public class Outtake {
     }
 
     public void pixelOut () {
-
         extensionServo.setPower(1);
     }
 }
