@@ -2,18 +2,23 @@ package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
-    CRServo outServo;
+    private CRServo extensionServo;
+    private Servo droppingServo;
 
-    public Outtake (HardwareMap hardwareMap, Telemetry telemetry) {
-        outServo = hardwareMap.get(CRServo.class, "outServo");
-        telemetry.update();
+    private ElapsedTime timer;
+
+    public Outtake (HardwareMap hardwareMap) {
+        extensionServo = hardwareMap.get(CRServo.class, "extend");
+        droppingServo = hardwareMap.get(Servo.class, "drop");
+        timer.reset();
     }
 
     public void pixelOut () {
-        outServo.setPower(1);
+
+        extensionServo.setPower(1);
     }
 }
