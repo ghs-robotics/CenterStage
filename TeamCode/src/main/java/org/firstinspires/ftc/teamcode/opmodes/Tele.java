@@ -45,15 +45,15 @@ public class Tele extends LinearOpMode {
 //            }
 
 //            if (gp2.a) {
-//                lift.setLow();
+//                lift.moveToLow();
 //            }
 //
 //            if (gp2.x) {
-//                lift.setMid();
+//                lift.moveToMid();
 //            }
 //
 //            if (gp2.y) {
-//                lift.setHigh();
+//                lift.moveToHigh();
 //            }
 
             //-------------------------------------------------------------------------------------
