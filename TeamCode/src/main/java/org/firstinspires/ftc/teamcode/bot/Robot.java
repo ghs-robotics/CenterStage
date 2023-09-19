@@ -57,6 +57,11 @@ public class Robot {
         telemetry.addLine();
     }
 
+    private void intakeTelemetry(){
+        telemetry.addData("intake position: ", intake.getIntakePos());
+        telemetry.addLine();
+    }
+
     private void liftTelemetry(){
         telemetry.addData("lift position: ", lift.getLiftPosition());
         telemetry.addLine();
