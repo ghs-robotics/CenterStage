@@ -42,8 +42,8 @@ public class Intake {
         setHeight();
     }
 
-    public double getServoPos () {
-        return intakeServo.getPosition();
+    public int getIntakePos () {
+        return Math.abs(intakeLvl % pos.length);
     }
 
     private void setHeight () {
