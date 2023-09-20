@@ -46,6 +46,7 @@ public class Robot {
 
     public void getTelemetry(){
         liftTelemetry();
+        intakeTelemetry();
         positionTelemetry();
     }
 
