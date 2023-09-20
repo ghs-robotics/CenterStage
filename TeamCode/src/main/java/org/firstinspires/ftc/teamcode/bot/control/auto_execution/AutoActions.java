@@ -55,8 +55,7 @@ public class AutoActions {
     }
 
     private void runIntake(){
-        // start runIntake
-        // use timer to make sure the bot has enough time to intake
+        robot.
     }
 
     private void runDelivery(){
