@@ -60,7 +60,7 @@ public class Navigation {
 
     }
 
-    public boolean runToPosition(double x, double y, double headding){
+    public boolean runToPosition(double x, double y, double heading){
         double xDiff = this.x - x;
         double yDiff = this.y - y;
 

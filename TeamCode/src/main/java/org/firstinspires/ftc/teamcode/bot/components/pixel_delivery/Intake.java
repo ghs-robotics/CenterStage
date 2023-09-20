@@ -32,6 +32,12 @@ public class Intake {
         }
     }
 
+    public void setIntakeHeight(int targetLevel){
+        int diff = targetLevel - getIntakeLvl();
+        intakeLvl += diff;
+        setHeight();
+    }
+
     public void changeIntakeHeight(boolean decrease, boolean increase) {
         if (decrease) {
             intakeLvl -= 1;
@@ -43,11 +49,14 @@ public class Intake {
     }
 
     public int getIntakePos () {
-        return Math.abs(intakeLvl % pos.length);
+        return getIntakeLvl();
     }
 
     private void setHeight () {
         intakeServo.setPosition(pos[Math.abs(intakeLvl % pos.length)]);
     }
+
+    private int getIntakeLvl(){
+        return Math.abs(intakeLvl % pos.length);}
 }
 

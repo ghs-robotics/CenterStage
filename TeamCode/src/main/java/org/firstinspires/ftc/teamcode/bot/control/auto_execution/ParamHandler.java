@@ -6,9 +6,14 @@ public class ParamHandler {
     int x;
     int y;
     double heading;
+    int intakeLevel;
 
     public ParamHandler(){
 
+    }
+
+    public ParamHandler(int intakeLevel){
+        this.intakeLevel = intakeLevel;
     }
 
     public ParamHandler(int action, int x, int y, double heading){

@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoRunner;
+import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActionHandler;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
 
 @Autonomous
 public class  Auto extends LinearOpMode {
     Robot robot = new Robot(hardwareMap, telemetry);
-    AutoRunner runner = new AutoRunner(robot);
+    AutoActionHandler actionHandler = new AutoActionHandler(robot);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,23 +23,23 @@ public class  Auto extends LinearOpMode {
         robot.init();
 
         // create list of actions to run
-        runner.add(MOVE);
+        actionHandler.add(MOVE, new ParamHandler());
         for (int i = 0; i < cycle; i++) {
-            runner.add(DELIVER);
-            runner.add(MOVE);
-            runner.add(INTAKE);
-            runner.add(MOVE);
+            actionHandler.add(DELIVER);
+            actionHandler.add(MOVE, new ParamHandler());
+            actionHandler.add(INTAKE);
+            actionHandler.add(MOVE, new ParamHandler());
         }
-        runner.add(MOVE);
-        runner.add(PLACE);
-        runner.add(MOVE);
+        actionHandler.add(MOVE, new ParamHandler());
+        actionHandler.add(PLACE);
+        actionHandler.add(MOVE);
 
         waitForStart();
 
-        runner.init();
+        actionHandler.init();
 
         while (opModeIsActive()){
-            runner.run();
+            actionHandler.run();
             telemetry.update();
         }
     }
