@@ -4,18 +4,31 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
 public class TeamPropPipeline extends OpenCvPipeline {
+    private ArrayList<Integer> colorDetections;
+    final int hueThreshold = 20;
+
+    //OpenCV HSV
+    final int[] lime = {38, 255, 255};
+    final int[] magenta = {156, 255, 255};
+    final int[] cyan = {95, 255, 255};
+    final int[] hues = {38, 156, 95};
+    private ArrayList<Double> hueTargets;
+
     public TeamPropPipeline(){
 
     }
 
     @Override
     public Mat processFrame(Mat input) {
-        //Crop image
+        /*//Crop image
         //Rect rectCrop = new Rect((int) (input.width() / 2), (int) (input.height() / 2), (int) (input.width() / 5), (int) (input.height() / 5));
         //input = new Mat(input, rectCrop);
 
@@ -24,14 +37,16 @@ public class TeamPropPipeline extends OpenCvPipeline {
         //Mat colorSample = new Mat(input, sampleCrop);
 
         //convert image from RGB to HSV
-        /*Mat hsvConvert = new Mat();
-        cvtColor(colorSample, hsvConvert, Imgproc.COLOR_RGB2HSV);
+        Mat hsvConvert = new Mat();
+        Imgproc.cvtColor(input, hsvConvert, Imgproc.COLOR_RGB2HSV);
 
         //Find average of each channel across sample pixels
-        Mat avgColColor = new Mat();
+        Mat avgColorColumn = new Mat();
         Mat avgColor = new Mat();
-        Core.reduce(hsvConvert, avgColColor, 0, Core.REDUCE_AVG);
-        Core.reduce(avgColColor, avgColor, 1, Core.REDUCE_AVG);
+
+        Core.reduce(hsvConvert, avgColorColumn, 0, Core.REDUCE_AVG);
+        Core.reduce(avgColorColumn, avgColor, 1, Core.REDUCE_AVG);
+
         ArrayList<Mat> channels = new ArrayList<Mat>(3);
         Core.split(avgColor, channels);
         Mat hueChannel = channels.get(0);
