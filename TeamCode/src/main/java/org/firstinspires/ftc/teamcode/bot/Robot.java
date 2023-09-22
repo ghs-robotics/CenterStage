@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.bot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
@@ -9,10 +10,13 @@ import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Lift;
 import org.firstinspires.ftc.teamcode.bot.control.Navigation;
+import org.firstinspires.ftc.teamcode.cv.Camera;
 
 public class Robot {
     HardwareMap hardwareMap;
     Telemetry telemetry;
+
+    public Camera cam;
 
     public Drivebase drive;
     public Navigation nav;
@@ -30,6 +34,8 @@ public class Robot {
         nav = new Navigation(drive, gyro);
         intake = new Intake(hardwareMap);
         lift = new Lift(hardwareMap);
+
+        cam = new Camera();
 
     }
 

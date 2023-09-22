@@ -32,6 +32,16 @@ public class Intake {
         }
     }
 
+    public boolean autoRunIntake(double milliseconds) {
+        int timeLim = 1000;
+        pixelIn(milliseconds < timeLim);
+
+        if (milliseconds < timeLim)
+            return false;
+        else
+            return true;
+    }
+
     public void setIntakeHeight(int targetLevel){
         int diff = targetLevel - getIntakeLvl();
         intakeLvl += diff;
