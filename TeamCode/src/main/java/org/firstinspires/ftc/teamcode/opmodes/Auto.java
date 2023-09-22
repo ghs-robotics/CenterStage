@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
 @Autonomous
 public class  Auto extends LinearOpMode {
     Robot robot = new Robot(hardwareMap, telemetry);
-    AutoActionHandler actionHandler = new AutoActionHandler(robot);
+    AutoActionHandler actionHandler = new AutoActionHandler(robot, telemetry);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,10 +36,14 @@ public class  Auto extends LinearOpMode {
 
         waitForStart();
 
+        telemetry.addLine("queuing actions");
+
+        actionHandler.findAndSetZone();
         actionHandler.init();
 
         while (opModeIsActive()){
             actionHandler.run();
+            actionHandler.status();
             telemetry.update();
         }
     }
