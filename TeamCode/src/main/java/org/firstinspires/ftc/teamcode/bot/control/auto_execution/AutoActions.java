@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.bot.Robot;
 
 public class AutoActions {
@@ -8,11 +10,16 @@ public class AutoActions {
     public static final int MOVE = 0;
     public static final int INTAKE = 1;
     public static final int DELIVER = 2;
-    public static final int PLACE = 4;
-    public static final int ALIGN = 5;
+    public static final int PLACE = 3;
+    public static final int ALIGN = 4;
+
+    private String description;
 
     private int identity;
     private boolean endAction;
+
+    private ElapsedTime timer;
+    private boolean timerReset;
 
     private int zone;
 
@@ -22,11 +29,45 @@ public class AutoActions {
     public AutoActions(int id, Robot robot){
         this.identity = id;
         this.robot = robot;
+        timerReset = false;
+        setDescription();
     }
 
     public AutoActions(int id, Robot robot,ParamHandler params){
         this(id, robot);
         this.params = params;
+    }
+
+    private void moveTo(){
+        endAction = robot.nav.runToPosition(params.x, params.y, params.heading);
+    }
+
+    private void runIntake(){
+        robot.intake.setIntakeHeight(params.intakeLevel);
+
+        if(!timerReset)
+            timer.reset();
+
+        endAction = robot.intake.autoRunIntake(timer.milliseconds());
+    }
+
+    private void runDelivery(){
+        // same as intake
+    }
+
+    private void placePixel(){
+        // drops the pixel
+    }
+
+    private void alignBotToTag(){
+        // looks for the required tag
+        // requires the use of moving to align itself
+        // runs the delivery
+
+    }
+
+    public boolean isFinished(){
+        return endAction;
     }
 
     public void runAction(){
@@ -50,50 +91,34 @@ public class AutoActions {
         }
     }
 
-    private void moveTo(){
-        robot.nav.runToPosition(params.x, params.y, params.heading);
+    public String getDescription(){
+        return description;
     }
 
-    private void runIntake(){
-        // start runIntake
-        // use timer to make sure the bot has enough time to intake
-    }
-
-    private void runDelivery(){
-        // same as intake
-    }
-
-    private void detectElement(){
-        // run cv to look for the element's placement and then move accordingly
-        // if completed this function should return something
-    }
-
-    private void placePixel(){
-        // drops the pixel
-    }
-
-    private void alignBotToTag(){
-        // looks for the required tag
-        // requires the use of moving to align itself
-        // runs the delivery
-
-    }
-
-    public boolean isFinished(){
-        return endAction;
+    private void setDescription() {
+        switch (identity){
+            case MOVE:
+                description = "Moving " + params.x + ", " + params.y + ". Facing " + params.heading;
+                break;
+            case INTAKE:
+                description = "Running Intake for " + (timer.milliseconds() / 1000.0) + " sec";
+                break;
+            case DELIVER:
+                description =  "Delivering pixel to backdrop";
+                break;
+            case PLACE:
+                description = "Placing pixel on spike mark";
+                break;
+            case ALIGN:
+                description = "Aligning with the AprilTag";
+                break;
+        }
     }
 
     /**
-     * @return the action this object will execute
+     * sets the zone read by the camera
      */
-    public int getIdentity() {
-        return identity;
-    }
-
-    /**
-     * @return the area the
-     */
-    public int getZone(){
-        return zone;
+    public void setZone(int zone){
+        this.zone = zone;
     }
 }
