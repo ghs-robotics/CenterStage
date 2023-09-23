@@ -30,6 +30,7 @@ public class AutoActions {
         this.identity = id;
         this.robot = robot;
         timerReset = false;
+        timer = new ElapsedTime();
         setDescription();
     }
 
@@ -91,10 +92,16 @@ public class AutoActions {
         }
     }
 
+    /**
+     * @return description of the specific object's action and status
+     */
     public String getDescription(){
         return description;
     }
 
+    /**
+     * helper method to get telemetry text
+     */
     private void setDescription() {
         switch (identity){
             case MOVE:
