@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 
@@ -14,7 +12,7 @@ public class AutoActionHandler {
     private Robot robot;
     private Telemetry telemetry;
 
-    private int totalSteps;
+    private int totalActions;
     private int zone;
 
     public AutoActionHandler(Robot robot, Telemetry telemetry){
@@ -64,15 +62,15 @@ public class AutoActionHandler {
 
     public void init(){
         current = actionList.get(0);
-        totalSteps = actionList.size();
+        totalActions = actionList.size();
     }
 
     public void status(){
-        int currentStep = totalSteps - actionList.size();
+        int currentStep = totalActions - actionList.size();
 
         if (!actionList.isEmpty()) {
             telemetry.addLine(current.getDescription());
-            telemetry.addLine(currentStep + " of " + totalSteps + " steps");
+            telemetry.addLine(currentStep + " of " + totalActions + " actions");
         }else
             telemetry.addLine( "Done!;");
     }
