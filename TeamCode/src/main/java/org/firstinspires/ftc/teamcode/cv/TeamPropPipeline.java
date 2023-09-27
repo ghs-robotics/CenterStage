@@ -28,7 +28,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        /*//Crop image
+        //Crop image
         //Rect rectCrop = new Rect((int) (input.width() / 2), (int) (input.height() / 2), (int) (input.width() / 5), (int) (input.height() / 5));
         //input = new Mat(input, rectCrop);
 
@@ -40,19 +40,22 @@ public class TeamPropPipeline extends OpenCvPipeline {
         Mat hsvConvert = new Mat();
         Imgproc.cvtColor(input, hsvConvert, Imgproc.COLOR_RGB2HSV);
 
-        //Find average of each channel across sample pixels
+        //Find average color of pixels
         Mat avgColorColumn = new Mat();
         Mat avgColor = new Mat();
 
+        //Find average of each column
         Core.reduce(hsvConvert, avgColorColumn, 0, Core.REDUCE_AVG);
+        //Find average
         Core.reduce(avgColorColumn, avgColor, 1, Core.REDUCE_AVG);
 
+        //Split HSV to get H
         ArrayList<Mat> channels = new ArrayList<Mat>(3);
         Core.split(avgColor, channels);
         Mat hueChannel = channels.get(0);
 
         hueTargets = new ArrayList<Double>();
-        hueTargets.add(38.0);  //[ 38  ]
+        hueTargets.add(38.0);  //[ 38 ]
         hueTargets.add(156.0); //[ 156 ]
         hueTargets.add(95.0); //[ 195 ]
 
@@ -96,13 +99,12 @@ public class TeamPropPipeline extends OpenCvPipeline {
             //colorDetections.remove(0);
         }
 
-        //Draw rectangle around center 30x30 pixels to help line up cameraq
-
+        /*//Draw rectangle around center 30x30 pixels to help line up camera
         Point upperLeft = new Point((int)input.cols()/2 - 10, (int)input.cols()/2 + 10);
         Point bottomRight = new Point((int)input.cols()/2 + 10, (int)input.cols()/2 - 10);
-        rectangle(input, upperLeft, bottomRight, new Scalar(255, 25, 25), 2);
+        rectangle(input, upperLeft, bottomRight, new Scalar(255, 25, 25), 2);*/
 
-        return input;*/
-        return null;
+        return input;
+        //return null;
     }
 }
