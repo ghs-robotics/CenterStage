@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Lift;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Outtake;
 import org.firstinspires.ftc.teamcode.bot.control.Navigation;
 
 public class Robot {
@@ -21,6 +22,7 @@ public class Robot {
 
     public Intake intake;
     public Lift lift;
+    public Outtake outtake;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
@@ -31,7 +33,7 @@ public class Robot {
         nav = new Navigation(drive, gyro);
         intake = new Intake(hardwareMap);
         lift = new Lift(hardwareMap);
-
+        outtake = new Outtake(hardwareMap);
     }
 
     public void init(){

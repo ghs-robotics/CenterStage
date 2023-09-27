@@ -22,8 +22,8 @@ public class Intake {
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void pixelIn (boolean press) {
-        if (press) {
+    public void pixelIn (boolean pressing) {
+        if (pressing) {
             intakeMotor.setPower(0.5);
         } else {
             intakeMotor.setPower(0);

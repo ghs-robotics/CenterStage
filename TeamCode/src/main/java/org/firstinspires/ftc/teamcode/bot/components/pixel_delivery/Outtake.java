@@ -17,7 +17,11 @@ public class Outtake {
         timer.reset();
     }
 
-    public void pixelOut () {
-        extensionServo.setPower(1);
+    public void pixelOut (boolean pressing) {
+        if (pressing) {
+            extensionServo.setPower(1);
+        } else {
+            extensionServo.setPower(0);
+        }
     }
 }
