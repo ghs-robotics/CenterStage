@@ -116,9 +116,57 @@ public class PID {
         Doutput = -D * (actual - lastActual);
         lastActual = actual;
 
+        Ioutput = I * errorSum;
+        if (maxIOutput != 0) {
+            Ioutput = constrain(Ioutput, -maxIOutput, maxIOutput);
+        }
 
+        output = Poutput + Ioutput + Doutput;
 
-        return 0;
+        if (minOutput != maxOutput && !bounded(output, minOutput, maxOutput)) {
+            errorSum = error;
+        }
+        else if (outputRampRate != 0 && bounded(output, minOutput, maxOutput)) {
+            errorSum = error;
+        }
+        else if (maxIOutput != 0 && !bounded(output, lastOutput - outputRampRate, lastOutput + outputRampRate)) {
+            errorSum = constrain(errorSum + error, -maxError, maxError);
+        }
+        else {
+            errorSum += error;
+        }
+        if (outputRampRate != 0) {
+            output = constrain(output, lastOutput - outputRampRate, lastOutput + outputRampRate);
+        }
+        if (minOutput != maxOutput) {
+            output = lastOutput * outputFilter + output * (1 - outputFilter);
+        }
+
+        lastOutput = output;
+        return output;
+    }
+
+    public double getOutput (double actual) {
+        return getOutput(lastActual,target);
+    }
+
+    public void reset () {
+        firstRun = true;
+        errorSum = 0;
+    }
+
+    public void setOutputRampRate (double rate) {
+        outputRampRate = rate;
+    }
+
+    public void setTargetRange (double range) {
+        targetRange = range;
+    }
+
+    public void setOutputFilter (double strength) {
+        if (strength == 0 || bounded(strength, 0, 1)) {
+            outputFilter = strength;
+        }
     }
 
     private double constrain (double value, double min, double max) {
@@ -129,6 +177,10 @@ public class PID {
             return min;
         }
         return value;
+    }
+
+    private boolean bounded (double value, double min, double max) {
+        return (min < value) && (value < max);
     }
 
     private void checkSigns () {
