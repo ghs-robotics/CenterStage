@@ -142,6 +142,10 @@ public class PID {
             output = lastOutput * outputFilter + output * (1 - outputFilter);
         }
 
+        // for testing - prints outputs
+         System.out.printf("Final output %5.2f [ %5.2f, %5.2f , %5.2f  ], eSum %.2f\n",output,Poutput, Ioutput, Doutput,errorSum );
+         System.out.printf("%5.2f\t%5.2f\t%5.2f\t%5.2f\n",output,Poutput, Ioutput, Doutput );
+
         lastOutput = output;
         return output;
     }
