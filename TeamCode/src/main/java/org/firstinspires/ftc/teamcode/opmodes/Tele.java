@@ -15,28 +15,38 @@ public class Tele extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
+
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
-        robot.init();
-
+        waitForStart();
         telemetry.addLine("Initializing");
         telemetry.update();
 
-        waitForStart();
-
-        while (opModeIsActive()) {
+        while (opModeIsActive()){
             gp1.update();
             gp2.update();
+
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
             robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
 
+
+
+
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
+
+
+
+            //-------------------------------------------------------------------------------------
+            //                                  TELEMETRY
+            //-------------------------------------------------------------------------------------
+            telemetry.update();
+
             robot.intake.pixelIn(gp2.dpad_left.pressing());
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
 
@@ -69,5 +79,6 @@ public class Tele extends LinearOpMode {
             telemetry.update();
             telemetry.update();
         }
+
     }
 }
