@@ -6,5 +6,11 @@ import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions;
 import java.util.ArrayList;
 
 public class Routes {
-    public AutoActionHandler routeA;
+    private static ArrayList<AutoActionHandler> routeA;
+
+    public static ArrayList<AutoActionHandler> getRouteA(){
+        routeA = new ArrayList<>();
+
+        return routeA;
+    }
 }

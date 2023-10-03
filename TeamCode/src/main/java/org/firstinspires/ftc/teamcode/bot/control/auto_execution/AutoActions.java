@@ -70,6 +70,9 @@ public class AutoActions {
         return endAction;
     }
 
+    /**
+     * determines the action
+     */
     public void runAction(){
         switch (identity){
             case MOVE:
@@ -110,7 +113,7 @@ public class AutoActions {
                 description = "Running Intake for " + (timer.milliseconds() / 1000.0) + " sec";
                 break;
             case DELIVER:
-                description =  "Delivering pixel to backdrop";
+                description = "Delivering pixel to backdrop";
                 break;
             case PLACE:
                 description = "Placing pixel on spike mark";
