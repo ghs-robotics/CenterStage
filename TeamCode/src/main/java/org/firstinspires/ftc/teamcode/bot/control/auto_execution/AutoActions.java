@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.bot.Robot;
 
 public class AutoActions {
     // identities
+    public static final int DONE = -1;
     public static final int MOVE = 0;
     public static final int INTAKE = 1;
     public static final int DELIVER = 2;
@@ -30,7 +31,7 @@ public class AutoActions {
         this.robot = robot;
         timerReset = false;
         timer = new ElapsedTime();
-        setDescription();
+//        setDescription();
     }
 
     public AutoActions(int id, Robot robot,ParamHandler params){
@@ -43,12 +44,12 @@ public class AutoActions {
     }
 
     private void runIntake(){
-        robot.intake.setIntakeHeight(params.intakeLevel);
-
-        if(!timerReset)
-            timer.reset();
-
-        endAction = robot.intake.autoRunIntake(timer.milliseconds());
+//        robot.intake.setIntakeHeight(params.intakeLevel);
+//
+//        if(!timerReset)
+//            timer.reset();
+//
+//        endAction = robot.intake.autoRunIntake(timer.milliseconds());
     }
 
     private void runDelivery(){
@@ -129,5 +130,12 @@ public class AutoActions {
      */
     public void setZone(int zone){
         this.zone = zone;
+    }
+
+    /**
+     * @return the identity of this action
+     */
+    public int getIdentity(){
+        return identity;
     }
 }

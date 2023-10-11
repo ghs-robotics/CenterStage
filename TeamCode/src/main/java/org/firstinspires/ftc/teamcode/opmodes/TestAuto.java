@@ -21,21 +21,20 @@ public class TestAuto extends LinearOpMode {
         robot.init();
 
         // create list of actions to run
-        actionHandler.add(MOVE, new ParamHandler(100, 100, 0.0));
-        actionHandler.add(MOVE, new ParamHandler(-100, 100, 0.0));
-        actionHandler.add(MOVE, new ParamHandler(-100, -100, 0.0));
-        actionHandler.add(MOVE, new ParamHandler(100, -100, 0.0));
+        actionHandler.add(MOVE, new ParamHandler(500, 0, 0.0));
+        actionHandler.add(MOVE, new ParamHandler(500, 500, 0.0));
+        actionHandler.add(MOVE, new ParamHandler(0, 500, 0.0));
+        actionHandler.add(MOVE, new ParamHandler(0, 0, 0.0));
 
-        waitForStart();
         telemetry.addLine("queuing actions");
         telemetry.addLine(actionHandler.getTotalActions() + " total actions");
 
+        waitForStart();
         //actionHandler.findAndSetZone();
         actionHandler.init();
 
         while (opModeIsActive()){
-            if (!actionHandler.isFinished())
-                actionHandler.run();
+            actionHandler.run();
             actionHandler.status();
             telemetry.update();
         }

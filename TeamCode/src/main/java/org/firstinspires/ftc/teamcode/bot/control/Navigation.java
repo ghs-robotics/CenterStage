@@ -27,9 +27,9 @@ public class Navigation {
     //
     //Diagonal vertical motors 163.7 mm
     //Diagonal horizontal motor 163.1 mm
-    private final double leftTrackingDistance = 139.5 * 3;
-    private final double rightTrackingDistance = 139.5 * 3;
-    private final double backTrackingDistance = 108.54 * 3;
+    private final double leftTrackingDistance = 139.5 * 2;
+    private final double rightTrackingDistance = 139.5 * 2;
+    private final double backTrackingDistance = 108.54 * 2;
 
     Telemetry telemetry;
 
@@ -45,7 +45,6 @@ public class Navigation {
         this.x = 0;
         this.y = 0;
 
-        gyro.resetHeading();
 //        updatePosition();
     }
 
@@ -58,17 +57,17 @@ public class Navigation {
         this.gyroHeading = gyro.getHeading(AngleUnit.RADIANS);
 
         // update x position
-        this.x = 2 * (backEncoder / gyroHeading + backTrackingDistance) * (Math.sin(gyroHeading / 2));
+        this.x = (backEncoder / gyroHeading + backTrackingDistance) * (Math.sin(gyroHeading / 2));
 
         // update y position
-        this.y = -2 * (leftEncoder / gyroHeading + leftTrackingDistance) * (Math.sin(gyroHeading / 2));
+        this.y = -(leftEncoder / gyroHeading + leftTrackingDistance) * (Math.sin(gyroHeading / 2));
 
     }
 
     public boolean runToPosition(double x, double y, double heading){
         updatePosition();
 
-        double xDiff = this.x - x;
+        double xDiff = x - this.x;
         double yDiff = this.y - y;
 
         double xPow = 0;
@@ -76,20 +75,18 @@ public class Navigation {
         double rotPow = 0;
 
 
-        if (Math.abs(xDiff) > 10) {
-            xPow = xDiff / 100;
+        if (Math.abs(xDiff) > 15) {
+            xPow = xDiff / 10.0;
         }
-        if (Math.abs(yDiff) > 10) {
-            yPow = yDiff / 100;
+        if (Math.abs(yDiff) > 15) {
+            yPow = yDiff / 10.0;
         }
 
-        // todo note-
-        //  the power is not going to 0 at the end
-
-        drive.calculateDrivePowers(xPow, yPow, rotPow);
-        telemetry.addLine("x = " + x);
-        telemetry.addLine("y = " + y);
-        return !(Math.abs(xDiff) > 10) && !(Math.abs(yDiff) > 10);
+        drive.calculateDrivePowers(xPow , yPow, rotPow);
+        telemetry.addLine("y = " + this.y);
+        telemetry.addLine("x = " + this.x);
+        telemetry.addLine("heading = " + this.gyroHeading);
+        return xPow + yPow + rotPow == 0;
     }
 
     private void updateEncoders() {

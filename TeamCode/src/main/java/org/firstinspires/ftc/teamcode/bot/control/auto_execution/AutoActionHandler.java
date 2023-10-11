@@ -15,6 +15,7 @@ public class AutoActionHandler {
     private int totalActions;
     private int zone;
 
+
     public AutoActionHandler(Robot robot, Telemetry telemetry){
         this.actionList = new ArrayList<AutoActions>();
         this.robot = robot;
@@ -43,6 +44,8 @@ public class AutoActionHandler {
     }
 
     private void nextAction(){
+
+        // something is wrong here rn
         if (current.isFinished()) {
             actionList.remove(0);
             current = actionList.get(0);
@@ -50,7 +53,6 @@ public class AutoActionHandler {
     }
 
     public void findAndSetZone(){
-        //todo get the zone from the camera
         zone = robot.cam.getZone();
         for (AutoActions a: actionList)
             a.setZone(zone);
@@ -61,18 +63,26 @@ public class AutoActionHandler {
     }
 
     public void init(){
+        if (actionList.isEmpty())
+            return;
+
         current = actionList.get(0);
         totalActions = actionList.size();
+        actionList.add(new AutoActions(AutoActions.DONE, robot));
+    }
+
+    public int getTotalActions(){
+        return totalActions;
     }
 
     public void status(){
-        int currentStep = totalActions - actionList.size();
+        int currentStep = totalActions - actionList.size() + 1;
 
-        if (!actionList.isEmpty()) {
+        if (current.getIdentity() != AutoActions.DONE) {
             telemetry.addLine(current.getDescription());
             telemetry.addLine(currentStep + " of " + totalActions + " actions");
         }else
-            telemetry.addLine( "Done!;");
+            telemetry.addLine( "Done!");
     }
 
 }
