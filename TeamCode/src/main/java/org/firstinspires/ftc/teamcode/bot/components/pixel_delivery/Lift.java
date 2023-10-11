@@ -14,6 +14,10 @@ public class Lift {
     public static final int MID = 40;
     public static final int HIGH = 60;
 
+//    double[] pos = {};
+//
+//    private int liftLvl;
+
     public Lift (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
@@ -44,9 +48,22 @@ public class Lift {
         liftMotor1.setTargetPosition(HIGH);
     }
 
+//    public void changeLiftHeight(boolean decrease, boolean increase) {
+//        if (decrease) {
+//            liftLvl -= 1;
+//        }
+//        if (increase) {
+//            liftLvl += 1;
+//        }
+//    }
+
     public int getLiftPosition(){
         return liftMotor1.getCurrentPosition();
     }
+
+//    private void setHeight () {
+//        liftMotor1.setPower(pos[Math.abs(liftLvl % pos.length)]);
+//    }
 
     public void resetEncoders(){
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.bot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.bot.components.Drone;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
@@ -23,6 +24,7 @@ public class Robot {
     public Intake intake;
     public Lift lift;
     public Outtake outtake;
+    public Drone drone;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
