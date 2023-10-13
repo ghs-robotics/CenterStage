@@ -31,7 +31,7 @@ public class Robot {
         drive = new BallDrive(hardwareMap);
         gyro = new Gyro(hardwareMap);
 
-        nav = new Navigation(drive, gyro);
+        nav = new Navigation(drive, gyro, telemetry);
         intake = new Intake(hardwareMap);
         lift = new Lift(hardwareMap);
 
@@ -39,12 +39,18 @@ public class Robot {
 
     }
 
+    /**
+     * initializes the robot parts
+     */
     public void init(){
         //init cameras
         drive.resetEncoders();
-        lift.resetEncoders();
+//        lift.resetEncoders();
     }
 
+    /**
+     * tells the robot parts to retrieve the current information from each part to update the robot.
+     */
     public void update(){
         nav.updatePosition();
     }
@@ -64,12 +70,12 @@ public class Robot {
     }
 
     private void intakeTelemetry(){
-        telemetry.addData("intake position: ", intake.getIntakePos());
+//        telemetry.addData("intake position: ", intake.getIntakePos());
         telemetry.addLine();
     }
 
     private void liftTelemetry(){
-        telemetry.addData("lift position: ", lift.getLiftPosition());
+//        telemetry.addData("lift position: ", lift.getLiftPosition());
         telemetry.addLine();
     }
 }
