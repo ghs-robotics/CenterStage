@@ -22,6 +22,9 @@ public class AutoActionHandler {
         this.telemetry = telemetry;
     }
 
+    /**
+     * runs the action and calls next action in case the current action is complete.
+     */
     public void run(){
         current.runAction();
         nextAction();
@@ -43,25 +46,39 @@ public class AutoActionHandler {
         actionList.add(new AutoActions(action, robot));
     }
 
+    /**
+     * Checks the status of the current action and removes the action from queue if isFinished
+     * returns true.
+     */
     private void nextAction(){
-
-        // something is wrong here rn
         if (current.isFinished()) {
+            current = null;
             actionList.remove(0);
             current = actionList.get(0);
         }
     }
 
+    /**
+     * Gets the zone (spike mark) that was detected by the camera.
+     */
     public void findAndSetZone(){
         zone = robot.cam.getZone();
         for (AutoActions a: actionList)
             a.setZone(zone);
     }
 
+    /**
+     * @return The action list of this object.
+     *
+     * Made for getting presets and adding them to the main Auto queue
+     */
     public ArrayList<AutoActions> getActions(){
         return actionList;
     }
 
+    /**
+     * starts the queue
+     */
     public void init(){
         if (actionList.isEmpty())
             return;
@@ -71,10 +88,16 @@ public class AutoActionHandler {
         actionList.add(new AutoActions(AutoActions.DONE, robot));
     }
 
+    /**
+     * @return the total number of actions queue to execute
+     */
     public int getTotalActions(){
         return totalActions;
     }
 
+    /**
+     * Prints the current step in the Auto and gives an idea of how complete the auto is.
+     */
     public void status(){
         int currentStep = totalActions - actionList.size() + 1;
 

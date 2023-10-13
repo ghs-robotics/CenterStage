@@ -67,12 +67,15 @@ public class AutoActions {
 
     }
 
+    /**
+     * @return whether or not this action has been completed
+     */
     public boolean isFinished(){
         return endAction;
     }
 
     /**
-     * determines the action
+     * determines the action and what this specific action will do.
      */
     public void runAction(){
         switch (identity){
