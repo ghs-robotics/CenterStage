@@ -12,125 +12,142 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 
 public class TeamPropPipeline extends OpenCvPipeline {
-    private ArrayList<Integer> colorDetections;
-    final int hueThreshold = 20;
+    //0 = left, 1 = middle, 2 = right
+    public int finalSpikeMarkPos = -1;
 
-    //OpenCV HSV
+    private int detectionAttempts = 0;
+    private int maxDetectionAttempts = 10;
+    public boolean detectionFinished = false;
+
+    final int hueThreshold = 40;
+
+    final int targetHueRed = 0;
+    final int targetHueBlue = 240;
+
+    private boolean targetRed;
+
+    /*//OpenCV HSV
     final int[] lime = {38, 255, 255};
     final int[] magenta = {156, 255, 255};
     final int[] cyan = {95, 255, 255};
     final int[] hues = {38, 156, 95};
-    private ArrayList<Double> hueTargets;
+    private ArrayList<Double> hueTargets;*/
 
-    public TeamPropPipeline(){
-
+    public TeamPropPipeline(boolean _targetRed){
+        targetRed = _targetRed;
     }
 
-    public Mat processFrame(Mat input){
+    public Mat processFrame(Mat input) {
+        if (detectionFinished == false){
+            //Crop mat
+            int middleCropWidth = 500;
+
+            int leftCrop = (input.width() / 2) - (middleCropWidth / 2);
+            int rightCrop = (input.width() / 2) + (middleCropWidth / 2);
+
+            //Create left mat
+            Rect rectLeft = new Rect(
+                    0,
+                    0,
+                    leftCrop - 1,
+                    input.height()
+            );
+            Mat leftMat = new Mat(input, rectLeft);
+
+            //Create middle mat
+            Rect rectMiddle = new Rect(
+                    leftCrop,
+                    0,
+                    rightCrop - leftCrop,
+                    input.height()
+            );
+            Mat middleMat = new Mat(input, rectMiddle);
+
+            //Create right mat
+            Rect rectRight = new Rect(
+                    rightCrop + 1,
+                    0,
+                    input.width() - (rightCrop + 1),
+                    input.height()
+            );
+            Mat rightMat = new Mat(input, rectRight);
+
+
+
+            //convert all mats from RGB to HSV
+            Mat leftMatHSV = new Mat();
+            Imgproc.cvtColor(leftMat, leftMatHSV, Imgproc.COLOR_RGB2HSV);
+
+            Mat middleMatHSV = new Mat();
+            Imgproc.cvtColor(middleMat, middleMatHSV, Imgproc.COLOR_RGB2HSV);
+
+            Mat rightMatHSV = new Mat();
+            Imgproc.cvtColor(rightMat, rightMatHSV, Imgproc.COLOR_RGB2HSV);
+
+
+
+            //Get all mats hues in threshold
+            int leftInThreshold = 0;
+            int middleInThreshold = 0;
+            int rightInThreshold = 0;
+
+            int targetHue = targetRed ? targetHueRed : targetHueBlue;
+
+            int pixelX;
+            int pixelY;
+
+            //Left hues in Threshold
+            int matWidth = leftMatHSV.width();
+            int matHeight = leftMatHSV.height();
+
+            for (pixelX = 0; pixelX < matWidth; pixelX++){
+                for (pixelY = 0; pixelY < matHeight; pixelY++){
+                    int hue = (int) leftMatHSV.get(pixelX, pixelY)[0];
+                    if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) leftInThreshold++;
+                }
+            }
+
+            //Middle hues in Threshold
+            matWidth = middleMatHSV.width();
+            matHeight = middleMatHSV.height();
+
+            for (pixelX = 0; pixelX < matWidth; pixelX++){
+                for (pixelY = 0; pixelY < matHeight; pixelY++){
+                    int hue = (int) middleMatHSV.get(pixelX, pixelY)[0];
+                    if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) middleInThreshold++;
+                }
+            }
+
+            //Right hues in Threshold
+            matWidth = rightMatHSV.width();
+            matHeight = rightMatHSV.height();
+
+            for (pixelX = 0; pixelX < matWidth; pixelX++){
+                for (pixelY = 0; pixelY < matHeight; pixelY++){
+                    int hue = (int) rightMatHSV.get(pixelX, pixelY)[0];
+                    if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) rightInThreshold++;
+                }
+            }
+
+
+
+            //Check greatest hues in Threshold
+            if (leftInThreshold + middleInThreshold + rightInThreshold != 0)
+            {
+                if (leftInThreshold > rightInThreshold){
+                    if (leftInThreshold > middleInThreshold) finalSpikeMarkPos = 0;
+                    else finalSpikeMarkPos = 1;
+                } else if (rightInThreshold > middleInThreshold) finalSpikeMarkPos = 2;
+                else finalSpikeMarkPos = 1;
+
+                detectionFinished = true;
+            }
+            else {
+                detectionAttempts++;
+                if (detectionAttempts == maxDetectionAttempts) detectionFinished = true;
+            }
+        }
         return input;
-    }
-
-    public int processImage(Mat input) {
-        //Crop mat
-        int leftCrop = (input.width() / 2) - 250;
-        int rightCrop = (input.width() / 2) + 250;
-
-        //Create left mat
-        Rect rectLeft = new Rect(
-                0,
-                0,
-                leftCrop - 1,
-                input.height()
-        );
-        Mat leftMat = new Mat(input, rectLeft);
-
-        //Create middle mat
-        Rect rectMiddle = new Rect(
-                leftCrop,
-                0,
-                rightCrop - leftCrop,
-                input.height()
-        );
-        Mat middleMat = new Mat(input, rectMiddle);
-
-        //Create right mat
-        Rect rectRight = new Rect(
-                rightCrop + 1,
-                0,
-                input.width() - (rightCrop + 1),
-                input.height()
-        );
-        Mat rightMat = new Mat(input, rectRight);
-
-
-
-        //convert all mats from RGB to HSV
-        Mat leftMatHSV = new Mat();
-        Imgproc.cvtColor(leftMat, leftMatHSV, Imgproc.COLOR_RGB2HSV);
-
-        Mat middleMatHSV = new Mat();
-        Imgproc.cvtColor(middleMat, middleMatHSV, Imgproc.COLOR_RGB2HSV);
-
-        Mat rightMatHSV = new Mat();
-        Imgproc.cvtColor(rightMat, rightMatHSV, Imgproc.COLOR_RGB2HSV);
-
-
-
-        //Get all mats hues in threshold
-        int leftInThreshold = 0;
-        int middleInThreshold = 0;
-        int rightInThreshold = 0;
-
-        int targetHue = 0;
-        int hueThreshold = 15;
-
-        int pixelX;
-        int pixelY;
-
-        //Left hues in Threshold
-        int matWidth = leftMatHSV.width();
-        int matHeight = leftMatHSV.height();
-
-        for (pixelX = 0; pixelX < matWidth; pixelX++){
-            for (pixelY = 0; pixelY < matHeight; pixelY++){
-                int hue = (int) leftMatHSV.get(pixelX, pixelY)[0];
-                if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) leftInThreshold++;
-            }
-        }
-
-        //Middle hues in Threshold
-        matWidth = middleMatHSV.width();
-        matHeight = middleMatHSV.height();
-
-        for (pixelX = 0; pixelX < matWidth; pixelX++){
-            for (pixelY = 0; pixelY < matHeight; pixelY++){
-                int hue = (int) middleMatHSV.get(pixelX, pixelY)[0];
-                if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) middleInThreshold++;
-            }
-        }
-
-        //Right hues in Threshold
-        matWidth = rightMatHSV.width();
-        matHeight = rightMatHSV.height();
-
-        for (pixelX = 0; pixelX < matWidth; pixelX++){
-            for (pixelY = 0; pixelY < matHeight; pixelY++){
-                int hue = (int) rightMatHSV.get(pixelX, pixelY)[0];
-                if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) rightInThreshold++;
-            }
-        }
-
-        //0 = left, 1 = middle, 2 = right
-        int spikeMark;
-        //Check greatest hues in Threshold
-        if (leftInThreshold > rightInThreshold){
-            if (leftInThreshold > middleInThreshold) spikeMark = 0;
-            else spikeMark = 1;
-        } else if (rightInThreshold > middleInThreshold) spikeMark = 2;
-        else spikeMark = 1;
-
-
-        return spikeMark;
 
 
 

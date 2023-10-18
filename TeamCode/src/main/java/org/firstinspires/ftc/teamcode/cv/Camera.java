@@ -16,11 +16,13 @@ public class Camera {
 
     public TeamPropPipeline TPPipeline;
 
-    public Camera(HardwareMap hardwareMap){
+    public Camera(HardwareMap hardwareMap, Telemetry _telemetry){
+        telemetry = _telemetry;
+
         cam = OpenCvCameraFactory.getInstance()
                 .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
 
-        TPPipeline = new TeamPropPipeline();
+        TPPipeline = new TeamPropPipeline(true);
     }
 
     public void init(){

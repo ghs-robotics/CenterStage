@@ -11,18 +11,24 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoRunner;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
+import org.firstinspires.ftc.teamcode.cv.TeamPropPipeline;
 
 @Autonomous
 public class Auto extends LinearOpMode {
     Robot robot = new Robot(hardwareMap, telemetry);
     AutoRunner runner = new AutoRunner(robot);
 
+    private int spikeMarkPos;
+
     @Override
     public void runOpMode() throws InterruptedException {
         int cycle = 1;
         robot.init();
 
-        // create list of actions to run
+        //camera
+        robot.cam.init();
+
+        /*// create list of actions to run
         runner.add(MOVE, new ParamHandler(MOVE));
         for (int i = 0; i < cycle; i++) {
             runner.add(DELIVER);
@@ -36,10 +42,14 @@ public class Auto extends LinearOpMode {
 
         waitForStart();
 
-        runner.init();
+        runner.init();*/
 
         while (opModeIsActive()){
-            runner.run();
+            //runner.run();
+            TeamPropPipeline tpp = robot.cam.TPPipeline;
+            if (tpp.detectionFinished)
+                if (tpp.finalSpikeMarkPos != -1) spikeMarkPos = tpp.finalSpikeMarkPos;
+
             telemetry.update();
         }
     }

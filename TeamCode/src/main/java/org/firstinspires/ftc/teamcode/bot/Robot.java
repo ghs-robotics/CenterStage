@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.bot;
 
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,6 +8,7 @@ import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 import org.firstinspires.ftc.teamcode.bot.control.Navigation;
+import org.firstinspires.ftc.teamcode.cv.Camera;
 
 public class Robot {
     HardwareMap hardwareMap;
@@ -18,6 +18,8 @@ public class Robot {
     private Gyro gyro;
 
     Navigation nav;
+
+    public Camera cam;
 
     Intake intake;
 
@@ -31,7 +33,7 @@ public class Robot {
     }
 
     public void init(){
-        //init cameras
+        cam = new Camera(hardwareMap, telemetry);
         drive.resetEncoders();
     }
 
@@ -49,5 +51,8 @@ public class Robot {
         telemetry.addData("odo heading: ", Math.toDegrees(nav.getOdoHeading()));
         telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));
         telemetry.addLine();
+    }
+    private void camTelemetry(){
+
     }
 }
