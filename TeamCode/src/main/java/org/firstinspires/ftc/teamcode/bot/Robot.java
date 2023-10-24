@@ -26,15 +26,15 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
-        drive = new BallDrive(hardwareMap);
-        gyro = new Gyro(hardwareMap);
+        //drive = new BallDrive(hardwareMap);
+        //gyro = new Gyro(hardwareMap);
 
-        nav = new Navigation(drive, gyro);
+        //nav = new Navigation(drive, gyro);
     }
 
     public void init(){
         cam = new Camera(hardwareMap, telemetry);
-        drive.resetEncoders();
+        //drive.resetEncoders();
     }
 
     public void update(){

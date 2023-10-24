@@ -18,7 +18,7 @@ public class Auto extends LinearOpMode {
     Robot robot = new Robot(hardwareMap, telemetry);
     AutoRunner runner = new AutoRunner(robot);
 
-    private int spikeMarkPos;
+    private int spikeMarkPos = -1;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,6 +49,9 @@ public class Auto extends LinearOpMode {
             TeamPropPipeline tpp = robot.cam.TPPipeline;
             if (tpp.detectionFinished)
                 if (tpp.finalSpikeMarkPos != -1) spikeMarkPos = tpp.finalSpikeMarkPos;
+
+            telemetry.addData("spikeMarkPos: ", spikeMarkPos);
+            telemetry.addLine();
 
             telemetry.update();
         }
