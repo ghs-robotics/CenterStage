@@ -154,6 +154,9 @@ public class PID {
         return getOutput(lastActual,target);
     }
 
+    /**
+     * resets the booleans firstRun and errorSum
+     */
     public void reset () {
         firstRun = true;
         errorSum = 0;
@@ -187,6 +190,11 @@ public class PID {
         return (min < value) && (value < max);
     }
 
+    /**
+     * Checks the reversed boolean to ensure PID is making proper adjustments
+     * If the reversed is true, the PID will decrease motor input
+     * If reversed is false, the PID will increase motor input
+     */
     private void checkSigns () {
         if (reversed) {
             if (P > 0) {P = -P;}
