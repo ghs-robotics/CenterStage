@@ -22,7 +22,7 @@ public class Camera {
         cam = OpenCvCameraFactory.getInstance()
                 .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
 
-        TPPipeline = new TeamPropPipeline(true);
+        TPPipeline = new TeamPropPipeline(true, telemetry);
     }
 
     public void init(){

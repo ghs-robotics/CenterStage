@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.cv;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.opmodes.Tele;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -19,12 +21,14 @@ public class TeamPropPipeline extends OpenCvPipeline {
     private int maxDetectionAttempts = 10;
     public boolean detectionFinished = false;
 
-    final int hueThreshold = 40;
+    final int hueThreshold = 125;
 
     final int targetHueRed = 0;
     final int targetHueBlue = 240;
 
     private boolean targetRed;
+
+    private Telemetry telemetry;
 
     /*//OpenCV HSV
     final int[] lime = {38, 255, 255};
@@ -33,7 +37,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
     final int[] hues = {38, 156, 95};
     private ArrayList<Double> hueTargets;*/
 
-    public TeamPropPipeline(boolean _targetRed){
+    public TeamPropPipeline(boolean _targetRed, Telemetry _telemetry){
+        telemetry = _telemetry;
         targetRed = _targetRed;
     }
 
@@ -44,6 +49,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
             int leftCrop = (input.width() / 2) - (middleCropWidth / 2);
             int rightCrop = (input.width() / 2) + (middleCropWidth / 2);
+
+
 
             //Create left mat
             Rect rectLeft = new Rect(
@@ -96,41 +103,89 @@ public class TeamPropPipeline extends OpenCvPipeline {
             int pixelX;
             int pixelY;
 
+            telemetry.addLine("555");
+            telemetry.update();
             //Left hues in Threshold
             int matWidth = leftMatHSV.width();
             int matHeight = leftMatHSV.height();
 
+            int leftNullNum = 0;
+            int midNullNum = 0;
+            int rightNullNum = 0;
+
             for (pixelX = 0; pixelX < matWidth; pixelX++){
                 for (pixelY = 0; pixelY < matHeight; pixelY++){
-                    int hue = (int) leftMatHSV.get(pixelX, pixelY)[0];
-                    if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) leftInThreshold++;
+                    if (leftMatHSV.get(pixelX, pixelY) != null){
+                        int hue = (int) (leftMatHSV.get(pixelX, pixelY)[0]);
+                        if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) leftInThreshold++;
+                    }
+                    else {
+                        leftNullNum++;
+                        telemetry.addData("leftNullNum: ", leftNullNum);
+                        telemetry.addLine();
+                        telemetry.addData("midNullNum: ", midNullNum);
+                        telemetry.addLine();
+                        telemetry.addData("rightNullNum: ", rightNullNum);
+                        telemetry.addLine();
+                        telemetry.update();
+                    }
                 }
             }
 
+            telemetry.addLine("666");
+            telemetry.update();
             //Middle hues in Threshold
             matWidth = middleMatHSV.width();
             matHeight = middleMatHSV.height();
 
             for (pixelX = 0; pixelX < matWidth; pixelX++){
                 for (pixelY = 0; pixelY < matHeight; pixelY++){
-                    int hue = (int) middleMatHSV.get(pixelX, pixelY)[0];
-                    if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) middleInThreshold++;
+                    if (middleMatHSV.get(pixelX, pixelY) != null){
+                        int hue = (int) (middleMatHSV.get(pixelX, pixelY)[0]);
+                        if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) middleInThreshold++;
+                    }
+                    else {
+                        midNullNum++;
+                        telemetry.addData("leftNullNum: ", leftNullNum);
+                        telemetry.addLine();
+                        telemetry.addData("midNullNum: ", midNullNum);
+                        telemetry.addLine();
+                        telemetry.addData("rightNullNum: ", rightNullNum);
+                        telemetry.addLine();
+                        telemetry.update();
+                    }
                 }
             }
 
+            telemetry.addLine("777");
+            telemetry.update();
             //Right hues in Threshold
             matWidth = rightMatHSV.width();
             matHeight = rightMatHSV.height();
 
             for (pixelX = 0; pixelX < matWidth; pixelX++){
                 for (pixelY = 0; pixelY < matHeight; pixelY++){
-                    int hue = (int) rightMatHSV.get(pixelX, pixelY)[0];
-                    if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) rightInThreshold++;
+                    if (rightMatHSV.get(pixelX, pixelY) != null){
+                        int hue = (int) (rightMatHSV.get(pixelX, pixelY)[0]);
+                        if (Math.abs((targetHue - hue + 540) % 360 - 180) <= hueThreshold ) rightInThreshold++;
+                    }
+                    else {
+                        rightNullNum++;
+                        telemetry.addData("leftNullNum: ", leftNullNum);
+                        telemetry.addLine();
+                        telemetry.addData("midNullNum: ", midNullNum);
+                        telemetry.addLine();
+                        telemetry.addData("rightNullNum: ", rightNullNum);
+                        telemetry.addLine();
+                        telemetry.update();
+                    }
                 }
             }
 
 
 
+            telemetry.addLine("888");
+            telemetry.update();
             //Check greatest hues in Threshold
             if (leftInThreshold + middleInThreshold + rightInThreshold != 0)
             {
@@ -147,6 +202,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
                 if (detectionAttempts == maxDetectionAttempts) detectionFinished = true;
             }
         }
+        telemetry.addLine("999");
+        telemetry.update();
         return input;
 
 

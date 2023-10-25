@@ -15,13 +15,14 @@ import org.firstinspires.ftc.teamcode.cv.TeamPropPipeline;
 
 @Autonomous
 public class Auto extends LinearOpMode {
-    Robot robot = new Robot(hardwareMap, telemetry);
-    AutoRunner runner = new AutoRunner(robot);
 
     private int spikeMarkPos = -1;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Robot robot = new Robot(hardwareMap, telemetry);
+        AutoRunner runner = new AutoRunner(robot);
+
         int cycle = 1;
         robot.init();
 
@@ -43,7 +44,7 @@ public class Auto extends LinearOpMode {
         waitForStart();
 
         runner.init();*/
-
+        waitForStart();
         while (opModeIsActive()){
             //runner.run();
             TeamPropPipeline tpp = robot.cam.TPPipeline;
