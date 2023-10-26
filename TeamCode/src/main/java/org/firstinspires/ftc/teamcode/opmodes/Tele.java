@@ -40,13 +40,6 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-
-
-            //-------------------------------------------------------------------------------------
-            //                                  TELEMETRY
-            //-------------------------------------------------------------------------------------
-            telemetry.update();
-
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
             robot.intake.pixelIn(gp2.dpad_left.pressing());
 
@@ -54,7 +47,7 @@ public class Tele extends LinearOpMode {
 
             robot.lift.driveLift(gp2.left_stick_y);
 
-
+            robot.hang.hang(gp2.x.pressing());
 
             robot.drone.deliverDrone(gp2.y.pressing());
 

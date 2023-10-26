@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.components.Drone;
+import org.firstinspires.ftc.teamcode.bot.components.Hanging;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
@@ -25,6 +26,7 @@ public class Robot {
     public Lift lift;
     public Outtake outtake;
     public Drone drone;
+    public Hanging hang;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
@@ -36,6 +38,7 @@ public class Robot {
         intake = new Intake(hardwareMap);
         lift = new Lift(hardwareMap);
         outtake = new Outtake(hardwareMap);
+        hang = new Hanging(hardwareMap);
     }
 
     public void init(){
@@ -71,4 +74,5 @@ public class Robot {
         telemetry.addData("lift position: ", lift.getLiftPosition());
         telemetry.addLine();
     }
+
 }
