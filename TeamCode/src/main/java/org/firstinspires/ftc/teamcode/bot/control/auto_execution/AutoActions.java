@@ -44,12 +44,12 @@ public class AutoActions {
     }
 
     private void runIntake(){
-//        robot.intake.setIntakeHeight(params.intakeLevel);
-//
-//        if(!timerReset)
-//            timer.reset();
-//
-//        endAction = robot.intake.autoRunIntake(timer.milliseconds());
+        robot.intake.setIntakeHeight(params.intakeLevel);
+
+        if(!timerReset)
+            timer.reset();
+
+        endAction = robot.intake.autoRunIntake(timer.milliseconds());
     }
 
     private void runDelivery(){

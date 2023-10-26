@@ -8,7 +8,7 @@ import java.sql.ParameterMetaData;
 public class ParamHandler {
     int x;
     int y;
-    double heading;
+    double heading; // in degrees
     int intakeLevel;
     int outtakeLevel;
 

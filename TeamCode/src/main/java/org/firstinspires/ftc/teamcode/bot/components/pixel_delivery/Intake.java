@@ -22,6 +22,7 @@ public class Intake {
         intakeServo = hardwareMap.get(Servo.class, "intakeServo");
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeServo.setPosition(0.05);
     }
 
     public void pixelIn (boolean press) {

@@ -9,12 +9,10 @@ public class Navigation {
     // axis based on the robot's starting position
     private double x;
     private double y;
-    private double odoHeading;
     private double gyroHeading;
 
-    private int leftEncoder;
-    private int rightEncoder;
-    private int backEncoder;
+    private int verticalEncoder;
+    private int horizontalEncoder;
 
     // you would think balldrive odo would be easier to code
     // but the numbers are difficult to guess
@@ -27,9 +25,8 @@ public class Navigation {
     //
     //Diagonal vertical motors 163.7 mm
     //Diagonal horizontal motor 163.1 mm
-    private final double leftTrackingDistance = 139.5 * 2;
-    private final double rightTrackingDistance = 139.5 * 2;
-    private final double backTrackingDistance = 108.54 * 2;
+    private final double verticalTrackingDistance = 139.5 * 2;
+    private final double horizontalTrackingDistance = 108.54 * 2;
 
     Telemetry telemetry;
 
@@ -51,24 +48,29 @@ public class Navigation {
     public void updatePosition(){
         updateEncoders();
 
-        // update rotation using encoders in rads
-        this.odoHeading = (leftEncoder - rightEncoder) / (leftTrackingDistance + rightTrackingDistance);
-
         this.gyroHeading = gyro.getHeading(AngleUnit.RADIANS);
 
         // update x position
-        this.x = (backEncoder / gyroHeading + backTrackingDistance) * (Math.sin(gyroHeading / 2));
+        this.x = Math.cos(gyroHeading) * horizontalEncoder;
 
         // update y position
-        this.y = -(leftEncoder / gyroHeading + leftTrackingDistance) * (Math.sin(gyroHeading / 2));
+        this.y = Math.sin(gyroHeading) * verticalEncoder;
 
     }
 
+    /**
+     * @param x target x position
+     * @param y target y position
+     * @param heading target heading in degrees
+     * @return whether or not the robot is at target position and facing target direction
+     */
     public boolean runToPosition(double x, double y, double heading){
         updatePosition();
 
         double xDiff = x - this.x;
         double yDiff = this.y - y;
+        double rotDiffCounterClock = (this.gyroHeading - (Math.toRadians(heading))) % (2 * Math.PI);
+        double rotDiffClock = ((Math.toRadians(heading)) - this.gyroHeading) % (2 * Math.PI);
 
         double xPow = 0;
         double yPow = 0;
@@ -81,6 +83,11 @@ public class Navigation {
         if (Math.abs(yDiff) > 15) {
             yPow = yDiff / 10.0;
         }
+        if (rotDiffClock >= rotDiffCounterClock){
+            rotPow = rotDiffClock / 10.0;
+        } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
+            rotPow = rotDiffCounterClock /10.0;
+        }
 
         drive.calculateDrivePowers(xPow , yPow, rotPow);
         telemetry.addLine("y = " + this.y);
@@ -89,16 +96,24 @@ public class Navigation {
         return xPow + yPow + rotPow == 0;
     }
 
+    /**
+     * Helper function that updates the encoder values every cycle
+     */
     private void updateEncoders() {
-        leftEncoder = drive.getEncoderTicks()[0];
-        rightEncoder = drive.getEncoderTicks()[1];
-        backEncoder = drive.getEncoderTicks()[2];
+        verticalEncoder = drive.getEncoderTicks()[0];
+        horizontalEncoder = drive.getEncoderTicks()[1];
     }
 
+    /**
+     * @return x coordinate
+     */
     public double getX(){
         return x;
     }
 
+    /**
+     * @return y coordinate
+     */
     public double getY(){
         return y;
     }
@@ -106,12 +121,7 @@ public class Navigation {
     /**
      * @return heading of the robot in only radians
      */
-    public double getOdoHeading(){
-        return odoHeading;
-    }
-
     public double getGyroHeading(){
         return gyroHeading;
     }
-
 }

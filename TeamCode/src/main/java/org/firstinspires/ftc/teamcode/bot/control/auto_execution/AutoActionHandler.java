@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 
@@ -12,12 +14,15 @@ public class AutoActionHandler {
     private Robot robot;
     private Telemetry telemetry;
 
+    private ElapsedTime timer;
+
     private int totalActions;
     private int zone;
 
 
     public AutoActionHandler(Robot robot, Telemetry telemetry){
         this.actionList = new ArrayList<AutoActions>();
+        this.timer = new ElapsedTime();
         this.robot = robot;
         this.telemetry = telemetry;
     }
@@ -27,23 +32,50 @@ public class AutoActionHandler {
      */
     public void run(){
         current.runAction();
+        checkTime();
         nextAction();
     }
 
+    /**
+     * @param actionSet a pre-existing set of autoActions to add to this list
+     */
     public void add(ArrayList<AutoActions> actionSet){
         actionList.addAll(actionSet);
     }
 
-    public void add(AutoActionHandler actionSet){
-        actionList.addAll(actionSet.getActions());
+
+    /**
+     * @param actionHandler gets a pre-existing set of actions to add to this list from a pre-built
+     *                      AutoActionHandler
+     */
+    public void add(AutoActionHandler actionHandler){
+        actionList.addAll(actionHandler.getActions());
     }
 
+    /**
+     * @param action the identity of the action (see the public static constant in AutoActions)
+     * @param params any parameters the action needs
+     */
     public void add(int action, ParamHandler params){
         actionList.add(new AutoActions(action, robot, params));
     }
 
+    /**
+     * @param action the identity of the action (see the public static constant in AutoActions)
+     *               This one is for actions that do not require parameters
+     */
     public void add(int action){
         actionList.add(new AutoActions(action, robot));
+    }
+
+    /**
+     * Helper function that checks if we are close to the time ending and if we need to
+     * change course and park
+     */
+    private void checkTime(){
+        if (timer.milliseconds() > 25000 && actionList.size() > 2){
+
+        }
     }
 
     /**

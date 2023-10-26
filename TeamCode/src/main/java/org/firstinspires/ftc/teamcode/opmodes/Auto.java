@@ -14,15 +14,19 @@ import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
 
 @Autonomous
 public class  Auto extends LinearOpMode {
-    Robot robot = new Robot(hardwareMap, telemetry);
-    AutoActionHandler actionHandler = new AutoActionHandler(robot, telemetry);
+    Robot robot;
+    AutoActionHandler actionHandler;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        int cycle = 1;
+        robot = new Robot(hardwareMap, telemetry);
+        actionHandler = new AutoActionHandler(robot, telemetry);
+
         robot.init();
 
-        // create list of actions to run
+        // create list of actions to run ------------------------------------------
+        int cycle = 1;
+
         actionHandler.add(MOVE, new ParamHandler());
         for (int i = 0; i < cycle; i++) {
             actionHandler.add(DELIVER);
@@ -34,9 +38,14 @@ public class  Auto extends LinearOpMode {
         actionHandler.add(PLACE);
         actionHandler.add(MOVE);
 
-        waitForStart();
+        // list stops here --------------------------------------------------------
 
         telemetry.addLine("queuing actions");
+        telemetry.addLine(actionHandler.getTotalActions() + " total actions");
+        telemetry.update();
+
+        waitForStart();
+
 
         actionHandler.findAndSetZone();
         actionHandler.init();

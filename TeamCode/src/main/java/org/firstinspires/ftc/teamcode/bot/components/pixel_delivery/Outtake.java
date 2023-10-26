@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
     private CRServo extensionServo;
-    private Servo droppingServo;
+    private CRServo droppingServo;
 
     private ElapsedTime timer;
 
     public Outtake (HardwareMap hardwareMap) {
         extensionServo = hardwareMap.get(CRServo.class, "extend");
-        droppingServo = hardwareMap.get(Servo.class, "drop");
+        droppingServo = hardwareMap.get(CRServo.class, "drop");
         timer.reset();
     }
 
