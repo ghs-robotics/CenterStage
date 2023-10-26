@@ -26,7 +26,12 @@ public class PID {
 
     private double targetRange = 0;
 
-
+    /**
+     * a constructor that creates a pid class object
+     * @param p proportional gain -> p is large when (target pos - current pos) is large
+     * @param i integral gain ->
+     * @param d derivative gain -> responds to large changes in error, prevents overshoot in p & i
+     */
     public PID (double p, double i, double d) {
         P = p;
         I = i;
@@ -87,6 +92,10 @@ public class PID {
         this.reversed = reversed;
     }
 
+    /**
+     * a function that sets target position
+     * @param target is the desired position that the pid is working toward
+     */
     public void setTarget (double target) {
         this.target = target;
     }
@@ -191,7 +200,7 @@ public class PID {
     }
 
     /**
-     * Checks the reversed boolean to ensure PID is making proper adjustments
+     * checks the reversed boolean to ensure PID is making proper adjustments
      * If the reversed is true, the PID will decrease motor input
      * If reversed is false, the PID will increase motor input
      */
