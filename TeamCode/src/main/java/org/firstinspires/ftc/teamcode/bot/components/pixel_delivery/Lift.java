@@ -18,7 +18,6 @@ public class Lift {
 
     private Servo extensionServo;
     private Servo droppingServo;
-    private ElapsedTime timer;
 
     public static final int MIN = 0;
     public static final int MAX = 100;
@@ -42,11 +41,10 @@ public class Lift {
 
 
     public Lift(HardwareMap hardwareMap) {
-        liftMotor1 = hardwareMap.get(DcMotor.class, "liftMotor1");
-        liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
+        liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
+        liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
         extensionServo = hardwareMap.get(Servo.class, "extend");
         droppingServo = hardwareMap.get(Servo.class, "drop");
-        timer.reset();
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 

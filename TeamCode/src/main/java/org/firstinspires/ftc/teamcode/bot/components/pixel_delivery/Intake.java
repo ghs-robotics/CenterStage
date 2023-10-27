@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 // todo needs renaming
 public class Intake {
+    private DcMotor conveyorBeltMotor;
     private DcMotor intakeMotor;
     private Servo intakeServo;
 
@@ -18,8 +19,9 @@ public class Intake {
     int intakeLvl = 60;
 
     public Intake (HardwareMap hardwareMap) {
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        intakeServo = hardwareMap.get(Servo.class, "intakeServo");
+        conveyorBeltMotor = hardwareMap.get(DcMotor.class,"belt");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intakem");
+        intakeServo = hardwareMap.get(Servo.class, "intakes");
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeServo.setPosition(0.05);
