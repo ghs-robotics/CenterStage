@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Lift {
+public class Delivery {
     private DcMotor liftMotor1;
     private DcMotor liftMotor2;
 
@@ -37,7 +33,7 @@ public class Lift {
 
 
 
-    public Lift(HardwareMap hardwareMap) {
+    public Delivery(HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
         extensionServo = hardwareMap.get(Servo.class, "extend");
@@ -76,26 +72,34 @@ public class Lift {
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    public void pixelOut (boolean pressing) {
+        if (pressing) {
+            extensionServo.setPosition(1);
+        }
+    }
+
     public void moveToDropperLow() {
         droppingServo.setPosition(INTAKE);
     }
+
     public void moveToDropperMid() {
         droppingServo.setPosition(EMPTY);
     }
+
     public void moveToDropperHigh() {
         droppingServo.setPosition(DR1);
     }
+
     public void moveToExtenderLow() {
         extensionServo.setPosition(EXTLOW);
-
     }
+
     public void moveToExtenderMid() {
         extensionServo.setPosition(EXTMID);
-
     }
+
     public void moveToExtenderHigh() {
         extensionServo.setPosition(EXTHIGH);
-
     }
-
 }
