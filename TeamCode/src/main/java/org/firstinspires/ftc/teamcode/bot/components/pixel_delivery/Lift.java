@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Lift {
     private DcMotor liftMotor1;
     private DcMotor liftMotor2;
+
     private Servo extensionServo;
     private Servo droppingServo;
     private ElapsedTime timer;
