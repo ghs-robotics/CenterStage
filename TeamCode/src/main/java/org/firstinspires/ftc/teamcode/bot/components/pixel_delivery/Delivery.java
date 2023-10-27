@@ -41,17 +41,23 @@ public class Delivery {
     }
 
     public void changeLiftHeight (boolean increase) {
-        liftLvl += 1;
+        if (increase) {
+            liftLvl += 1;
+        }
         setDeliveryHeights();
     }
 
     public void changeDropHeight (boolean increase) {
-        dropLvl += 1;
+        if (increase) {
+            dropLvl += 1;
+        }
         setDeliveryHeights();
     }
 
     public void changeExtendHeight (boolean increase) {
-        extendLvl += 1;
+        if (increase) {
+            extendLvl += 1;
+        }
         setDeliveryHeights();
     }
 
