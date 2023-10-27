@@ -12,26 +12,13 @@ public class Delivery {
     private Servo extensionServo;
     private Servo droppingServo;
 
-    public static final int MIN = 0;
-    public static final int MAX = 100;
-    public static final int LOW = 20;
-    public static final int MID = 40;
-    public static final int HIGH = 60;
+    private double[] liftMotorPos = {0, 20, 40, 60, 100};
+    private double[] dropServoPos = {0, 0.5, 1};
+    private double[] extendServoPos = {0, 0.2, 0.4, 0.6, 1};
 
-    public static int EXTLVLLOW = 0;
-    public static int EXTLVLMID = 1;
-
-    public static final double EXTMIN = 0;
-    public static final double EXTMAX = 1.0;
-    public static final double EXTLOW = .2;
-    public static final double EXTMID = .4;
-    public static final double EXTHIGH = .6;
-
-    public static final double INTAKE = 0;
-    public static final double DR1 = 1.0;
-    public static final double EMPTY = .5;
-
-
+    private int liftLvl = 60;
+    private int dropLvl = 60;
+    private int extendLvl = 60;
 
     public Delivery(HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
@@ -42,8 +29,9 @@ public class Delivery {
     }
 
     public void raiseLift () {
-        if (liftMotor1.getCurrentPosition() >= MIN && liftMotor1.getCurrentPosition() <= MAX) {
+        if (liftMotor1.getCurrentPosition() >= 0 && liftMotor1.getCurrentPosition() <= 100) {
             liftMotor1.setPower(1);
+            liftMotor2.setPower(1);
         }
     }
 
@@ -52,54 +40,57 @@ public class Delivery {
         liftMotor2.setPower(power);
     }
 
-    public void moveToLow() {
-        liftMotor1.setTargetPosition(LOW);
+    public void changeLiftHeight (boolean increase) {
+        liftLvl += 1;
+        setDeliveryHeights();
     }
 
-    public void moveToMid() {
-        liftMotor1.setTargetPosition(MID);
+    public void changeDropHeight (boolean increase) {
+        dropLvl += 1;
+        setDeliveryHeights();
     }
 
-    public void moveToHigh() {
-        liftMotor1.setTargetPosition(HIGH);
+    public void changeExtendHeight (boolean increase) {
+        extendLvl += 1;
+        setDeliveryHeights();
+    }
+
+    private void setDeliveryHeights () {
+        liftMotor1.setTargetPosition((int) liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
+        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
+        extensionServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
     }
 
     public int getLiftPosition() {
         return liftMotor1.getCurrentPosition();
     }
 
+    private int getLiftLvl() {
+        return Math.abs(liftLvl % liftMotorPos.length);
+    }
+
+    private int getDropLvl() {
+        return Math.abs(dropLvl % dropServoPos.length);
+    }
+
+    private int getExtendLvl() {
+        return Math.abs(extendLvl % extendServoPos.length);
+    }
+
+    public int getLiftPos () {
+        return getLiftLvl();
+    }
+
+    public int getDropPos () {
+        return getDropLvl();
+    }
+
+    public int getExtendPos () {
+        return getExtendLvl();
+    }
+
     public void resetEncoders() {
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    public void pixelOut (boolean pressing) {
-        if (pressing) {
-            extensionServo.setPosition(1);
-        }
-    }
-
-    public void moveToDropperLow() {
-        droppingServo.setPosition(INTAKE);
-    }
-
-    public void moveToDropperMid() {
-        droppingServo.setPosition(EMPTY);
-    }
-
-    public void moveToDropperHigh() {
-        droppingServo.setPosition(DR1);
-    }
-
-    public void moveToExtenderLow() {
-        extensionServo.setPosition(EXTLOW);
-    }
-
-    public void moveToExtenderMid() {
-        extensionServo.setPosition(EXTMID);
-    }
-
-    public void moveToExtenderHigh() {
-        extensionServo.setPosition(EXTHIGH);
     }
 }

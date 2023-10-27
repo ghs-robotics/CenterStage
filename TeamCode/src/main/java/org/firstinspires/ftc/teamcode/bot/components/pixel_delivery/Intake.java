@@ -59,14 +59,6 @@ public class Intake {
         setHeight();
     }
 
-    public void runBelt (boolean pressing) {
-        if (pressing) {
-            conveyorBeltMotor.setPower(0.5);
-        } else {
-            conveyorBeltMotor.setPower(0);
-        }
-    }
-
     public int getIntakePos () {
         return getIntakeLvl();
     }
@@ -76,6 +68,15 @@ public class Intake {
     }
 
     private int getIntakeLvl(){
-        return Math.abs(intakeLvl % pos.length);}
+        return Math.abs(intakeLvl % pos.length);
+    }
+
+    public void runBelt (boolean pressing) {
+        if (pressing) {
+            conveyorBeltMotor.setPower(0.5);
+        } else {
+            conveyorBeltMotor.setPower(0);
+        }
+    }
 }
 
