@@ -53,7 +53,7 @@ public class  Auto extends LinearOpMode {
         while (opModeIsActive()){
             actionHandler.run();
             actionHandler.status();
-            telemetry.update();
+            robot.update();
         }
     }
 }
