@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 // todo needs renaming
 public class Intake {
     private DcMotor conveyorBeltMotor;
@@ -27,8 +25,8 @@ public class Intake {
         intakeServo.setPosition(0.05);
     }
 
-    public void pixelIn (boolean press) {
-        if (press) {
+    public void pixelIn (boolean pressing) {
+        if (pressing) {
             intakeMotor.setPower(0.5);
         } else {
             intakeMotor.setPower(0);

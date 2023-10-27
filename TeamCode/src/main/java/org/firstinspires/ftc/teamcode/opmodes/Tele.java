@@ -15,36 +15,48 @@ public class Tele extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
+
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
-        robot.init();
-
+        waitForStart();
         telemetry.addLine("Initializing");
         telemetry.update();
 
-        waitForStart();
-
-        while (opModeIsActive()) {
+        while (opModeIsActive()){
             gp1.update();
             gp2.update();
+
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
             robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
 
+
+
+
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
-            robot.intake.pixelIn(gp2.dpad_left.pressing());
+
+
+
+            //-------------------------------------------------------------------------------------
+            //                                  TELEMETRY
+            //-------------------------------------------------------------------------------------
+            telemetry.update();
+
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
+            robot.intake.pixelIn(gp2.dpad_left.pressing());
+
+            robot.outtake.pixelOut(gp2.dpad_right.pressing());
+
             robot.lift.driveLift(gp2.left_stick_y);
 
 
-//            if (gp2.dpad_right) {
-//                outtake.pixelOut();
-//            }
+
+            robot.drone.deliverDrone(gp2.y.pressing());
 
 //            if (gp2.a) {
 //                lift.moveToLow();
@@ -66,5 +78,6 @@ public class Tele extends LinearOpMode {
             telemetry.update();
             telemetry.update();
         }
+
     }
 }

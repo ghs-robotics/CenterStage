@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.bot;
 
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.bot.components.Drone;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Lift;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Outtake;
 import org.firstinspires.ftc.teamcode.bot.control.Navigation;
 import org.firstinspires.ftc.teamcode.cv.Camera;
 
@@ -24,6 +27,7 @@ public class Robot {
 
     public Intake intake;
     public Lift lift;
+    public Drone drone;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
@@ -69,12 +73,12 @@ public class Robot {
     }
 
     private void intakeTelemetry(){
-//        telemetry.addData("intake position: ", intake.getIntakePos());
+        telemetry.addData("intake position: ", intake.getIntakePos());
         telemetry.addLine();
     }
 
     private void liftTelemetry(){
-//        telemetry.addData("lift position: ", lift.getLiftPosition());
+        telemetry.addData("lift position: ", lift.getLiftPosition());
         telemetry.addLine();
     }
 }

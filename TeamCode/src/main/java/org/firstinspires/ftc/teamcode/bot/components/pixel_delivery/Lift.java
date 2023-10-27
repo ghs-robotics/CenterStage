@@ -8,9 +8,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Lift {
     private DcMotor liftMotor1;
@@ -48,14 +45,7 @@ public class Lift {
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    // outtake
-
-
-
-
-    // Lift
-
-    public void raiseLift() {
+    public void raiseLift () {
         if (liftMotor1.getCurrentPosition() >= MIN && liftMotor1.getCurrentPosition() <= MAX) {
             liftMotor1.setPower(1);
         }
