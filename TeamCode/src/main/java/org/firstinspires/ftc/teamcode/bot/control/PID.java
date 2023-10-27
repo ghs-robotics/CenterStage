@@ -29,7 +29,7 @@ public class PID {
     /**
      * a constructor that creates a pid class object
      * @param p proportional gain -> p is large when (target pos - current pos) is large
-     * @param i integral gain ->
+     * @param i integral gain -> becomes large if bot cannot reach target quickly
      * @param d derivative gain -> responds to large changes in error, prevents overshoot in p & i
      */
     public PID (double p, double i, double d) {
