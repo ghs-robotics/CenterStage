@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.components;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -33,6 +34,10 @@ public class Gyro {
 
     public double getHeading(AngleUnit unit) {
         double yaw = getOrientation(unit)[0];
+        if (unit == RADIANS)
+            yaw -= Math.PI;
+        else
+            yaw -= 180;
         return yaw;
     }
 

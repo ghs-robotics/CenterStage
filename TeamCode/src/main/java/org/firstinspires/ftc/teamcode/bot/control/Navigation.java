@@ -58,6 +58,22 @@ public class Navigation {
 
     }
 
+    public boolean runToPosition(double x, double y, double heading, boolean xFirst){
+        return runToPosition(x, y, heading, xFirst, 1);
+    }
+
+    private boolean runToPosition(double x, double y, double heading, boolean xFirst, int cycle){
+        if (cycle < 1)
+            return true;
+
+        if (xFirst)
+            runToPosition(x, this.y, heading);
+        else
+            runToPosition(this.x, y, heading);
+
+        return runToPosition(x, y, heading, !xFirst, cycle--);
+    }
+
     /**
      * @param x target x position
      * @param y target y position
