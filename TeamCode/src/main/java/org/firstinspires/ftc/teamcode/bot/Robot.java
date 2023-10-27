@@ -25,8 +25,8 @@ public class Robot {
     public Intake intake;
     public Lift lift;
     public Outtake outtake;
-    public Drone drone;
     public Hanging hang;
+    public Drone drone;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
@@ -39,6 +39,7 @@ public class Robot {
         lift = new Lift(hardwareMap);
         outtake = new Outtake(hardwareMap);
         hang = new Hanging(hardwareMap);
+        drone = new Drone(hardwareMap);
     }
 
     public void init(){

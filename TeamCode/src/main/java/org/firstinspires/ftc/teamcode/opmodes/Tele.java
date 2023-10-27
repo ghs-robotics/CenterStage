@@ -47,9 +47,9 @@ public class Tele extends LinearOpMode {
 
             robot.lift.driveLift(gp2.left_stick_y);
 
-            robot.hang.hang(gp2.x.pressing());
+            robot.hang.hang(gp2.y.pressing());
 
-            robot.drone.deliverDrone(gp2.y.pressing());
+            robot.drone.launch(gp2.a.pressing());
 
 //            if (gp2.a) {
 //                lift.moveToLow();
