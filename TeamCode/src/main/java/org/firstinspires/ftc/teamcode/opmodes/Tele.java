@@ -15,48 +15,38 @@ public class Tele extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
+
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
-        robot.init();
-
+        waitForStart();
         telemetry.addLine("Initializing");
         telemetry.update();
 
-        waitForStart();
-
-        while (opModeIsActive()) {
+        while (opModeIsActive()){
             gp1.update();
             gp2.update();
+
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
             robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
-
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
-            robot.intake.pixelIn(gp2.dpad_left.pressing());
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
-            robot.lift.driveLift(gp2.left_stick_y);
+            robot.intake.pixelIn(gp2.dpad_left.pressing());
+            robot.intake.runBelt(gp2.a.pressing());
 
+            robot.deliver.driveLift(gp2.left_stick_y);
+            robot.deliver.changeLiftHeight(gp2.dpad_up.pressed());
+            robot.deliver.changeDropHeight(gp2.x.pressed());
+            robot.deliver.changeExtendHeight(gp2.b.pressed());
 
-//            if (gp2.dpad_right) {
-//                outtake.pixelOut();
-//            }
+//            robot.drone.deliverDrone(gp2.x.pressing());
 
-//            if (gp2.a) {
-//                lift.moveToLow();
-//            }
-//
-//            if (gp2.x) {
-//                lift.moveToMid();
-//            }
-//
-//            if (gp2.y) {
-//                lift.moveToHigh();
-//            }
+            robot.hang.hang(gp2.y.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
@@ -64,5 +54,6 @@ public class Tele extends LinearOpMode {
             robot.update();
             robot.getTelemetry();
         }
+
     }
 }
