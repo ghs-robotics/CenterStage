@@ -62,9 +62,10 @@ public class Robot {
     }
 
     public void getTelemetry(){
-        liftTelemetry();
-        intakeTelemetry();
         positionTelemetry();
+        intakeTelemetry();
+        liftTelemetry();
+        deliveryTelemetry();
     }
 
     private void positionTelemetry(){
@@ -82,5 +83,9 @@ public class Robot {
     private void liftTelemetry(){
         telemetry.addData("lift position: ", deliver.getLiftPosition());
         telemetry.addLine();
+    }
+
+    private void deliveryTelemetry () {
+        telemetry.addData("drop position", deliver.getDropPos());
     }
 }

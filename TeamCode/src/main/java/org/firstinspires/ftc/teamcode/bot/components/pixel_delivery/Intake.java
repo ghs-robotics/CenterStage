@@ -5,13 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-// todo needs renaming
 public class Intake {
     private DcMotor conveyorBeltMotor;
     private DcMotor intakeMotor;
     private Servo intakeServo;
 
-    // TODO: make one position for each pixel (5 in each stack) (2 more)
     double[] pos = {0.01, 0.06, 0.09, 0.13, 0.16, 0.2};
 
     int intakeLvl = 60;
@@ -73,7 +71,7 @@ public class Intake {
 
     public void runBelt (boolean pressing) {
         if (pressing) {
-            conveyorBeltMotor.setPower(0.5);
+            conveyorBeltMotor.setPower(1);
         } else {
             conveyorBeltMotor.setPower(0);
         }
