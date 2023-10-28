@@ -12,6 +12,7 @@ public class AutoActions {
     public static final int DELIVER = 2;
     public static final int PLACE = 3;
     public static final int ALIGN = 4;
+    public static final int WAIT = 5;
 
     private String description;
 
@@ -19,7 +20,9 @@ public class AutoActions {
     private boolean endAction;
 
     private ElapsedTime timer;
+    private ElapsedTime waitTimer;
     private boolean timerReset;
+    private boolean waitTimerStart;
 
     private int zone;
 
@@ -30,6 +33,7 @@ public class AutoActions {
         this.identity = id;
         this.robot = robot;
         timerReset = false;
+        waitTimerStart = false;
         timer = new ElapsedTime();
 //        setDescription();
     }
@@ -67,6 +71,13 @@ public class AutoActions {
 
     }
 
+    private void waiting() {
+        if (!waitTimerStart)
+            waitTimer = new ElapsedTime();
+
+        endAction = waitTimer.milliseconds() >= (params.waitTime * 1000);
+
+    }
     /**
      * @return whether or not this action has been completed
      */
@@ -93,6 +104,9 @@ public class AutoActions {
                 break;
             case ALIGN:
                 alignBotToTag();
+                break;
+            case WAIT:
+                waiting();
                 break;
 
         }
@@ -124,6 +138,9 @@ public class AutoActions {
                 break;
             case ALIGN:
                 description = "Aligning with the AprilTag";
+                break;
+            case WAIT:
+                description = "waiting";
                 break;
         }
     }

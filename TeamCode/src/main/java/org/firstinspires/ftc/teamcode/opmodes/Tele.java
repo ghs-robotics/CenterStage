@@ -47,6 +47,7 @@ public class Tele extends LinearOpMode {
 //            robot.drone.deliverDrone(gp2.x.pressing());
 
             robot.hang.hang(gp2.y.pressing());
+            robot.hang.uncoil(gp2.dpad_down.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY

@@ -51,28 +51,30 @@ public class Navigation {
         this.gyroHeading = gyro.getHeading(AngleUnit.RADIANS);
 
         // update x position
-        this.x = Math.cos(gyroHeading) * horizontalEncoder;
+//        this.x = Math.cos(gyroHeading) * horizontalEncoder;
+        this.x = horizontalEncoder;
 
         // update y position
-        this.y = Math.sin(gyroHeading) * verticalEncoder;
+//        this.y = Math.sin(gyroHeading) * verticalEncoder;
+        this.y = verticalEncoder;
 
     }
-
-    public boolean runToPosition(double x, double y, double heading, boolean xFirst){
-        return runToPosition(x, y, heading, xFirst, 1);
-    }
-
-    private boolean runToPosition(double x, double y, double heading, boolean xFirst, int cycle){
-        if (cycle < 1)
-            return true;
-
-        if (xFirst)
-            runToPosition(x, this.y, heading);
-        else
-            runToPosition(this.x, y, heading);
-
-        return runToPosition(x, y, heading, !xFirst, cycle--);
-    }
+//
+//    public boolean runToPosition(double x, double y, double heading, boolean xFirst){
+//        return runToPosition(x, y, heading, xFirst, 1);
+//    }
+//
+//    private boolean runToPosition(double x, double y, double heading, boolean xFirst, int cycle){
+//        if (cycle < 1)
+//            return true;
+//
+//        if (xFirst)
+//            runToPosition(x, this.y, heading);
+//        else
+//            runToPosition(this.x, y, heading);
+//
+//        return runToPosition(x, y, heading, !xFirst, cycle--);
+//    }
 
     /**
      * @param x target x position

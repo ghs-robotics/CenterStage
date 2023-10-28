@@ -21,4 +21,14 @@ public class Hanging {
             hangServo2.setPower(0);
         }
     }
+
+    public void uncoil (boolean pressing) {
+        if (pressing) {
+            hangServo1.setPower(-1);
+            hangServo2.setPower(1);
+        } else {
+            hangServo1.setPower(0);
+            hangServo2.setPower(0);
+        }
+    }
 }

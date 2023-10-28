@@ -34,10 +34,6 @@ public class Gyro {
 
     public double getHeading(AngleUnit unit) {
         double yaw = getOrientation(unit)[0];
-        if (unit == RADIANS)
-            yaw -= Math.PI;
-        else
-            yaw -= 180;
         return yaw;
     }
 
