@@ -12,21 +12,16 @@ public class Hanging {
         hangServo2 = hardwareMap.get(CRServo.class, "hang2");
     }
 
-    public void hang (boolean pressing) {
-        if (pressing) {
-            hangServo1.setPower(1);
-            hangServo2.setPower(-1);
-        } else {
-            hangServo1.setPower(0);
-            hangServo2.setPower(0);
-        }
-    }
-
-    public void uncoil (boolean pressing) {
-        if (pressing) {
+    public void hang (boolean lower, boolean raise) {
+        if (lower) {
             hangServo1.setPower(-1);
             hangServo2.setPower(1);
-        } else {
+        }
+        else if (raise) {
+            hangServo1.setPower(1);
+            hangServo2.setPower(-1);
+        }
+        else {
             hangServo1.setPower(0);
             hangServo2.setPower(0);
         }
