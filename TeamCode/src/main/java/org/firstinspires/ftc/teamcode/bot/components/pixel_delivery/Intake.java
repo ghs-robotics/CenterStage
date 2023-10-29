@@ -26,8 +26,10 @@ public class Intake {
     public void pixelIn (boolean pressing) {
         if (pressing) {
             intakeMotor.setPower(0.5);
+            conveyorBeltMotor.setPower(1);
         } else {
             intakeMotor.setPower(0);
+            conveyorBeltMotor.setPower(0);
         }
     }
 
@@ -67,14 +69,6 @@ public class Intake {
 
     private int getIntakeLvl(){
         return Math.abs(intakeLvl % pos.length);
-    }
-
-    public void runBelt (boolean pressing) {
-        if (pressing) {
-            conveyorBeltMotor.setPower(1);
-        } else {
-            conveyorBeltMotor.setPower(0);
-        }
     }
 }
 
