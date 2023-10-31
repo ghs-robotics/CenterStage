@@ -40,8 +40,8 @@ public class Tele extends LinearOpMode {
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
             robot.intake.pixelIn(gp2.dpad_left.pressing());
 
-            robot.deliver.driveLift(gp2.left_stick_y);
-            robot.deliver.changeLiftHeight(gp2.dpad_up .pressed());
+            if (!gp2.dpad_up.pressed()) robot.deliver.driveLift(gp2.left_stick_y);
+            robot.deliver.changeLiftHeight(gp2.dpad_up.pressed());
             robot.deliver.changeDropPosition(gp2.dpad_right.pressed());
             robot.deliver.extendOuttake(gp2.right_stick_y);
 
