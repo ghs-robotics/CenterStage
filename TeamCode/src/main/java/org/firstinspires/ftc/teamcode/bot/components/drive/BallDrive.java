@@ -19,9 +19,14 @@ public class BallDrive implements Drivebase {
         rightDrive = hardwareMap.get(DcMotor.class, "right");
         backDrive = hardwareMap.get(DcMotor.class, "back");
 
-        leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftDrive.setDirection(DcMotorSimple.Direction.REVERSE); // y-axis encoder
         backDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightDrive.setDirection(DcMotorSimple.Direction.FORWARD); // x-axis encoder
+    }
+
+    @Override
+    public void metaDrive(double x, double y, double rot) {
+
     }
 
     @Override
@@ -35,8 +40,8 @@ public class BallDrive implements Drivebase {
 
     @Override
     public int[] getEncoderTicks() {
-        int[] ticks = {leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition(),
-                backDrive.getCurrentPosition()};
+        // 0 gets y, 1 gets x
+        int[] ticks = {leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition()};
         return ticks;
     }
 
@@ -44,11 +49,9 @@ public class BallDrive implements Drivebase {
     public void resetEncoders() {
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private void setMotorPowers(){

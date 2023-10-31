@@ -11,22 +11,17 @@ public class Navigation {
     private double y;
     private double gyroHeading;
 
-    private int verticalEncoder;
-    private int horizontalEncoder;
+    private int yEncoder;
+    private int xEncoder;
 
-    // you would think balldrive odo would be easier to code
-    // but the numbers are difficult to guess
+    private final int TICKS_PER_REV = 8192;
+    private final double WHEEL_RAD = 17.5; // in mm
 
-    // 9/10 balldrive can't be precisely tuned, there is not enough traction between wheel and motor
+    private final double[] X_DIS_FROM_CENTER = new double[]{164.109, 48.88}; // in mm
+    private final double[] Y_DIS_FROM_CENTER = new double[]{153.275, 60.916}; // in mm
 
-    //139.5mm - left
-    //139.5mm - right
-    //108.54mm - back
-    //
-    //Diagonal vertical motors 163.7 mm
-    //Diagonal horizontal motor 163.1 mm
-    private final double verticalTrackingDistance = 139.5 * 2;
-    private final double horizontalTrackingDistance = 108.54 * 2;
+
+    private final
 
     Telemetry telemetry;
 
@@ -51,12 +46,12 @@ public class Navigation {
         this.gyroHeading = gyro.getHeading(AngleUnit.RADIANS);
 
         // update x position
-//        this.x = Math.cos(gyroHeading) * horizontalEncoder;
-        this.x = horizontalEncoder;
+        this.x = Math.sin(gyroHeading) * xEncoder;
+//        this.x = xEncoder;
 
         // update y position
-//        this.y = Math.sin(gyroHeading) * verticalEncoder;
-        this.y = verticalEncoder;
+        this.y = Math.cos(gyroHeading) * yEncoder;
+//        this.y = yEncoder;
 
     }
 //
@@ -118,8 +113,8 @@ public class Navigation {
      * Helper function that updates the encoder values every cycle
      */
     private void updateEncoders() {
-        verticalEncoder = drive.getEncoderTicks()[0];
-        horizontalEncoder = drive.getEncoderTicks()[1];
+        yEncoder = -drive.getEncoderTicks()[0];
+        xEncoder = -drive.getEncoderTicks()[1];
     }
 
     /**

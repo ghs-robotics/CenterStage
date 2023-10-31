@@ -19,9 +19,11 @@ public class Tele extends LinearOpMode {
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
+
+        robot.init();
         waitForStart();
         telemetry.addLine("Initializing");
-        telemetry.update();
+        robot.update();
 
         while (opModeIsActive()){
             gp1.update();

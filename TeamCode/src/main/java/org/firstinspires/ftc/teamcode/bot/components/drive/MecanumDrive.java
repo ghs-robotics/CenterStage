@@ -19,6 +19,11 @@ public class MecanumDrive implements Drivebase{
     }
 
     @Override
+    public void metaDrive(double x, double y, double rot) {
+
+    }
+
+    @Override
     public void calculateDrivePowers(double x, double y, double rot) {
         rot = -rot;
         double frontLeftPower = rot - x + y;
