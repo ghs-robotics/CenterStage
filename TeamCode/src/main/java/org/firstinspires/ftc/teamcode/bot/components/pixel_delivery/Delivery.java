@@ -21,7 +21,7 @@ public class Delivery {
     private int dropLvl = 60;
 //    private int extendLvl = 60;
 
-    public Delivery(HardwareMap hardwareMap) {
+    public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
         extensionServo = hardwareMap.get(CRServo.class, "extend");
@@ -32,7 +32,7 @@ public class Delivery {
         droppingServo.setPosition(0);
     }
 
-    public void driveLift(double power) {
+    public void driveLift (double power) {
         liftMotor1.setPower(power);
         liftMotor2.setPower(power);
     }
@@ -45,24 +45,25 @@ public class Delivery {
         if (increase) {
             liftLvl += 1;
         }
-        setDeliveryHeights();
+        setDeliveryPositions();
     }
 
-    public void changeDropHeight (boolean increase) {
+    public void changeDropPosition (boolean increase) {
         if (increase) {
             dropLvl += 1;
         }
-        setDeliveryHeights();
+        setDeliveryPositions();
     }
 
-//    public void changeExtendHeight (boolean increase) {
+ //    public void changeExtendHeight (boolean increase) {
 //        if (increase) {
 //            extendLvl += 1;
 //        }
 //        setDeliveryHeights();
 //    }
 
-    private void setDeliveryHeights () {
+    private void setDeliveryPositions() {
+        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
         droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
 //        extensionServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
