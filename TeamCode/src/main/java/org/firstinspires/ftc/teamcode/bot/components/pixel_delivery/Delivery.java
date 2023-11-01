@@ -10,6 +10,8 @@ public class Delivery {
     private DcMotor liftMotor1;
     private DcMotor liftMotor2;
 
+    private boolean runLiftToPosition;
+
     private CRServo extensionServo;
     private Servo droppingServo;
 
@@ -28,8 +30,11 @@ public class Delivery {
         droppingServo = hardwareMap.get(Servo.class, "drop");
 
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
         extensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
         droppingServo.setPosition(0);
+
+        runLiftToPosition = false;
     }
 
     public void driveLift (double power) {
@@ -62,8 +67,19 @@ public class Delivery {
 //        setDeliveryHeights();
 //    }
 
-    private void setDeliveryPositions() {
+    public void setRunLiftToPosition(boolean button){
+        if (button)
+            runLiftToPosition = !runLiftToPosition;
+
+        setDeliveryPositions();
+    }
+
+    private void runLiftToPosition(){
         liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor2.setPower(liftMotor1.getPower());
+    }
+
+    private void setDeliveryPositions() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
         droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
 //        extensionServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
