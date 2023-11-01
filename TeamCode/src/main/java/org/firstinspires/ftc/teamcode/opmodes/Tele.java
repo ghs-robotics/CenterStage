@@ -43,7 +43,7 @@ public class Tele extends LinearOpMode {
             if (!gp2.dpad_right.pressed())
             {
                 if (!gp2.dpad_up.pressed()) robot.deliver.driveLift(gp2.left_stick_y);
-                else robot.deliver.changeLiftHeight(gp2.dpad_up.pressed());
+                else robot.deliver.changeLiftHeight(gp2.y.pressed());
             }
             else robot.deliver.changeDropPosition(gp2.dpad_right.pressed());
             robot.deliver.extendOuttake(gp2.right_stick_y);
