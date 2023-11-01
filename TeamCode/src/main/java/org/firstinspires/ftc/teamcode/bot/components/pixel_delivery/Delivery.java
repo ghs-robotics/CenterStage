@@ -10,18 +10,16 @@ public class Delivery {
     private DcMotor liftMotor1;
     private DcMotor liftMotor2;
 
-    private boolean runLiftToPosition;
-
     private CRServo extensionServo;
     private Servo droppingServo;
 
     private int[] liftMotorPos = {0, 200, 400, 600, 1000};
     private double[] dropServoPos = {0, 0.5, 0.6};
-//    private double[] extendServoPos = {0, 0.2, 0.4, 0.6, 1};
 
     private int liftLvl = 60;
     private int dropLvl = 60;
-//    private int extendLvl = 60;
+
+    private boolean runLiftToPosition;
 
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
@@ -37,13 +35,31 @@ public class Delivery {
         runLiftToPosition = false;
     }
 
-    public void driveLift (double power) {
-        liftMotor1.setPower(power);
-        liftMotor2.setPower(power);
+    private void setDeliveryPositions() {
+        liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
+        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
     }
 
-    public void extendOuttake (double power) {
-        extensionServo.setPower(power);
+    //-------------------------------------------------------------------------------------
+    //                                   Lift Functions
+    //-------------------------------------------------------------------------------------
+    public void driveLift (double power) {
+        if (!runLiftToPosition) {
+            liftMotor1.setPower(power);
+            liftMotor2.setPower(power);
+        }
+    }
+
+    public void setRunLiftToPosition(boolean button){
+        if (button)
+            runLiftToPosition = !runLiftToPosition;
+
+        runLiftToPosition();
+    }
+
+    private void runLiftToPosition(){
+        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor2.setPower(liftMotor1.getPower());
     }
 
     public void changeLiftHeight (boolean increase) {
@@ -53,6 +69,18 @@ public class Delivery {
         setDeliveryPositions();
     }
 
+    public int getLiftPosition() {
+        return liftMotor1.getCurrentPosition();
+    }
+
+    public void resetEncoders() {
+        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    //-------------------------------------------------------------------------------------
+    //                                   Drop Functions
+    //-------------------------------------------------------------------------------------
     public void changeDropPosition (boolean increase) {
         if (increase) {
             dropLvl += 1;
@@ -60,57 +88,14 @@ public class Delivery {
         setDeliveryPositions();
     }
 
- //    public void changeExtendHeight (boolean increase) {
-//        if (increase) {
-//            extendLvl += 1;
-//        }
-//        setDeliveryHeights();
-//    }
-
-    public void setRunLiftToPosition(boolean button){
-        if (button)
-            runLiftToPosition = !runLiftToPosition;
-
-        setDeliveryPositions();
-    }
-
-    private void runLiftToPosition(){
-        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor2.setPower(liftMotor1.getPower());
-    }
-
-    private void setDeliveryPositions() {
-        liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
-        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
-//        extensionServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
-    }
-
-    public int getLiftPosition() {
-        return liftMotor1.getCurrentPosition();
-    }
-
     public double getDropPosition () {
         return droppingServo.getPosition();
     }
 
-//    public double getExtendPosition () {
-//        return extensionServo.getPosition();
-//    }
-
-    private int getLiftLvl() {
-        return Math.abs(liftLvl % liftMotorPos.length);
-    }
-
-    private int getDropLvl() {
-        return Math.abs(dropLvl % dropServoPos.length);
-    }
-
-//    private int getExtendLvl() {
-//        return Math.abs(extendLvl % extendServoPos.length);
-//    }
-
-    public void resetEncoders() {
-        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    //-------------------------------------------------------------------------------------
+    //                                   Outtake Functions
+    //-------------------------------------------------------------------------------------
+    public void extendOuttake (double power) {
+        extensionServo.setPower(power);
     }
 }
