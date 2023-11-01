@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.bot.components.Gyro;
+
 public class BallDrive implements Drivebase {
     private DcMotor leftDrive;
     private DcMotor rightDrive;
@@ -13,7 +16,9 @@ public class BallDrive implements Drivebase {
     private double rp;
     private double bp;
 
-    public BallDrive(HardwareMap hardwareMap) {
+    private Gyro gyro;
+
+    public BallDrive(HardwareMap hardwareMap, Gyro gyro) {
 
         leftDrive = hardwareMap.get(DcMotor.class, "left");
         rightDrive = hardwareMap.get(DcMotor.class, "right");
@@ -22,20 +27,31 @@ public class BallDrive implements Drivebase {
         leftDrive.setDirection(DcMotorSimple.Direction.REVERSE); // y-axis encoder
         backDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDrive.setDirection(DcMotorSimple.Direction.FORWARD); // x-axis encoder
+
+        this.gyro = gyro;
     }
 
-    @Override
-    public void metaDrive(double x, double y, double rot) {
+    public void calculateDrivePowers(double x, double y, double rot) {
 
-    }
-
-    @Override
-    public void calculateDrivePowers(double x, double y, double rot){
         bp = x;
         lp = y - rot;
         rp = y + rot;
 
         setMotorPowers();
+    }
+
+    @Override
+    public void calculateDrivePowers(double x, double y, double rot, boolean driveMode){
+        double angle = gyro.getHeading(AngleUnit.RADIANS);
+
+        double driveX = x;
+        double driveY = y;
+
+        if(driveMode) {
+            driveX = y * Math.sin(angle) - x * Math.cos(angle);
+            driveY = y * Math.cos(angle) + x * Math.sin(angle);
+        }
+        calculateDrivePowers(driveX, driveY, rot);
     }
 
     @Override

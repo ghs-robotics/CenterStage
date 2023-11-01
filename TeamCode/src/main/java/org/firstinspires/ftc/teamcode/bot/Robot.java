@@ -31,8 +31,8 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
-        drive = new BallDrive(hardwareMap);
         gyro = new Gyro(hardwareMap);
+        drive = new BallDrive(hardwareMap, gyro);
 
         nav = new Navigation(drive, gyro, telemetry);
         intake = new Intake(hardwareMap);
@@ -51,6 +51,8 @@ public class Robot {
         drive.resetEncoders();
         deliver.resetEncoders();
     }
+
+
 
     /**
      * tells the robot parts to retrieve the current information from each part to update the robot.
