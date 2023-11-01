@@ -93,16 +93,18 @@ public class Navigation {
         if (Math.abs(xDiff) > 15) {
             xPow = xDiff / 10.0;
         }
+
         if (Math.abs(yDiff) > 15) {
             yPow = yDiff / 10.0;
         }
+
         if (rotDiffClock >= rotDiffCounterClock){
             rotPow = rotDiffClock / 10.0;
         } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
             rotPow = rotDiffCounterClock /10.0;
         }
 
-        drive.calculateDrivePowers(xPow , yPow, rotPow);
+        drive.calculateDrivePowers(xPow , yPow, rotPow, true);
         telemetry.addLine("y = " + this.y);
         telemetry.addLine("x = " + this.x);
         telemetry.addLine("heading = " + this.gyroHeading);
