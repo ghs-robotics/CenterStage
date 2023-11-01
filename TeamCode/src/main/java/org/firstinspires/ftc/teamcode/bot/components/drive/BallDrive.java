@@ -31,8 +31,8 @@ public class BallDrive implements Drivebase {
         this.gyro = gyro;
     }
 
+    @Override
     public void calculateDrivePowers(double x, double y, double rot) {
-
         bp = x;
         lp = y - rot;
         rp = y + rot;
