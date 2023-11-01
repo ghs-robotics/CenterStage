@@ -12,12 +12,16 @@ public class Tele extends LinearOpMode {
     Controller gp1;
     Controller gp2;
 
+    boolean driveMode;
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
 
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
+
+        driveMode = false;
 
 
         robot.init();
@@ -32,7 +36,13 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
-            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
+
+            // toggle drive mode. True is metaDrive, False is regular drive - left bumper
+            if(gp1.left_bumper.pressed())
+                driveMode = !driveMode;
+
+            // driving
+            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x, driveMode);
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
