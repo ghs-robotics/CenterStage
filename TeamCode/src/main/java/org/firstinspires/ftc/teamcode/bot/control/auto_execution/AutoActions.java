@@ -20,9 +20,7 @@ public class AutoActions {
     private boolean endAction;
 
     private ElapsedTime timer;
-    private ElapsedTime waitTimer;
     private boolean timerReset;
-    private boolean waitTimerStart;
 
     private int zone;
 
@@ -33,9 +31,9 @@ public class AutoActions {
         this.identity = id;
         this.robot = robot;
         timerReset = false;
-        waitTimerStart = false;
         timer = new ElapsedTime();
-//        setDescription();
+
+        setDescription();
     }
 
     public AutoActions(int id, Robot robot,ParamHandler params){
@@ -48,7 +46,7 @@ public class AutoActions {
     }
 
     private void runIntake(){
-        robot.intake.setIntakeHeight(params.intakeLevel);
+        robot.intake.setLiftHeight(params.intakeLevel);
 
         if(!timerReset)
             timer.reset();
@@ -58,6 +56,12 @@ public class AutoActions {
 
     private void runDelivery(){
         // same as intake
+        robot.deliver.setHeights(params.liftLevel, params.outtakeLevel);
+
+        boolean dropPixels = false;
+
+        if(!timerReset)
+            timer.reset();
     }
 
     private void placePixel(){
@@ -72,10 +76,10 @@ public class AutoActions {
     }
 
     private void waiting() {
-        if (!waitTimerStart)
-            waitTimer = new ElapsedTime();
+        if(!timerReset)
+            timer.reset();
 
-        endAction = waitTimer.milliseconds() >= (params.waitTime * 1000);
+        endAction = timer.milliseconds() >= (params.waitTime * 1000);
 
     }
     /**

@@ -43,7 +43,7 @@ public class Intake {
             return true;
     }
 
-    public void setIntakeHeight(int targetLevel){
+    public void setLiftHeight(int targetLevel){
         int diff = targetLevel - getIntakeLvl();
         intakeLvl += diff;
         setHeight();
