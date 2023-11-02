@@ -43,6 +43,7 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
+
     public void driveLift (double power) {
         if (!runLiftToPosition) {
             liftMotor1.setPower(power);
@@ -81,6 +82,7 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
     //                                   Drop Functions
     //-------------------------------------------------------------------------------------
+
     public void changeDropPosition (boolean increase) {
         if (increase) {
             dropLvl += 1;
@@ -95,6 +97,7 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
     //                                   Outtake Functions
     //-------------------------------------------------------------------------------------
+
     public void extendOuttake (double power) {
         extensionServo.setPower(power);
     }
