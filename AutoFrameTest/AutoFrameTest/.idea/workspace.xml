@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d6b36303-2b50-412f-831d-32eb7887bd49" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/AutoActions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/AutoRunner.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ParamHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Robot.java" afterDir="false" />
-    </list>
+    <list default="true" id="d6b36303-2b50-412f-831d-32eb7887bd49" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +27,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "auto-framework-w-test-proj",
+    "git-widget-placeholder": "auto-framework",
     "last_opened_file_path": "A:/Productive/4042/CenterStage4042/AutoFrameTest/AutoFrameTest/src",
     "vue.rearranger.settings.migration": "true"
   }
@@ -41,6 +36,21 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="A:\Productive\4042\CenterStage4042\AutoFrameTest\AutoFrameTest\src" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="AutoFrameTest" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="AutoFrameTest" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -51,6 +61,7 @@
       <option name="presentableId" value="Default" />
       <updated>1695102712992</updated>
       <workItem from="1695102713993" duration="271000" />
+      <workItem from="1697829182139" duration="49000" />
     </task>
     <servers />
   </component>

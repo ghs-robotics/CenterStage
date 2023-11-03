@@ -35,6 +35,22 @@ public class Delivery {
         runLiftToPosition = false;
     }
 
+    //-------------------------------------------------------------------------------------
+    //                                   Auto Functions
+    //-------------------------------------------------------------------------------------
+
+    public void setHeights(int lift, int extension){
+        int lDiff = lift - getLiftLvl();
+        liftLvl += lDiff;
+
+//        int eDiff = extension - getExtensionLvl();
+//        extension +=
+
+        setDeliveryPositions();
+    }
+
+
+
     private void setDeliveryPositions() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
         droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
@@ -70,6 +86,10 @@ public class Delivery {
         setDeliveryPositions();
     }
 
+    public int getLiftLvl(){
+        return Math.abs(liftLvl % liftMotorPos.length);
+    }
+
     public int getLiftPosition() {
         return liftMotor1.getCurrentPosition();
     }
@@ -100,5 +120,9 @@ public class Delivery {
 
     public void extendOuttake (double power) {
         extensionServo.setPower(power);
+    }
+
+    public int getExtensionLvl(){
+        return Math.abs(dropLvl % dropServoPos.length);
     }
 }

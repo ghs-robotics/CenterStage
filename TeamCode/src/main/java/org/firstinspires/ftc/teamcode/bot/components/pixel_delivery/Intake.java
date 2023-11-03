@@ -59,7 +59,7 @@ public class Intake {
      *
      * Jett aggressively updrafts the intake until it reaches the desired pos
      */
-    public void setIntakeHeight(int targetLevel){
+    public void setLiftHeight(int targetLevel){
         int diff = targetLevel - getIntakeLvl();
         intakeLvl += diff;
         setHeight();
