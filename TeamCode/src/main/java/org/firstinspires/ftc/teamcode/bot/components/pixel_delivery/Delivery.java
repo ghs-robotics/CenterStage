@@ -14,7 +14,7 @@ public class Delivery {
     private Servo droppingServo;
 
     private int[] liftMotorPos = {0, 200, 400, 600, 1000};
-    private double[] dropServoPos = {0, 0.5, 0.6};
+    private double[] dropServoPos = {0.1, 0.5, 0.6};
 
     private int liftLvl = 60;
     private int dropLvl = 60;
