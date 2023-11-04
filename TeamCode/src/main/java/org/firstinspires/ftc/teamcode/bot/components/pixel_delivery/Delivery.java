@@ -95,14 +95,6 @@ public class Delivery {
         setDeliveryPositions();
     }
 
-    public int getLiftLvl(){
-        return Math.abs(liftLvl % liftMotorPos.length);
-    }
-
-    public int getLiftPosition() {
-        return liftMotor1.getCurrentPosition();
-    }
-
     public void resetEncoders() {
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -126,19 +118,11 @@ public class Delivery {
         liftMotor2.setPower(power * 0.75);
     }
 
-    public boolean getLiftMode(){
-        return runLiftToPosition;
-    }
-
     private void runLiftToPosition(){
         if (runLiftToPosition) {
             liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             liftMotor2.setPower(liftMotor1.getPower());
         }
-    }
-
-    public double getSentPower() {
-        return sentPower;
     }
 
     //-------------------------------------------------------------------------------------
@@ -162,6 +146,26 @@ public class Delivery {
 
     public void extendOuttake (double power) {
         extensionServo.setPower(power);
+    }
+
+    //-------------------------------------------------------------------------------------
+    //                                   Telemetry Functions
+    //-------------------------------------------------------------------------------------
+
+    public int getLiftPosition() {
+        return liftMotor1.getCurrentPosition();
+    }
+
+    public boolean getLiftMode(){
+        return runLiftToPosition;
+    }
+
+    public int getLiftLvl(){
+        return Math.abs(liftLvl % liftMotorPos.length);
+    }
+
+    public double getSentPower() {
+        return sentPower;
     }
 
     public int getExtensionLvl(){
