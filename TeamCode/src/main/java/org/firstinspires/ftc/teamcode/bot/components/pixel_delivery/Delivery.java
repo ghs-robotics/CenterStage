@@ -112,16 +112,18 @@ public class Delivery {
      * @param power sets the power of both motors on the lift
      */
     private void setLiftPower(double power){
-        if (getLiftPosition() > 1200 && power > 0) {
+        int limit = 1430;
+
+        if (getLiftPosition() > limit && power > 0) {
             power = 0;
-        }else if (getLiftPosition() > 1000){
-            power *= (1200 - getLiftPosition()) / 200.0;
+        }else if (getLiftPosition() > limit - 150){
+            power *= (limit - getLiftPosition()) / 200.0;
         } else if (getLiftPosition() < 0 && power > 0){
             power = 0;
         }
 
-        liftMotor1.setPower(power);
-        liftMotor2.setPower(power);
+        liftMotor1.setPower(power * 0.75);
+        liftMotor2.setPower(power * 0.75);
     }
 
     public boolean getLiftMode(){

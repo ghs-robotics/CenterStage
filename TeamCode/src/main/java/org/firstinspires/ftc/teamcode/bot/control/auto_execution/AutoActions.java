@@ -14,7 +14,7 @@ public class AutoActions {
     public static final int ALIGN = 4;
     public static final int WAIT = 5;
 
-    private String description;
+    private Robot robot;
 
     private int identity;
     private boolean endAction;
@@ -23,9 +23,9 @@ public class AutoActions {
     private boolean timerReset;
 
     private int zone;
+    private String description;
 
     ParamHandler params;
-    private Robot robot;
 
     public AutoActions(int id, Robot robot){
         this.identity = id;
@@ -41,6 +41,9 @@ public class AutoActions {
         this.params = params;
     }
 
+    /**
+     * Driving the rob
+     */
     private void moveTo(){
         endAction = robot.nav.runToPosition(params.x, params.y, params.heading);
     }
@@ -54,20 +57,22 @@ public class AutoActions {
         endAction = robot.intake.autoRunIntake(timer.milliseconds());
     }
 
+    /**
+     * Runs the entire delivery system
+     */
     private void runDelivery(){
         // same as intake
         robot.delivery.setHeights(params.liftLevel, params.outtakeLevel);
 
         if(!timerReset)
             timer.reset();
-        if(robot.delivery.getDropPosition() == 0.6)
-            endAction = true;
-        else
-            robot.delivery.setDeliveryPositions();
+
+        endAction = (robot.delivery.getDropPosition() == 0.6);
+        robot.delivery.setDeliveryPositions();
     }
 
     /**
-     * drops pixel
+     * drops pixel by reversing Intake
      */
     private void placePixel(){
         robot.intake.autoPixelOut();

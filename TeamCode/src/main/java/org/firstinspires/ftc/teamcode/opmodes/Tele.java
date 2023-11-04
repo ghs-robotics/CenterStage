@@ -51,13 +51,16 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            // available buttons y, a, dpad_left, dpad_right, left trigger, right trigger
+            // available buttons y, a, dpad_left, dpad_right
 
             // changes intake height - left bumper and right bumper
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
 
             // runs intake and conveyor belt - x
             robot.intake.pixelIn(gp2.x.pressing());
+
+            // runs intake analogly - left and right trigger
+            robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
 
             // changes drop servo position - b
             robot.delivery.changeDropPosition(gp2.b.pressed());

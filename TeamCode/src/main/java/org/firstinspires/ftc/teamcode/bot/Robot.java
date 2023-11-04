@@ -71,6 +71,7 @@ public class Robot {
 
     private void positionTelemetry(){
         telemetry.addLine("Drivebase Telemetry");
+        telemetry.addData("Meta Drive Mode On: ", drive.getDriveMode());
         telemetry.addData("x pos: ", nav.getX());
         telemetry.addData("y pos: ", nav.getY());
         telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));

@@ -27,7 +27,7 @@ dependencies {
 
 
     // dashboard
-    implementation 'com.acmerobotics.dashboard:dashboard:0.4.12'
-    implementation 'org.apache.commons:commons-math3:3.6.1'
+//    implementation 'com.acmerobotics.dashboard:dashboard:0.4.12'
+//    implementation 'org.apache.commons:commons-math3:3.6.1'
 }
 

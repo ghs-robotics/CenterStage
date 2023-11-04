@@ -44,6 +44,11 @@ public class Intake {
         }
     }
 
+    public void pixelIn (double power) {
+        intakeMotor.setPower(power / 2);
+        conveyorBeltMotor.setPower(power);
+    }
+
     /**
      * @param milliseconds is the current amount of time that has passed
      * @return false-> passed time is less than timeLim, true-> passed time is greater than timeLim

@@ -20,8 +20,7 @@ public class Navigation {
     private final double[] X_DIS_FROM_CENTER = new double[]{164.109, 48.88}; // in mm
     private final double[] Y_DIS_FROM_CENTER = new double[]{153.275, 60.916}; // in mm
 
-
-    private final
+    public final double TICKS_PER_TILE = 39800;
 
     Telemetry telemetry;
 
@@ -46,12 +45,12 @@ public class Navigation {
         this.gyroHeading = gyro.getHeading(AngleUnit.RADIANS);
 
         // update x position
-        this.x = Math.sin(gyroHeading) * xEncoder;
-//        this.x = xEncoder;
+//        this.x = Math.sin(gyroHeading) * xEncoder;
+        this.x = xEncoder;
 
         // update y position
-        this.y = Math.cos(gyroHeading) * yEncoder;
-//        this.y = yEncoder;
+//        this.y = Math.cos(gyroHeading) * yEncoder;
+        this.y = yEncoder;
 
     }
 //

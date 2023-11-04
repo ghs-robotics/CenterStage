@@ -21,39 +21,27 @@ public class  Auto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
         actionHandler = new AutoActionHandler(robot, telemetry);
-
         robot.init();
 
-        // create list of actions to run ------------------------------------------
-        int cycle = 1;
+        // create list of actions to run
+        //actionHandler.add(WAIT, new ParamHandler(20));
+        actionHandler.add(MOVE, new ParamHandler(0, -1500, 0.0));
 
-        actionHandler.add(MOVE, new ParamHandler());
-        for (int i = 0; i < cycle; i++) {
-            actionHandler.add(DELIVER);
-            actionHandler.add(MOVE, new ParamHandler());
-            actionHandler.add(INTAKE);
-            actionHandler.add(MOVE, new ParamHandler());
-        }
-        actionHandler.add(MOVE, new ParamHandler());
-        actionHandler.add(PLACE);
-        actionHandler.add(MOVE);
 
-        // list stops here --------------------------------------------------------
+
 
         telemetry.addLine("queuing actions");
         telemetry.addLine(actionHandler.getTotalActions() + " total actions");
-        telemetry.update();
 
         waitForStart();
-
-
-        actionHandler.findAndSetZone();
+        //actionHandler.findAndSetZone();
         actionHandler.init();
 
         while (opModeIsActive()){
             actionHandler.run();
             actionHandler.status();
             robot.update();
+            robot.getTelemetry();
         }
     }
 }

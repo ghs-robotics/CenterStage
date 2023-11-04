@@ -15,6 +15,7 @@ public class MecanumDrive implements Drivebase{
 
     private Gyro gyro;
 
+    private boolean metaDriveOn;
 
     public MecanumDrive(HardwareMap hardwareMap, Gyro gyro){
 //        frontLeft = hardwareMap.get(DcMotor.class,"FLDrive");
@@ -40,6 +41,7 @@ public class MecanumDrive implements Drivebase{
 
     @Override
     public void calculateDrivePowers(double x, double y, double rot, boolean meta) {
+        metaDriveOn = meta;
 
         double angle = gyro.getHeading(AngleUnit.RADIANS);
         double driveY = y * Math.cos(angle) + x * Math.sin(angle);
@@ -58,6 +60,11 @@ public class MecanumDrive implements Drivebase{
     @Override
     public void resetEncoders() {
 
+    }
+
+    @Override
+    public boolean getDriveMode() {
+        return false;
     }
 
     private void setMotorPowers(double fl, double bl, double fr, double br){

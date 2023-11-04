@@ -18,6 +18,8 @@ public class BallDrive implements Drivebase {
 
     private Gyro gyro;
 
+    private boolean metaDriveOn;
+
     public BallDrive(HardwareMap hardwareMap, Gyro gyro) {
 
         leftDrive = hardwareMap.get(DcMotor.class, "left");
@@ -43,6 +45,7 @@ public class BallDrive implements Drivebase {
     @Override
     public void calculateDrivePowers(double x, double y, double rot, boolean driveMode){
         double angle = gyro.getHeading(AngleUnit.RADIANS);
+        metaDriveOn = driveMode;
 
         double driveX = x;
         double driveY = y;
@@ -68,6 +71,11 @@ public class BallDrive implements Drivebase {
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    @Override
+    public boolean getDriveMode() {
+        return metaDriveOn;
     }
 
     private void setMotorPowers(){
