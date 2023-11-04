@@ -48,11 +48,10 @@ public class Robot {
      */
     public void init(){
         //init cameras
+        gyro.resetHeading();
         drive.resetEncoders();
         delivery.resetEncoders();
     }
-
-
 
     /**
      * tells the robot parts to retrieve the current information from each part to update the robot.
@@ -87,6 +86,7 @@ public class Robot {
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
         telemetry.addData("lift position: ", delivery.getLiftPosition());
+        telemetry.addData("lift target Pos: ", delivery.getLiftLvl());
         telemetry.addData("Lift Preset On: ", delivery.getLiftMode());
         telemetry.addData("drop position", delivery.getDropPosition());
 //        telemetry.addData("extend position", deliver.getExtendPosition());

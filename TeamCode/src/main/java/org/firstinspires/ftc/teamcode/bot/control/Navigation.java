@@ -20,7 +20,7 @@ public class Navigation {
     private final double[] X_DIS_FROM_CENTER = new double[]{164.109, 48.88}; // in mm
     private final double[] Y_DIS_FROM_CENTER = new double[]{153.275, 60.916}; // in mm
 
-    public final double TICKS_PER_TILE = 39800;
+    public static final int TICKS_PER_TILE = 39800;
 
     Telemetry telemetry;
 
@@ -89,11 +89,11 @@ public class Navigation {
         double rotPow = 0;
 
 
-        if (Math.abs(xDiff) > 15) {
+        if (Math.abs(xDiff) > TICKS_PER_TILE / 25.0) {
             xPow = xDiff / 10.0;
         }
 
-        if (Math.abs(yDiff) > 15) {
+        if (Math.abs(yDiff) > TICKS_PER_TILE / 25.0) {
             yPow = yDiff / 10.0;
         }
 
@@ -103,11 +103,13 @@ public class Navigation {
             rotPow = rotDiffCounterClock /10.0;
         }
 
-        drive.calculateDrivePowers(xPow , yPow, rotPow, true);
+        drive.calculateDrivePowers(xPow , yPow, 0, true);
         telemetry.addLine("y = " + this.y);
         telemetry.addLine("x = " + this.x);
         telemetry.addLine("heading = " + this.gyroHeading);
-        return xPow + yPow + rotPow == 0;
+        telemetry.addLine(String.valueOf(xPow + yPow + rotPow == 0));
+        return xPow + yPow == 0;
+
     }
 
     /**

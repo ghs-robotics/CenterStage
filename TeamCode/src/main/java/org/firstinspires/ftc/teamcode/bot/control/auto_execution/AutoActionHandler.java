@@ -124,17 +124,16 @@ public class AutoActionHandler {
      * @return the total number of actions queue to execute
      */
     public int getTotalActions(){
-        return totalActions;
+        return actionList.size();
     }
 
     /**
      * Prints the current step in the Auto and gives an idea of how complete the auto is.
      */
     public void status(){
-        int currentStep = totalActions - actionList.size() + 1;
+        int currentStep = getTotalActions() - actionList.size() + 1;
 
         if (current.getIdentity() != AutoActions.DONE) {
-            telemetry.addLine(current.getDescription());
             telemetry.addLine(currentStep + " of " + totalActions + " actions");
         }else
             telemetry.addLine( "Done!");
