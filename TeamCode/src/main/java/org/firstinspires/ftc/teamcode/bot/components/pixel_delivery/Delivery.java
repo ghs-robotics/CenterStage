@@ -49,8 +49,6 @@ public class Delivery {
         setDeliveryPositions();
     }
 
-
-
     private void setDeliveryPositions() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
         droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);

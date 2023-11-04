@@ -44,33 +44,35 @@ public class Tele extends LinearOpMode {
             // driving
             robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x, driveMode);
 
+            // runs hang servos and winds the string - dpad down and dpad up
+            robot.hang.hang(gp1.dpad_down.pressing(), gp1.dpad_up.pressing());
+
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
+            // available buttons y, a, dpad_left, dpad_right, left trigger, right trigger
+
             // changes intake height - left bumper and right bumper
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
 
-            // runs intake and conveyor belt - dpad left
-            robot.intake.pixelIn(gp2.dpad_left.pressing());
+            // runs intake and conveyor belt - x
+            robot.intake.pixelIn(gp2.x.pressing());
+
+            // changes drop servo position - b
+            robot.deliver.changeDropPosition(gp2.b.pressed());
 
             // drives lift - left joystick, y-axis
             robot.deliver.driveLift(gp2.left_stick_y);
 
-            // runs lift to set height - y
-            robot.deliver.changeLiftHeight(gp2.y.pressed());
-
-            // changes mode from driving lift to setting lift position or vice versa
-            robot.deliver.setRunLiftToPosition(gp2.b.pressed());
-
-            // changes drop servo position - dpad right
-            robot.deliver.changeDropPosition(gp2.dpad_right.pressed());
-
             // extends outtake - right joystick y-axis
             robot.deliver.extendOuttake(gp2.right_stick_y);
 
-            // runs hang servos and winds the string - dpad down and dpad up
-            robot.hang.hang(gp2.dpad_down.pressing(), gp2.dpad_up.pressing());
+            // runs lift to set height - dpad up
+            robot.deliver.changeLiftHeight(gp2.dpad_up.pressed());
+
+            // changes mode from driving lift to setting lift position or vice versa - dpad down
+            robot.deliver.setRunLiftToPosition(gp2.dpad_down.pressed());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
