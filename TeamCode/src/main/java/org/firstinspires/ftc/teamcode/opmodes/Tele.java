@@ -69,7 +69,7 @@ public class Tele extends LinearOpMode {
             robot.delivery.extendOuttake(gp2.right_stick_y);
 
             // runs lift to set height - dpad up
-            robot.delivery.changeLiftHeight(gp2.dpad_up.pressed());
+            robot.delivery.changeLiftHeight(gp2.dpad_down.pressed(), gp2.dpad_up.pressed());
 
             // changes mode from driving lift to setting lift position or vice versa - dpad down
             robot.delivery.setRunLiftToPosition(gp2.dpad_down.pressed());

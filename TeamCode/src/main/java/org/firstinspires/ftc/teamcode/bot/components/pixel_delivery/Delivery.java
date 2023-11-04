@@ -85,7 +85,10 @@ public class Delivery {
         runLiftToPosition();
     }
 
-    public void changeLiftHeight (boolean increase) {
+    public void changeLiftHeight (boolean decrease, boolean increase) {
+        if (decrease) {
+            liftLvl -= 1;
+        }
         if (increase) {
             liftLvl += 1;
         }
@@ -108,7 +111,6 @@ public class Delivery {
     /**
      * @param power sets the power of both motors on the lift
      */
-
     private void setLiftPower(double power){
         if (getLiftPosition() > 1200 && power > 0) {
             power = 0;
@@ -120,6 +122,10 @@ public class Delivery {
 
         liftMotor1.setPower(power);
         liftMotor2.setPower(power);
+    }
+
+    public boolean getLiftMode(){
+        return runLiftToPosition;
     }
 
     private void runLiftToPosition(){

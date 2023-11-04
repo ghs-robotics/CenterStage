@@ -28,7 +28,6 @@ public class Intake {
         conveyorBeltMotor.setPower(-1);
     }
 
-
     /**
      * @param pressing (boolean) runs the intake when pressing, stops intake when !pressing
      *
