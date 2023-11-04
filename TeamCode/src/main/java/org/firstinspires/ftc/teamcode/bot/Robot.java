@@ -24,7 +24,7 @@ public class Robot {
     private Gyro gyro;
 
     public Intake intake;
-    public Delivery deliver;
+    public Delivery delivery;
     public Hanging hang;
 //    public Drone drone;
 
@@ -36,7 +36,7 @@ public class Robot {
 
         nav = new Navigation(drive, gyro, telemetry);
         intake = new Intake(hardwareMap);
-        deliver = new Delivery(hardwareMap);
+        delivery = new Delivery(hardwareMap);
         hang = new Hanging(hardwareMap);
 
         cam = new Camera();
@@ -49,7 +49,7 @@ public class Robot {
     public void init(){
         //init cameras
         drive.resetEncoders();
-        deliver.resetEncoders();
+        delivery.resetEncoders();
     }
 
 
@@ -59,6 +59,7 @@ public class Robot {
      */
     public void update(){
         nav.updatePosition();
+        //delivery.preventDropperDamage();
         telemetry.update();
     }
 
@@ -69,6 +70,7 @@ public class Robot {
     }
 
     private void positionTelemetry(){
+        telemetry.addLine("Drivebase Telemetry");
         telemetry.addData("x pos: ", nav.getX());
         telemetry.addData("y pos: ", nav.getY());
         telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));
@@ -76,13 +78,16 @@ public class Robot {
     }
 
     private void intakeTelemetry(){
+        telemetry.addLine("Intake Telemetry");
         telemetry.addData("intake position: ", intake.getIntakePos());
         telemetry.addLine();
     }
 
     private void deliveryTelemetry () {
-        telemetry.addData("lift position: ", deliver.getLiftPosition());
-        telemetry.addData("drop position", deliver.getDropPosition());
+        telemetry.addLine("Delivery System Telemetry");
+        telemetry.addData("lift position: ", delivery.getLiftPosition());
+        telemetry.addData("lift power: ", delivery.getSentPower());
+        telemetry.addData("drop position", delivery.getDropPosition());
 //        telemetry.addData("extend position", deliver.getExtendPosition());
         telemetry.addLine();
     }

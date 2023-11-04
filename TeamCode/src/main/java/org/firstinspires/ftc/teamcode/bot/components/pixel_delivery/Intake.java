@@ -23,11 +23,18 @@ public class Intake {
         intakeServo.setPosition(0.05);
     }
 
+    public void autoPixelOut () {
+        intakeMotor.setPower(-0.5);
+        conveyorBeltMotor.setPower(-1);
+    }
+
+
     /**
      * @param pressing (boolean) runs the intake when pressing, stops intake when !pressing
      *
      * wingman spins the Gekko wheels to intake each pixel
      */
+
     public void pixelIn (boolean pressing) {
         if (pressing) {
             intakeMotor.setPower(0.5);

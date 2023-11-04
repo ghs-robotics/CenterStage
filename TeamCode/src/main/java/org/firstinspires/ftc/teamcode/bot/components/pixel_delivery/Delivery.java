@@ -16,6 +16,8 @@ public class Delivery {
     private int[] liftMotorPos = {0, 200, 400, 600, 1000};
     private double[] dropServoPos = {0.1, 0.5, 0.6};
 
+    private double sentPower;
+
     private int liftLvl = 60;
     private int dropLvl = 60;
 
@@ -28,7 +30,10 @@ public class Delivery {
         droppingServo = hardwareMap.get(Servo.class, "drop");
 
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD); // currently polarity is reversed
+        liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         extensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
         droppingServo.setPosition(0);
 
@@ -45,11 +50,9 @@ public class Delivery {
 
 //        int eDiff = extension - getExtensionLvl();
 //        extension +=
-
-        setDeliveryPositions();
     }
 
-    private void setDeliveryPositions() {
+    public void setDeliveryPositions() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
         droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
     }
@@ -58,10 +61,20 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
+
+    public void preventDropperDamage() {
+    }
+
     public void driveLift (double power) {
-        if (!runLiftToPosition) {
-            liftMotor1.setPower(power);
-            liftMotor2.setPower(power);
+
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        sentPower = power;
+
+        if (!runLiftToPosition && Math.abs(power) > 0.1) {
+            setLiftPower(power);
+        } else if (Math.abs(power) < 0.1) {
+            setLiftPower(0);
         }
     }
 
@@ -70,11 +83,6 @@ public class Delivery {
             runLiftToPosition = !runLiftToPosition;
 
         runLiftToPosition();
-    }
-
-    private void runLiftToPosition(){
-        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor2.setPower(liftMotor1.getPower());
     }
 
     public void changeLiftHeight (boolean increase) {
@@ -95,6 +103,34 @@ public class Delivery {
     public void resetEncoders() {
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    /**
+     * @param power sets the power of both motors on the lift
+     */
+
+    private void setLiftPower(double power){
+        if (getLiftPosition() > 1200 && power > 0) {
+            power = 0;
+        }else if (getLiftPosition() > 1000){
+            power *= (1200 - getLiftPosition()) / 200.0;
+        } else if (getLiftPosition() < 0 && power > 0){
+            power = 0;
+        }
+
+        liftMotor1.setPower(power);
+        liftMotor2.setPower(power);
+    }
+
+    private void runLiftToPosition(){
+        if (runLiftToPosition) {
+            liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftMotor2.setPower(liftMotor1.getPower());
+        }
+    }
+
+    public double getSentPower() {
+        return sentPower;
     }
 
     //-------------------------------------------------------------------------------------
