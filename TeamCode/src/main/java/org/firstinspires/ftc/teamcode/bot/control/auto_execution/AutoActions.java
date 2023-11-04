@@ -3,16 +3,20 @@ package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
 
 public class AutoActions {
     // identities
     public static final int DONE = -1;
     public static final int MOVE = 0;
     public static final int INTAKE = 1;
-    public static final int DELIVER = 2;
+    public static final int LIFT = 2;
     public static final int PLACE = 3;
     public static final int ALIGN = 4;
     public static final int WAIT = 5;
+    public static final int DROP = 6;
+    public static final int EXTEND = 7;
+    public static final int RETRACT = 8;
 
     private Robot robot;
 
@@ -25,6 +29,13 @@ public class AutoActions {
     private int zone;
     private String description;
 
+    private boolean resetExtension = false;
+    private boolean ranExtension = false;
+    private boolean runExtension = false;
+    private boolean ranDropper = false;
+    private boolean started = false;
+
+
     ParamHandler params;
 
     public AutoActions(int id, Robot robot){
@@ -33,7 +44,7 @@ public class AutoActions {
         timerReset = false;
         timer = new ElapsedTime();
 
-        setDescription();
+//        setDescription();
     }
 
     public AutoActions(int id, Robot robot,ParamHandler params){
@@ -48,6 +59,13 @@ public class AutoActions {
         endAction = robot.nav.runToPosition(params.x, params.y, params.heading);
     }
 
+    private void dropPixels(){
+        if(!timerReset)
+            timer.reset();
+        robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
+        endAction = timer.milliseconds() > 1000;
+    }
+
     private void runIntake(){
         robot.intake.setLiftHeight(params.intakeLevel);
 
@@ -58,17 +76,26 @@ public class AutoActions {
     }
 
     /**
-     * Runs the entire delivery system
+     * Runs the lift
      */
-    private void runDelivery(){
-        // same as intake
-        robot.delivery.setHeights(params.liftLevel, params.outtakeLevel);
 
+    private void runLift(){
+        // same as intake
+        endAction = robot.delivery.driveLiftToPosition(225);
+    }
+
+    private void extendDropper(){
         if(!timerReset)
             timer.reset();
 
-        endAction = (robot.delivery.getDropPosition() == 0.6);
-        robot.delivery.setDeliveryPositions();
+        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
+    }
+
+    private void retractDropper(){
+        if(!timerReset)
+            timer.reset();
+
+        endAction = robot.delivery.autoRunExtension(-1, timer.milliseconds());
     }
 
     /**
@@ -118,8 +145,8 @@ public class AutoActions {
             case INTAKE:
                 runIntake();
                 break;
-            case DELIVER:
-                runDelivery();
+            case LIFT:
+                runLift();
                 break;
             case PLACE:
                 placePixel();
@@ -130,7 +157,15 @@ public class AutoActions {
             case WAIT:
                 waiting();
                 break;
-
+            case DROP:
+                dropPixels();
+                break;
+            case EXTEND:
+                extendDropper();
+                break;
+            case RETRACT:
+                retractDropper();
+                break;
         }
     }
 
@@ -152,7 +187,7 @@ public class AutoActions {
             case INTAKE:
                 description = "Running Intake for " + (timer.milliseconds() / 1000.0) + " sec";
                 break;
-            case DELIVER:
+            case LIFT:
                 description = "Delivering pixel to backdrop";
                 break;
             case PLACE:

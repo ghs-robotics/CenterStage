@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DELIVER;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.INTAKE;
 
 public class ParamHandler {
@@ -29,7 +29,7 @@ public class ParamHandler {
     }
 
     public ParamHandler (int id, int lift, int outtake){
-        if (id == DELIVER){
+        if (id == LIFT){
             this.liftLevel = lift;
             this.outtakeLevel = outtake;
         }

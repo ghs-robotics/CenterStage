@@ -16,6 +16,10 @@ public class Delivery {
     private int[] liftMotorPos = {0, 200, 400, 600, 1000};
     private double[] dropServoPos = {0.1, 0.5, 0.6};
 
+    public static final double DROPPER_INTAKING = 0.1;
+    public static final double DROPPER_FIRST = 0.5;
+    public static final double DROPPER_SECOND = 0.6;
+
     private double sentPower;
 
     private int liftLvl = 60;
@@ -44,17 +48,31 @@ public class Delivery {
     //                                   Auto Functions
     //-------------------------------------------------------------------------------------
 
-    public void setHeights(int lift, int extension){
-        int lDiff = lift - getLiftLvl();
-        liftLvl += lDiff;
+    public boolean autoRunExtension(double dir, double curMillisecond){
+        if (curMillisecond < 600){
+            extensionServo.setPower(dir);
+        }else
+            extensionServo.setPower(0);
 
-//        int eDiff = extension - getExtensionLvl();
-//        extension +=
+        return curMillisecond > 700;
     }
 
-    public void setDeliveryPositions() {
+    public boolean autoDropPixels(double targetPos){
+        droppingServo.setPosition(targetPos);
+        return droppingServo.getPosition() == targetPos;
+    }
+
+    public void setLiftPosition() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
-        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
+//        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
+    }
+
+    public boolean driveLiftToPosition(int target){
+        if (getLiftPosition() <= target)
+            driveLift(getLiftPosition() - target);
+        else
+            driveLift(-0.2);
+        return getLiftPosition() > target;
     }
 
     //-------------------------------------------------------------------------------------
@@ -92,7 +110,7 @@ public class Delivery {
         if (increase) {
             liftLvl += 1;
         }
-        setDeliveryPositions();
+        //setLiftPositions();
     }
 
     public void resetEncoders() {
@@ -120,6 +138,7 @@ public class Delivery {
 
     private void runLiftToPosition(){
         if (runLiftToPosition) {
+            setLiftPosition();
             liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             liftMotor2.setPower(liftMotor1.getPower());
         }
@@ -133,7 +152,7 @@ public class Delivery {
         if (increase) {
             dropLvl += 1;
         }
-        setDeliveryPositions();
+        setLiftPosition();
     }
 
     public double getDropPosition () {
