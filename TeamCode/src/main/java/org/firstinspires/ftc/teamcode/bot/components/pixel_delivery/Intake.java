@@ -10,7 +10,7 @@ public class Intake {
     private DcMotor intakeMotor;
     private Servo intakeServo;
 
-    double[] pos = {0.01, 0.06, 0.09, 0.13, 0.16, 0.2};
+    double[] pos = {0.01, 0.06, 0.08, 0.12, 0.15, 0.2};
 
     int intakeLvl = 60;
 
