@@ -58,14 +58,24 @@ public class AutoActions {
         // same as intake
         robot.deliver.setHeights(params.liftLevel, params.outtakeLevel);
 
-        boolean dropPixels = false;
-
         if(!timerReset)
             timer.reset();
+        if(robot.deliver.getDropPosition() == 0.6)
+            endAction = true;
+        else
+            robot.deliver.setDeliveryPositions();
     }
 
+    /**
+     * drops pixel
+     */
     private void placePixel(){
-        // drops the pixel
+        robot.intake.autoPixelOut();
+        if(!timerReset)
+            timer.reset();
+
+        if(timer.milliseconds() > 4000)
+            endAction = true;
     }
 
     private void alignBotToTag(){
@@ -75,6 +85,9 @@ public class AutoActions {
 
     }
 
+    /**
+     * waits out timer until timer is greater than or equal to the parameter wait time
+     */
     private void waiting() {
         if(!timerReset)
             timer.reset();

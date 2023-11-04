@@ -23,6 +23,11 @@ public class Intake {
         intakeServo.setPosition(0.05);
     }
 
+    public void autoPixelOut () {
+        intakeMotor.setPower(-0.5);
+        conveyorBeltMotor.setPower(-1);
+    }
+
     public void pixelIn (boolean pressing) {
         if (pressing) {
             intakeMotor.setPower(0.5);

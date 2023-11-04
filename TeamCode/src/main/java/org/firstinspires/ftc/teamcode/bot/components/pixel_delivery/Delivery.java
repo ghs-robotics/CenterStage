@@ -46,12 +46,11 @@ public class Delivery {
 //        int eDiff = extension - getExtensionLvl();
 //        extension +=
 
-        setDeliveryPositions();
     }
 
 
 
-    private void setDeliveryPositions() {
+    public void setDeliveryPositions() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
         droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
     }
