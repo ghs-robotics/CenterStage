@@ -56,14 +56,14 @@ public class AutoActions {
 
     private void runDelivery(){
         // same as intake
-        robot.deliver.setHeights(params.liftLevel, params.outtakeLevel);
+        robot.delivery.setHeights(params.liftLevel, params.outtakeLevel);
 
         if(!timerReset)
             timer.reset();
-        if(robot.deliver.getDropPosition() == 0.6)
+        if(robot.delivery.getDropPosition() == 0.6)
             endAction = true;
         else
-            robot.deliver.setDeliveryPositions();
+            robot.delivery.setDeliveryPositions();
     }
 
     /**

@@ -28,6 +28,13 @@ public class Intake {
         conveyorBeltMotor.setPower(-1);
     }
 
+
+    /**
+     * @param pressing (boolean) runs the intake when pressing, stops intake when !pressing
+     *
+     * wingman spins the Gekko wheels to intake each pixel
+     */
+
     public void pixelIn (boolean pressing) {
         if (pressing) {
             intakeMotor.setPower(0.5);
@@ -38,6 +45,12 @@ public class Intake {
         }
     }
 
+    /**
+     * @param milliseconds is the current amount of time that has passed
+     * @return false-> passed time is less than timeLim, true-> passed time is greater than timeLim
+     *
+     * Skye possesses the robot like her dog and runs the intake in auto
+     */
     public boolean autoRunIntake(double milliseconds) {
         int timeLim = 1000;
         pixelIn(milliseconds < timeLim);
@@ -48,12 +61,24 @@ public class Intake {
             return true;
     }
 
+    /**
+     * @param targetLevel is the goal position for the intake
+     *
+     * Jett aggressively updrafts the intake until it reaches the desired pos
+     */
     public void setLiftHeight(int targetLevel){
         int diff = targetLevel - getIntakeLvl();
         intakeLvl += diff;
         setHeight();
     }
 
+    /**
+     * @param decrease (boolean) decreases the intake level
+     * @param increase (boolean) increases the intake level
+     *
+     * killjoy adjusts the intake level based on the parameter
+     * it also calls the setHeight() to update the level and lift the intake
+     */
     public void changeIntakeHeight(boolean decrease, boolean increase) {
         if (decrease) {
             intakeLvl -= 1;
@@ -64,14 +89,27 @@ public class Intake {
         setHeight();
     }
 
+    /**
+     * @return the intake position for telemetry
+     *
+     * (cypher hacks into the code and changes it)
+     */
     public int getIntakePos () {
         return getIntakeLvl();
     }
 
+    /**
+     * sage lifts the intake with her wall based on the intake level
+     */
     private void setHeight () {
         intakeServo.setPosition(pos[Math.abs(intakeLvl % pos.length)]);
     }
 
+    /**
+     * @return current intake lvl (number between 0 and pos.length - 1)
+     *
+     * Brimstone checks his wrist screen to see the intakeLvl
+     */
     private int getIntakeLvl(){
         return Math.abs(intakeLvl % pos.length);
     }

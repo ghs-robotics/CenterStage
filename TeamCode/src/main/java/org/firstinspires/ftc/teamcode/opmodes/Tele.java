@@ -55,19 +55,19 @@ public class Tele extends LinearOpMode {
             robot.intake.pixelIn(gp2.dpad_left.pressing());
 
             // drives lift - left joystick, y-axis
-            robot.deliver.driveLift(gp2.left_stick_y);
+            robot.delivery.driveLift(gp2.left_stick_y);
 
             // runs lift to set height - y
-            robot.deliver.changeLiftHeight(gp2.y.pressed());
+            robot.delivery.changeLiftHeight(gp2.y.pressed());
 
             // changes mode from driving lift to setting lift position or vice versa
-            robot.deliver.setRunLiftToPosition(gp2.b.pressed());
+            robot.delivery.setRunLiftToPosition(gp2.b.pressed());
 
             // changes drop servo position - dpad right
-            robot.deliver.changeDropPosition(gp2.dpad_right.pressed());
+            robot.delivery.changeDropPosition(gp2.dpad_right.pressed());
 
             // extends outtake - right joystick y-axis
-            robot.deliver.extendOuttake(gp2.right_stick_y);
+            robot.delivery.extendOuttake(gp2.right_stick_y);
 
             // runs hang servos and winds the string - dpad down and dpad up
             robot.hang.hang(gp2.dpad_down.pressing(), gp2.dpad_up.pressing());
