@@ -29,12 +29,6 @@ public class AutoActions {
     private int zone;
     private String description;
 
-    private boolean resetExtension = false;
-    private boolean ranExtension = false;
-    private boolean runExtension = false;
-    private boolean ranDropper = false;
-    private boolean started = false;
-
 
     ParamHandler params;
 
@@ -56,12 +50,15 @@ public class AutoActions {
      * Driving the rob
      */
     private void moveTo(){
-        endAction = robot.nav.runToPosition(params.x, params.y, params.heading);
+        resetTimer();
+
+        endAction = robot.nav.runToPosition(params.x, params.y, params.heading) ||
+                    timer.milliseconds() > 10000;
     }
 
     private void dropPixels(){
-        if(!timerReset)
-            timer.reset();
+        resetTimer();
+
         robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
         endAction = timer.milliseconds() > 1000;
     }
@@ -69,8 +66,7 @@ public class AutoActions {
     private void runIntake(){
         robot.intake.setLiftHeight(params.intakeLevel);
 
-        if(!timerReset)
-            timer.reset();
+        resetTimer();
 
         endAction = robot.intake.autoRunIntake(timer.milliseconds());
     }
@@ -81,21 +77,21 @@ public class AutoActions {
 
     private void runLift(){
         // same as intake
-        endAction = robot.delivery.driveLiftToPosition(225);
+        robot.delivery.driveLiftToPosition(225);
+        resetTimer();
+        endAction = timer.milliseconds() > 750;
     }
 
     private void extendDropper(){
-        if(!timerReset)
-            timer.reset();
+        resetTimer();
 
-        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
+        endAction = robot.delivery.autoRunExtension(-1, timer.milliseconds());
     }
 
     private void retractDropper(){
-        if(!timerReset)
-            timer.reset();
+        resetTimer();
 
-        endAction = robot.delivery.autoRunExtension(-1, timer.milliseconds());
+        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
     }
 
     /**
@@ -103,9 +99,7 @@ public class AutoActions {
      */
     private void placePixel(){
         robot.intake.autoPixelOut();
-        if(!timerReset)
-            timer.reset();
-
+        resetTimer();
         if(timer.milliseconds() > 4000)
             endAction = true;
     }
@@ -121,8 +115,7 @@ public class AutoActions {
      * waits out timer until timer is greater than or equal to the parameter wait time
      */
     private void waiting() {
-        if(!timerReset)
-            timer.reset();
+        resetTimer();
 
         endAction = timer.milliseconds() >= (params.waitTime * 1000);
 
@@ -214,5 +207,12 @@ public class AutoActions {
      */
     public int getIdentity(){
         return identity;
+    }
+
+    private void resetTimer(){
+        if (!timerReset){
+            timer.reset();
+            timerReset = true;
+        }
     }
 }

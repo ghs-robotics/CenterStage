@@ -64,15 +64,13 @@ public class Delivery {
 
     public void setLiftPosition() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
-//        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
     }
 
-    public boolean driveLiftToPosition(int target){
+    public void driveLiftToPosition(int target){
         if (getLiftPosition() <= target)
             driveLift(getLiftPosition() - target);
         else
             driveLift(-0.2);
-        return getLiftPosition() > target;
     }
 
     //-------------------------------------------------------------------------------------
@@ -168,11 +166,16 @@ public class Delivery {
         if (increase) {
             dropLvl += 1;
         }
-        setLiftPosition();
+        setDroppingPosition();
     }
 
     public double getDropPosition () {
         return droppingServo.getPosition();
+    }
+
+    public void setDroppingPosition(){
+        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
+
     }
 
     //-------------------------------------------------------------------------------------
