@@ -25,16 +25,18 @@ public class  Auto extends LinearOpMode {
         actionHandler = new AutoActionHandler(robot, telemetry);
         robot.init();
 
+        int red = -1;
+        int blue = 1;
+
         // create list of actions to run
-        //actionHandler.add(WAIT, new ParamHandler(20));
 //        actionHandler.add(MOVE, new ParamHandler((TICKS_PER_TILE), (int) -(TICKS_PER_TILE * 1.3), 0.0));
 //        actionHandler.add(DELIVER, new ParamHandler(DELIVER, 1, 0));
 //        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.3), 0.0));
-        actionHandler.add(MOVE, new ParamHandler(-100, (int) -(TICKS_PER_TILE * 1.6), 0.0));
-        actionHandler.add(LIFT);
-        actionHandler.add(EXTEND);
+        actionHandler.add(MOVE, new ParamHandler(blue * 100, (int) -(TICKS_PER_TILE * 1.6), 0.0));
+//        actionHandler.add(LIFT);
+//        actionHandler.add(EXTEND);
         actionHandler.add(DROP);
-        actionHandler.add(RETRACT);
+//        actionHandler.add(RETRACT);
 
 
 
