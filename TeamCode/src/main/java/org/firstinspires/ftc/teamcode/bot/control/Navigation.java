@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot.control;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
@@ -8,91 +9,127 @@ public class Navigation {
     // axis based on the robot's starting position
     private double x;
     private double y;
-    private double odoHeading;
     private double gyroHeading;
 
-    private int leftEncoder;
-    private int rightEncoder;
-    private int backEncoder;
+    private int yEncoder;
+    private int xEncoder;
 
-    // you would think balldrive odo would be easier to code
-    // but the numbers are difficult to guess
+    private final int TICKS_PER_REV = 8192;
+    private final double WHEEL_RAD = 17.5; // in mm
 
-    // 9/10 balldrive can't be precisely tuned, there is not enough traction between wheel and motor
+    private final double[] X_DIS_FROM_CENTER = new double[]{164.109, 48.88}; // in mm
+    private final double[] Y_DIS_FROM_CENTER = new double[]{153.275, 60.916}; // in mm
 
-    //139.5mm - left
-    //139.5mm - right
-    //108.54mm - back
-    //
-    //Diagonal vertical motors 163.7 mm
-    //Diagonal horizontal motor 163.1 mm
-    private final double leftTrackingDistance = 139.5 * 3;
-    private final double rightTrackingDistance = 139.5 * 3;
-    private final double backTrackingDistance = 108.54 * 3;
+    public static final int TICKS_PER_TILE = 39800;
+
+    Telemetry telemetry;
 
     Drivebase drive;
     Gyro gyro;
 
-    public Navigation(Drivebase drive, Gyro gyro){
+    public Navigation(Drivebase drive, Gyro gyro, Telemetry telemetry){
         this.drive = drive;
         this.gyro = gyro;
+
+        this.telemetry = telemetry;
 
         this.x = 0;
         this.y = 0;
 
-        gyro.resetHeading();
-        updatePosition();
+//        updatePosition();
     }
 
     public void updatePosition(){
         updateEncoders();
 
-        // update x position
-        this.x = 2 * (backEncoder / odoHeading + backTrackingDistance) * (Math.sin(odoHeading / 2));
-
-        // update y position
-        this.y = -2 * (rightEncoder / odoHeading + rightTrackingDistance) * (Math.sin(odoHeading / 2));
-
-        // update rotation using encoders in rads
-        this.odoHeading = (leftEncoder - rightEncoder) / (leftTrackingDistance + rightTrackingDistance);
-
         this.gyroHeading = gyro.getHeading(AngleUnit.RADIANS);
 
-    }
+        // update x position
+//        this.x = Math.sin(gyroHeading) * xEncoder;
+        this.x = xEncoder;
 
-    public boolean runToPosition(double x, double y, double headding){
-        double xDiff = this.x - x;
+        // update y position
+//        this.y = Math.cos(gyroHeading) * yEncoder;
+        this.y = yEncoder;
+
+    }
+//
+//    public boolean runToPosition(double x, double y, double heading, boolean xFirst){
+//        return runToPosition(x, y, heading, xFirst, 1);
+//    }
+//
+//    private boolean runToPosition(double x, double y, double heading, boolean xFirst, int cycle){
+//        if (cycle < 1)
+//            return true;
+//
+//        if (xFirst)
+//            runToPosition(x, this.y, heading);
+//        else
+//            runToPosition(this.x, y, heading);
+//
+//        return runToPosition(x, y, heading, !xFirst, cycle--);
+//    }
+
+    /**
+     * @param x target x position
+     * @param y target y position
+     * @param heading target heading in degrees
+     * @return whether or not the robot is at target position and facing target direction
+     */
+    public boolean runToPosition(double x, double y, double heading){
+        updatePosition();
+
+        double xDiff = x - this.x;
         double yDiff = this.y - y;
+        double rotDiffCounterClock = (this.gyroHeading - (Math.toRadians(heading))) % (2 * Math.PI);
+        double rotDiffClock = ((Math.toRadians(heading)) - this.gyroHeading) % (2 * Math.PI);
 
         double xPow = 0;
         double yPow = 0;
         double rotPow = 0;
 
-        boolean atPos = true;
 
-        if (Math.abs(xDiff) > 5) {
-            xPow = xDiff / 50;
-            atPos = false;
-        }
-        if (Math.abs(yDiff) > 5) {
-            yPow = yDiff / 50;
-            atPos = false;
+        if (Math.abs(xDiff) > TICKS_PER_TILE / 25.0) {
+            xPow = xDiff / 10.0;
         }
 
-        drive.calculateDrivePowers(xPow, yPow, rotPow);
-        return atPos;
+        if (Math.abs(yDiff) > TICKS_PER_TILE / 25.0) {
+            yPow = yDiff / 10.0;
+        }
+
+        if (rotDiffClock >= rotDiffCounterClock){
+            rotPow = rotDiffClock / 10.0;
+        } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
+            rotPow = rotDiffCounterClock /10.0;
+        }
+
+        drive.calculateDrivePowers(xPow , yPow, 0, true);
+        telemetry.addLine("y = " + this.y);
+        telemetry.addLine("x = " + this.x);
+        telemetry.addLine("heading = " + this.gyroHeading);
+        telemetry.addLine(String.valueOf(xPow + yPow + rotPow == 0));
+        return xPow + yPow == 0;
+
     }
 
+    /**
+     * Helper function that updates the encoder values every cycle
+     */
     private void updateEncoders() {
-        leftEncoder = drive.getEncoderTicks()[0];
-        rightEncoder = drive.getEncoderTicks()[1];
-        backEncoder = drive.getEncoderTicks()[2];
+        yEncoder = -drive.getEncoderTicks()[0];
+        xEncoder = -drive.getEncoderTicks()[1];
     }
 
+    /**
+     * @return x coordinate
+     */
     public double getX(){
         return x;
     }
 
+    /**
+     * @return y coordinate
+     */
     public double getY(){
         return y;
     }
@@ -100,12 +137,7 @@ public class Navigation {
     /**
      * @return heading of the robot in only radians
      */
-    public double getOdoHeading(){
-        return odoHeading;
-    }
-
     public double getGyroHeading(){
         return gyroHeading;
     }
-
 }

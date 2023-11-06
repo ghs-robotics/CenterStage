@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.RETRACT;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,7 +12,7 @@ import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActionHandl
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
 
 @Autonomous
-public class  Auto extends LinearOpMode {
+public class AutoLong extends LinearOpMode {
     Robot robot;
     AutoActionHandler actionHandler;
 
@@ -25,14 +22,12 @@ public class  Auto extends LinearOpMode {
         actionHandler = new AutoActionHandler(robot, telemetry);
         robot.init();
 
-        int red = -1;
-        int blue = 1;
-
         // create list of actions to run
 //        actionHandler.add(MOVE, new ParamHandler((TICKS_PER_TILE), (int) -(TICKS_PER_TILE * 1.3), 0.0));
 //        actionHandler.add(DELIVER, new ParamHandler(DELIVER, 1, 0));
 //        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.3), 0.0));
-        actionHandler.add(MOVE, new ParamHandler(blue * 100, (int) -(TICKS_PER_TILE * 1.6), 0.0));
+        actionHandler.add(MOVE, new ParamHandler((int) -(TICKS_PER_TILE * 2.3), 0, 0.0));
+        actionHandler.add(MOVE, new ParamHandler((int) -(TICKS_PER_TILE * 2.4), (int) -(TICKS_PER_TILE * 1.5), 0.0));
 //        actionHandler.add(LIFT);
 //        actionHandler.add(EXTEND);
         actionHandler.add(DROP);

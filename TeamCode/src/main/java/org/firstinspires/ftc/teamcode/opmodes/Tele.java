@@ -12,6 +12,8 @@ public class Tele extends LinearOpMode {
     Controller gp1;
     Controller gp2;
 
+    boolean driveMode;
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
@@ -19,9 +21,13 @@ public class Tele extends LinearOpMode {
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
+        driveMode = false;
+
+
+        robot.init();
         waitForStart();
         telemetry.addLine("Initializing");
-        telemetry.update();
+        robot.update();
 
         while (opModeIsActive()){
             gp1.update();
@@ -30,53 +36,52 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
-            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
+            // toggle drive mode. True is metaDrive, False is regular drive - left bumper
+            if(gp1.left_bumper.pressed())
+                driveMode = !driveMode;
 
+            // driving
+            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x, driveMode);
 
-
+            // runs hang servos and winds the string - dpad down and dpad up
+            robot.hang.hang(gp1.dpad_down.pressing(), gp1.dpad_up.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
+            // available buttons y, a, dpad_left, dpad_right
 
-
-            //-------------------------------------------------------------------------------------
-            //                                  TELEMETRY
-            //-------------------------------------------------------------------------------------
-            telemetry.update();
-
+            // changes intake height - left bumper and right bumper
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
-            robot.intake.pixelIn(gp2.dpad_left.pressing());
 
-            robot.outtake.pixelOut(gp2.dpad_right.pressing());
+            // runs intake and conveyor belt - x
+            robot.intake.pixelIn(gp2.x.pressing());
 
-            robot.lift.driveLift(gp2.left_stick_y);
+            // runs intake analogly - left and right trigger
+            robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
 
+            // changes drop servo position - b
+            robot.delivery.changeDropPosition(gp2.b.pressed());
 
+            // drives lift - left joystick, y-axis
+            robot.delivery.driveLift(gp2.left_stick_y);
 
-            robot.drone.deliverDrone(gp2.y.pressing());
+            // extends outtake - right joystick y-axis
+            robot.delivery.setExtensionPower(gp2.right_stick_y);
 
-//            if (gp2.a) {
-//                lift.moveToLow();
-//            }
-//
-//            if (gp2.x) {
-//                lift.moveToMid();
-//            }
-//
-//            if (gp2.y) {
-//                lift.moveToHigh();
-//            }
+            // runs lift to set height - dpad up
+            robot.delivery.changeLiftHeight(gp2.dpad_down.pressed(), gp2.dpad_up.pressed());
+
+            // changes mode from driving lift to setting lift position or vice versa - dpad down
+            robot.delivery.setRunLiftToPosition(gp2.y.pressed());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
             robot.update();
             robot.getTelemetry();
-            telemetry.update();
-            telemetry.update();
         }
 
     }
