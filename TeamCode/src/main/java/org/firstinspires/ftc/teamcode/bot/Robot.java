@@ -58,7 +58,6 @@ public class Robot {
      */
     public void update(){
         nav.updatePosition();
-        //delivery.preventDropperDamage();
         telemetry.update();
     }
 

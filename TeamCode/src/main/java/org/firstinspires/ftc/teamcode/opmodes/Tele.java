@@ -69,7 +69,7 @@ public class Tele extends LinearOpMode {
             robot.delivery.driveLift(gp2.left_stick_y);
 
             // extends outtake - right joystick y-axis
-            robot.delivery.extendOuttake(gp2.right_stick_y);
+            robot.delivery.setExtensionPower(gp2.right_stick_y);
 
             // runs lift to set height - dpad up
             robot.delivery.changeLiftHeight(gp2.dpad_down.pressed(), gp2.dpad_up.pressed());
