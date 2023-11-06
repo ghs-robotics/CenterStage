@@ -64,7 +64,6 @@ public class Delivery {
 
     public void setLiftPosition() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
-//        droppingServo.setPosition(dropServoPos[Math.abs(dropLvl % dropServoPos.length)]);
     }
 
     public boolean driveLiftToPosition(int target){
@@ -79,10 +78,6 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
-
-    public void preventDropperDamage() {
-    }
-
     public void driveLift (double power) {
 
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -90,18 +85,12 @@ public class Delivery {
         sentPower = power;
 
         if (!runLiftToPosition && Math.abs(power) > 0.1) {
-            setLiftPower(power);
+            limitLift(power);
         } else if (Math.abs(power) < 0.1) {
             setLiftPower(0);
         }
     }
 
-    public void setRunLiftToPosition(boolean button){
-        if (button)
-            runLiftToPosition = !runLiftToPosition;
-
-        runLiftToPosition();
-    }
 
     public void changeLiftHeight (boolean decrease, boolean increase) {
         if (decrease) {
@@ -110,18 +99,12 @@ public class Delivery {
         if (increase) {
             liftLvl += 1;
         }
-        //setLiftPositions();
+
+        if (runLiftToPosition)
+            driveLiftToPosition(liftMotorPos[getLiftLvl()]);
     }
 
-    public void resetEncoders() {
-        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    /**
-     * @param power sets the power of both motors on the lift
-     */
-    private void setLiftPower(double power){
+    private void limitLift(double power){
         int limit = 1430;
 
         if (getLiftPosition() > limit && power > 0) {
@@ -131,18 +114,9 @@ public class Delivery {
         } else if (getLiftPosition() < 0 && power > 0){
             power = 0;
         }
-
-        liftMotor1.setPower(power * 0.75);
-        liftMotor2.setPower(power * 0.75);
+        setLiftPower(power);
     }
 
-    private void runLiftToPosition(){
-        if (runLiftToPosition) {
-            setLiftPosition();
-            liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftMotor2.setPower(liftMotor1.getPower());
-        }
-    }
 
     //-------------------------------------------------------------------------------------
     //                                   Drop Functions
@@ -155,39 +129,52 @@ public class Delivery {
         setLiftPosition();
     }
 
-    public double getDropPosition () {
-        return droppingServo.getPosition();
+    //-------------------------------------------------------------------------------------
+    //                                   Simple Functions
+    //-------------------------------------------------------------------------------------
+
+    public void setRunLiftToPosition(boolean button){
+        if (button)
+            runLiftToPosition = !runLiftToPosition;
     }
 
-    //-------------------------------------------------------------------------------------
-    //                                   Outtake Functions
-    //-------------------------------------------------------------------------------------
+    /**
+     * @param power sets the power of both motors on the lift
+     */
+    private void setLiftPower(double power){
+        liftMotor1.setPower(power);
+        liftMotor2.setPower(power);
+    }
 
-    public void extendOuttake (double power) {
+    public void resetEncoders() {
+        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+
+    public int getExtensionLvl(){
+        return Math.abs(dropLvl % dropServoPos.length);
+    }
+
+    public void setExtensionPower(double power) {
         extensionServo.setPower(power);
-    }
-
-    //-------------------------------------------------------------------------------------
-    //                                   Telemetry Functions
-    //-------------------------------------------------------------------------------------
-
-    public int getLiftPosition() {
-        return liftMotor1.getCurrentPosition();
     }
 
     public boolean getLiftMode(){
         return runLiftToPosition;
     }
 
+
+    public double getDropPosition () {
+        return droppingServo.getPosition();
+    }
+
     public int getLiftLvl(){
         return Math.abs(liftLvl % liftMotorPos.length);
     }
 
-    public double getSentPower() {
-        return sentPower;
+    public int getLiftPosition() {
+        return liftMotor1.getCurrentPosition();
     }
 
-    public int getExtensionLvl(){
-        return Math.abs(dropLvl % dropServoPos.length);
-    }
 }

@@ -139,4 +139,12 @@ public class AutoActionHandler {
             telemetry.addLine( "Done!");
     }
 
+    public void troubleshooting(){
+        telemetry.addLine();
+        telemetry.addLine("Troubleshooting");
+        //put troubleshooting telemetry here.
+
+        telemetry.addLine();
+    }
+
 }

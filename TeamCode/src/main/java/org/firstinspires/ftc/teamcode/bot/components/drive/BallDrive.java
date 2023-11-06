@@ -35,9 +35,10 @@ public class BallDrive implements Drivebase {
 
     @Override
     public void calculateDrivePowers(double x, double y, double rot) {
-        bp = x;
+        bp = x + rot;
         lp = y - rot;
         rp = y + rot;
+
 
         setMotorPowers();
     }
