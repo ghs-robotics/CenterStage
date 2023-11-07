@@ -81,7 +81,7 @@ public class Tele extends LinearOpMode {
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
             robot.update();
-            robot.getTelemetry();
+            robot.getTeleOpTelemetry();
         }
 
     }

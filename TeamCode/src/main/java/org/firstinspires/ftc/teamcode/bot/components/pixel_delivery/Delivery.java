@@ -39,7 +39,7 @@ public class Delivery {
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         extensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        droppingServo.setPosition(0);
+        droppingServo.setPosition(0.1);
 
         runLiftToPosition = false;
     }
@@ -49,11 +49,10 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
 
     public boolean autoRunExtension(double dir, double curMillisecond){
-        if (curMillisecond < 600){
-            extensionServo.setPower(dir);
+        if (curMillisecond < 550){
+            setExtensionPower(dir);
         }else
-            extensionServo.setPower(0);
-
+            setExtensionPower(0);
         return curMillisecond > 700;
     }
 
@@ -62,16 +61,15 @@ public class Delivery {
         return droppingServo.getPosition() == targetPos;
     }
 
-    public void setLiftPosition() {
-        liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
-    }
-
     public boolean driveLiftToPosition(int target){
-        if (getLiftPosition() <= target)
-            driveLift(getLiftPosition() - target);
+        liftLvl = target;
+        target = liftMotorPos[getLiftLvl()];
+
+        if (getLiftPosition() < target - 25 || getLiftPosition() > target + 25)
+            driveLift((getLiftPosition() - target) / 350.0);
         else
-            driveLift(-0.2);
-        return getLiftPosition() > target;
+            driveLift(-0.1);
+        return getLiftPosition() < target - 25 || getLiftPosition() > target + 25;
     }
 
     //-------------------------------------------------------------------------------------
@@ -126,7 +124,6 @@ public class Delivery {
         if (increase) {
             dropLvl += 1;
         }
-        setLiftPosition();
     }
 
     //-------------------------------------------------------------------------------------
@@ -151,7 +148,6 @@ public class Delivery {
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-
     public int getExtensionLvl(){
         return Math.abs(dropLvl % dropServoPos.length);
     }
@@ -164,7 +160,6 @@ public class Delivery {
         return runLiftToPosition;
     }
 
-
     public double getDropPosition () {
         return droppingServo.getPosition();
     }
@@ -176,5 +171,4 @@ public class Delivery {
     public int getLiftPosition() {
         return liftMotor1.getCurrentPosition();
     }
-
 }

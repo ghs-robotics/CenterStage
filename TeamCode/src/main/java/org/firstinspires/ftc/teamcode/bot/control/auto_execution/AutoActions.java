@@ -29,6 +29,7 @@ public class AutoActions {
     private int zone;
     private String description;
 
+    private int moveToCycle;
 
     ParamHandler params;
 
@@ -38,10 +39,11 @@ public class AutoActions {
         timerReset = false;
         timer = new ElapsedTime();
 
-//        setDescription();
+        setDescription();
+        moveToCycle = 3;
     }
 
-    public AutoActions(int id, Robot robot,ParamHandler params){
+    public AutoActions(int id, Robot robot, ParamHandler params){
         this(id, robot);
         this.params = params;
     }
@@ -51,8 +53,10 @@ public class AutoActions {
      */
     private void moveTo(){
         resetTimer();
+        moveToCycle = robot.nav.runToPosition(params.x, params.y, params.heading,
+                params.driveXFirst, moveToCycle);
 
-        endAction = robot.nav.runToPosition(params.x, params.y, params.heading) ||
+        endAction = moveToCycle == -1||
                     timer.milliseconds() > 10000;
     }
 
@@ -60,15 +64,22 @@ public class AutoActions {
         resetTimer();
 
         robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
+        if (timer.milliseconds() > 700)
+            robot.delivery.autoDropPixels(Delivery.DROPPER_INTAKING);
+
         endAction = timer.milliseconds() > 1000;
     }
 
     private void runIntake(){
-        robot.intake.setLiftHeight(params.intakeLevel);
+        robot.intake.setIntakeHeight(params.intakeLevel);
 
         resetTimer();
 
-        endAction = robot.intake.autoRunIntake(timer.milliseconds());
+        if (timer.milliseconds() < 2550)
+            robot.intake.pixelIn(1);
+        else
+            robot.intake.pixelIn(0);
+        endAction = timer.milliseconds() > 2700;
     }
 
     /**
@@ -77,15 +88,18 @@ public class AutoActions {
 
     private void runLift(){
         // same as intake
-        robot.delivery.driveLiftToPosition(225);
+        robot.delivery.driveLiftToPosition(params.liftLevel);
         resetTimer();
         endAction = timer.milliseconds() > 750;
     }
 
     private void extendDropper(){
         resetTimer();
-
-        endAction = robot.delivery.autoRunExtension(-1, timer.milliseconds());
+        if(timer.milliseconds() < 1400)
+            robot.delivery.setExtensionPower(-1);
+        else
+            robot.delivery.setExtensionPower(0);
+        endAction = timer.milliseconds() > 2000;
     }
 
     private void retractDropper(){
@@ -108,7 +122,6 @@ public class AutoActions {
         // looks for the required tag
         // requires the use of moving to align itself
         // runs the delivery
-
     }
 
     /**
@@ -117,9 +130,13 @@ public class AutoActions {
     private void waiting() {
         resetTimer();
 
-        endAction = timer.milliseconds() >= (params.waitTime * 1000);
-
+        endAction = timer.milliseconds() > (params.waitTime * 1000);
     }
+
+    private void shutOffBot(){
+        robot.shutOff();
+    }
+
     /**
      * @return whether or not this action has been completed
      */
@@ -132,6 +149,9 @@ public class AutoActions {
      */
     public void runAction(){
         switch (identity){
+            case DONE:
+                shutOffBot();
+                break;
             case MOVE:
                 moveTo();
                 break;
@@ -173,9 +193,10 @@ public class AutoActions {
      * helper method to get telemetry text
      */
     private void setDescription() {
+        description = "";
         switch (identity){
             case MOVE:
-                description = "Moving " + params.x + ", " + params.y + ". Facing " + params.heading;
+                description = "Driving";
                 break;
             case INTAKE:
                 description = "Running Intake for " + (timer.milliseconds() / 1000.0) + " sec";
@@ -191,6 +212,12 @@ public class AutoActions {
                 break;
             case WAIT:
                 description = "waiting";
+                break;
+            case EXTEND:
+                description = "Extending the Outtake";
+                break;
+            case RETRACT:
+                description = "retracting the Outtake";
                 break;
         }
     }
@@ -214,5 +241,9 @@ public class AutoActions {
             timer.reset();
             timerReset = true;
         }
+    }
+
+    public int getTimer() {
+        return (int) (timer.milliseconds() / 1000);
     }
 }

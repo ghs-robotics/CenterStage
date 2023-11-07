@@ -43,7 +43,7 @@ public class MecanumDrive implements Drivebase{
     public void calculateDrivePowers(double x, double y, double rot, boolean meta) {
         metaDriveOn = meta;
 
-        double angle = gyro.getHeading(AngleUnit.RADIANS);
+        double angle = gyro.getHeading();
         double driveY = y * Math.cos(angle) + x * Math.sin(angle);
         double driveX = y * Math.sin(angle) - x * Math.cos(angle);
 
