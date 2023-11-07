@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.components;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,6 +19,12 @@ public class Gyro {
     RevHubOrientationOnRobot revOrientation;
     YawPitchRollAngles angles;
 
+    double yaw, pitch, roll;
+    double lastYaw;
+
+    double headingVel;
+    double lastHeadingVel;
+
     public Gyro(HardwareMap hardwareMap) {
         gyro = hardwareMap.get(IMU.class, "imu");
 
@@ -31,20 +38,36 @@ public class Gyro {
 
     }
 
-    public double getHeading(AngleUnit unit) {
-        double yaw = getOrientation(unit)[0];
+    public double getDeltaHeading(){
+        return yaw - lastYaw;
+    }
+
+    public double getHeading(){
+        lastYaw = yaw;
+        yaw = getOrientation(RADIANS)[0];
         return yaw;
+    }
+
+    public double getHeadingVelocity(){
+        headingVel = gyro.getRobotAngularVelocity(RADIANS).zRotationRate;
+        double headingVelOffest = 0;
+
+        if (Math.abs(headingVel - lastHeadingVel) > Math.PI)
+            headingVelOffest -= Math.signum(headingVel) * 2 * Math.PI;
+        lastHeadingVel = headingVel;
+
+        return headingVelOffest + headingVel;
     }
 
     // up and down x axis
     public double getPitch(AngleUnit unit){
-        double pitch = getOrientation(unit)[1];
+        pitch = getOrientation(unit)[1];
         return pitch;
     }
 
     // up and down y axis
     public double getRoll(AngleUnit unit){
-        double roll = getOrientation(unit)[2];
+        roll = getOrientation(unit)[2];
         return roll;
     }
 
