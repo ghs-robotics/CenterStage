@@ -57,27 +57,11 @@ public class Intake {
     }
 
     /**
-     * @param milliseconds is the current amount of time that has passed
-     * @return false-> passed time is less than timeLim, true-> passed time is greater than timeLim
-     *
-     * Skye possesses the robot like her dog and runs the intake in auto
-     */
-    public boolean autoRunIntake(double milliseconds) {
-        int timeLim = 1000;
-        pixelIn(milliseconds < timeLim);
-
-        if (milliseconds < timeLim)
-            return false;
-        else
-            return true;
-    }
-
-    /**
      * @param targetLevel is the goal position for the intake
      *
      * Jett aggressively updrafts the intake until it reaches the desired pos
      */
-    public void setLiftHeight(int targetLevel){
+    public void setIntakeHeight(int targetLevel){
         int diff = targetLevel - getIntakeLvl();
         intakeLvl += diff;
         setHeight();

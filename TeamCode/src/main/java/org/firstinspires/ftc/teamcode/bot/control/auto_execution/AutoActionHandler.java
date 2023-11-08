@@ -105,6 +105,7 @@ public class AutoActionHandler {
      * Made for getting presets and adding them to the main Auto queue
      */
     public ArrayList<AutoActions> getActions(){
+
         return actionList;
     }
 
@@ -135,6 +136,9 @@ public class AutoActionHandler {
 
         if (current.getIdentity() != AutoActions.DONE) {
             telemetry.addLine(currentStep + " of " + totalActions + " actions");
+            telemetry.addLine();
+            telemetry.addLine(current.getDescription());
+            troubleshooting();
         }else
             telemetry.addLine( "Done!");
     }
@@ -143,6 +147,7 @@ public class AutoActionHandler {
         telemetry.addLine();
         telemetry.addLine("Troubleshooting");
         //put troubleshooting telemetry here.
+        telemetry.addLine(String.valueOf(current.isFinished()));
 
         telemetry.addLine();
     }

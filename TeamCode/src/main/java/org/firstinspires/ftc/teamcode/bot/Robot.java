@@ -54,6 +54,13 @@ public class Robot {
         delivery.resetEncoders();
     }
 
+    public void shutOff(){
+        drive.calculateDrivePowers(0,0,0);
+        intake.pixelIn(0);
+        delivery.setExtensionPower(0);
+        delivery.driveLift(0);
+    }
+
     /**
      * tells the robot parts to retrieve the current information from each part to update the robot.
      */
@@ -62,7 +69,11 @@ public class Robot {
         telemetry.update();
     }
 
-    public void getTelemetry(){
+    public void getAutoTelemetry(){
+        positionTelemetry();
+    }
+
+    public void getTeleOpTelemetry(){
         positionTelemetry();
         intakeTelemetry();
         deliveryTelemetry();

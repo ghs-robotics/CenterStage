@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.components.drive;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -8,9 +9,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 
 public class BallDrive implements Drivebase {
-    private DcMotor leftDrive;
-    private DcMotor rightDrive;
-    private DcMotor backDrive;
+    private DcMotorEx leftDrive;
+    private DcMotorEx rightDrive;
+    private DcMotorEx backDrive;
 
     private double lp;
     private double rp;
@@ -22,13 +23,17 @@ public class BallDrive implements Drivebase {
 
     public BallDrive(HardwareMap hardwareMap, Gyro gyro) {
 
-        leftDrive = hardwareMap.get(DcMotor.class, "left");
-        rightDrive = hardwareMap.get(DcMotor.class, "right");
-        backDrive = hardwareMap.get(DcMotor.class, "back");
+        leftDrive = hardwareMap.get(DcMotorEx.class, "left");
+        rightDrive = hardwareMap.get(DcMotorEx.class, "right");
+        backDrive = hardwareMap.get(DcMotorEx.class, "back");
 
         leftDrive.setDirection(DcMotorSimple.Direction.REVERSE); // y-axis encoder
         backDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDrive.setDirection(DcMotorSimple.Direction.FORWARD); // x-axis encoder
+
+        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         this.gyro = gyro;
     }
@@ -39,13 +44,12 @@ public class BallDrive implements Drivebase {
         lp = y - rot;
         rp = y + rot;
 
-
         setMotorPowers();
     }
 
     @Override
     public void calculateDrivePowers(double x, double y, double rot, boolean driveMode){
-        double angle = gyro.getHeading(AngleUnit.RADIANS);
+        double angle = gyro.getHeading();
         metaDriveOn = driveMode;
 
         double driveX = x;
@@ -77,6 +81,16 @@ public class BallDrive implements Drivebase {
     @Override
     public boolean getDriveMode() {
         return metaDriveOn;
+    }
+
+    public double[] getEncoderVel(){
+        int x = 1, y = 1;
+        if (rightDrive.getDirection() == DcMotorSimple.Direction.REVERSE)
+            x = -1;
+        if (leftDrive.getDirection() == DcMotorSimple.Direction.REVERSE)
+            y = -1;
+
+        return new double[]{leftDrive.getVelocity() * y, rightDrive.getVelocity() * x};
     }
 
     private void setMotorPowers(){

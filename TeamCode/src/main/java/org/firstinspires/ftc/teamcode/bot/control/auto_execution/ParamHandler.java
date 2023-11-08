@@ -25,7 +25,9 @@ public class ParamHandler {
 
     public ParamHandler(int id, int height){
         if (id == INTAKE)
-            this.intakeLevel = intakeLevel;
+            this.intakeLevel = height;
+        if (id == LIFT)
+            this.liftLevel = height + 100;
     }
 
     public ParamHandler (int id, int lift, int outtake){
