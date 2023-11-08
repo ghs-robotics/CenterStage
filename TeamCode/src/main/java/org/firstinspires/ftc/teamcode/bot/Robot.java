@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.bot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-//import org.firstinspires.ftc.teamcode.bot.components.Drone;
+import org.firstinspires.ftc.teamcode.bot.components.Drone;
 import org.firstinspires.ftc.teamcode.bot.components.Hanging;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
@@ -26,7 +26,7 @@ public class Robot {
     public Intake intake;
     public Delivery delivery;
     public Hanging hang;
-//    public Drone drone;
+    public Drone drone;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
@@ -38,6 +38,7 @@ public class Robot {
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
         hang = new Hanging(hardwareMap);
+        drone = new Drone(hardwareMap);
 
         cam = new Camera();
 

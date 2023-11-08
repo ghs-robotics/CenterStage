@@ -27,6 +27,10 @@ public class Delivery {
 
     private boolean runLiftToPosition;
 
+    /**
+     * adds all the variables to robot class, sets dropping servo to 0
+     * @param hardwareMap is how the code interacts with the robot
+     */
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
@@ -48,6 +52,12 @@ public class Delivery {
     //                                   Auto Functions
     //-------------------------------------------------------------------------------------
 
+    /**
+     * runs extention, stops when elapsed time is over 700ms
+     * @param dir direction
+     * @param curMillisecond time
+     * @return while running if less than 700 is false, after 700 its true and stops running
+     */
     public boolean autoRunExtension(double dir, double curMillisecond){
         if (curMillisecond < 600){
             extensionServo.setPower(dir);
@@ -57,15 +67,28 @@ public class Delivery {
         return curMillisecond > 700;
     }
 
+    /**
+     * drops pixel
+     * @param targetPos position servo needs to be to drop pixels
+     * @return  is false and keeps going until reaches position, then true and stops
+     */
     public boolean autoDropPixels(double targetPos){
         droppingServo.setPosition(targetPos);
         return droppingServo.getPosition() == targetPos;
     }
 
+    /**
+     * sets the lift position
+     */
     public void setLiftPosition() {
         liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
     }
 
+    /**
+     * raises lift to desired position
+     * @param target the desired point
+     * @return if position less than desired, is false, keeps running, and if higher, then true and stops
+     */
     public boolean driveLiftToPosition(int target){
         if (getLiftPosition() <= target)
             driveLift(getLiftPosition() - target);
@@ -78,6 +101,10 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
+    /**
+     * sets lift motor power
+     * @param power how much power is wanted
+     */
     public void driveLift (double power) {
 
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -91,7 +118,11 @@ public class Delivery {
         }
     }
 
-
+    /**
+     * changes lift height
+     * @param decrease if lift height goes down
+     * @param increase if lift height goes up
+     */
     public void changeLiftHeight (boolean decrease, boolean increase) {
         if (decrease) {
             liftLvl -= 1;
@@ -104,6 +135,10 @@ public class Delivery {
             driveLiftToPosition(liftMotorPos[getLiftLvl()]);
     }
 
+    /**
+     * limits how much power lift has
+     * @param power wanted amount of power
+     */
     private void limitLift(double power){
         int limit = 1430;
 
@@ -122,6 +157,10 @@ public class Delivery {
     //                                   Drop Functions
     //-------------------------------------------------------------------------------------
 
+    /**
+     * increases drop position
+     * @param increase goes up
+     */
     public void changeDropPosition (boolean increase) {
         if (increase) {
             dropLvl += 1;
@@ -133,6 +172,10 @@ public class Delivery {
     //                                   Simple Functions
     //-------------------------------------------------------------------------------------
 
+    /**
+     * sets run lift to position
+     * @param button false if not pressing, true if pressing
+     */
     public void setRunLiftToPosition(boolean button){
         if (button)
             runLiftToPosition = !runLiftToPosition;
@@ -146,6 +189,9 @@ public class Delivery {
         liftMotor2.setPower(power);
     }
 
+    /**
+     * resets encoders
+     */
     public void resetEncoders() {
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

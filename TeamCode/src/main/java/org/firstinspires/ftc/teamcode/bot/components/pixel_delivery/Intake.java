@@ -23,6 +23,9 @@ public class Intake {
         intakeServo.setPosition(0.05);
     }
 
+    /**
+     * ejects pixel
+     */
     public void autoPixelOut () {
         intakeMotor.setPower(-0.5);
         conveyorBeltMotor.setPower(-1);
@@ -44,6 +47,10 @@ public class Intake {
         }
     }
 
+    /**
+     * intakes pixel
+     * @param power desired power of motors
+     */
     public void pixelIn (double power) {
         intakeMotor.setPower(power / 2);
         conveyorBeltMotor.setPower(power);

@@ -51,7 +51,7 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            // available buttons y, a, dpad_left, dpad_right
+            // available buttons dpad_left, dpad_right
 
             // changes intake height - left bumper and right bumper
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
@@ -76,6 +76,9 @@ public class Tele extends LinearOpMode {
 
             // changes mode from driving lift to setting lift position or vice versa - dpad down
             robot.delivery.setRunLiftToPosition(gp2.y.pressed());
+
+            // Launches drone - a button
+            robot.drone.launchDrone(gp2.a.pressed());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
