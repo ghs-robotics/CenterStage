@@ -52,6 +52,7 @@ public class AutoActions {
     private void moveTo(){
         resetTimer();
 
+        
         endAction = robot.nav.runToPosition(params.x, params.y, params.heading) ||
                     timer.milliseconds() > 10000;
     }

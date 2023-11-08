@@ -39,7 +39,6 @@ public class BallDrive implements Drivebase {
         lp = y - rot;
         rp = y + rot;
 
-
         setMotorPowers();
     }
 
