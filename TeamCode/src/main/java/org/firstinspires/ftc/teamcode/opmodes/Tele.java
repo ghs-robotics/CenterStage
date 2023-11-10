@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
 public class Tele extends LinearOpMode {
@@ -32,7 +31,6 @@ public class Tele extends LinearOpMode {
             gp1.update();
             gp2.update();
 
-
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
@@ -55,9 +53,6 @@ public class Tele extends LinearOpMode {
 
             // changes intake height - left bumper and right bumper
             robot.intake.changeIntakeHeight(gp2.raisingIntake, gp2.loweringIntake);
-
-            // runs intake and conveyor belt - x
-            robot.intake.pixelIn(gp2.x.pressing());
 
             // runs intake analogly - left and right trigger
             robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
@@ -87,6 +82,5 @@ public class Tele extends LinearOpMode {
             robot.update();
             robot.getTeleOpTelemetry();
         }
-
     }
 }
