@@ -1,29 +1,89 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.bot.Robot;
+import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
-public class TeleOpProfile {
-    Robot robot;
-    Controller gp1;
-    Controller gp2;
-    Telemetry telemetry;
+public class TeleOpProfile extends Controller {
+    private int name;
 
-    double driveX;
+    private final String[] driverName;
+    private final String[] opName;
 
-    public TeleOpProfile (Robot robot, Controller gp1, Controller gp2, Telemetry telemetry) {
-        this.robot = robot;
-        this.gp1 = gp1;
-        this.gp2 = gp2;
-        this.telemetry = telemetry;
+    public boolean driverOp;
 
-        // map keys to vars
-        driveX = gp1.left_stick_x;
+    public boolean driveMode;
+    public double drivingX;
+    public double drivingY;
+    public double drivingRot;
 
+    public boolean loweringHanging;
+    public boolean raisingHanging;
 
+    public boolean raisingIntake;
+    public boolean loweringIntake;
 
-        // map keys to funs
-//        robot.drive.calculateDrivePowers(driveX, );
+    public double pixelIn;
+    public boolean dropPixel;
+
+    public double extendOuttake;
+
+    public double driveLift;
+    public boolean liftSetHeight;
+    public boolean LiftToPosition;
+
+    public boolean launchDrone;
+
+    public TeleOpProfile(Gamepad gamepad, boolean driverOp) {
+        super(gamepad);
+        this.driverOp = driverOp;
+
+        name = 0;
+        driverName = new String[] {"Lillian"};
+        opName = new String[] {"Ivan"};
+
+        if (driverOp) {
+            setLillianGamepad1();
+        } else {
+            setIvanGamepad2();
+        }
+    }
+
+    public void setLillianGamepad1() {
+        driveMode = left_bumper.pressed();
+        drivingX = left_stick_x;
+        drivingY = left_stick_y;
+        drivingRot = right_stick_x;
+        loweringHanging = dpad_down.pressing();
+        raisingHanging = dpad_up.pressing();
+    }
+
+    public void setIvanGamepad2() {
+        raisingIntake = left_bumper.pressed();
+        loweringIntake = right_bumper.pressed();
+        pixelIn = right_trigger - left_trigger;
+        dropPixel = b.pressed();
+        driveLift = left_stick_y;
+        extendOuttake = right_stick_y;
+        liftSetHeight = dpad_down.pressed();
+        LiftToPosition = y.pressed();
+        launchDrone = a.pressed();
+    }
+
+    public void update() {
+        super.update();
+        if (driverOp) {
+            switch (name) {
+                case 0:
+                    setLillianGamepad1();
+                    break;
+            }
+        } else {
+            switch (name) {
+                case 0:
+                    setIvanGamepad2();
+                    break;
+            }
+        }
     }
 }

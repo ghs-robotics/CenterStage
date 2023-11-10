@@ -27,7 +27,6 @@ public class Controller {
 
     public Controller(Gamepad gamepad){
         this.gamepad = gamepad;
-
         update();
     }
 
