@@ -51,6 +51,7 @@ public class Robot {
         gyro.resetHeading();
         drive.resetEncoders();
         delivery.resetEncoders();
+        nav.resetNav();
     }
 
     public void shutOff(){
@@ -64,7 +65,7 @@ public class Robot {
      * tells the robot parts to retrieve the current information from each part to update the robot.
      */
     public void update(){
-        nav.updatePosition();
+        nav.update();
         telemetry.update();
     }
 

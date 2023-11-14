@@ -29,9 +29,8 @@ public class TestAuto extends LinearOpMode {
         robot.init();
 
         // create list of actions to run
-//        actionHandler.add(MOVE, new ParamHandler((TICKS_PER_TILE / 2), (int) -(TICKS_PER_TILE / 2),
-//                0.0, true));
-        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
+        actionHandler.add(MOVE, new ParamHandler(600, 600, 0.0));
+//        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
 
 //        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.3), 0.0));
 //        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.7), 0.0));
@@ -45,6 +44,7 @@ public class TestAuto extends LinearOpMode {
         waitForStart();
         //actionHandler.findAndSetZone();
         actionHandler.init();
+        robot.getAutoTelemetry();
 
         while (opModeIsActive()){
             actionHandler.run();

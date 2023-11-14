@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.components.drive;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -65,6 +66,11 @@ public class MecanumDrive implements Drivebase{
     @Override
     public boolean getDriveMode() {
         return false;
+    }
+
+    @Override
+    public DcMotorEx[] getEncoderMotors() {
+        return new DcMotorEx[0];
     }
 
     private void setMotorPowers(double fl, double bl, double fr, double br){

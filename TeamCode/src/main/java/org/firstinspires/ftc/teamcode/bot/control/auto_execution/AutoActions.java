@@ -53,11 +53,9 @@ public class AutoActions {
      */
     private void moveTo(){
         resetTimer();
-        moveToCycle = robot.nav.runToPosition(params.x, params.y, params.heading,
-                params.driveXFirst, moveToCycle);
+        boolean there = robot.nav.runToPosition(params.x, params.y, params.heading);
 
-        endAction = moveToCycle == -1||
-                    timer.milliseconds() > 10000;
+        endAction = there; //|| timer.milliseconds() > 10000;
     }
 
     private void dropPixels(){
