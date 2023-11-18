@@ -39,7 +39,7 @@ public class Robot {
         delivery = new Delivery(hardwareMap);
         hang = new Hanging(hardwareMap);
 
-        cam = new Camera();
+        cam = new Camera(hardwareMap, telemetry);
 
     }
 
