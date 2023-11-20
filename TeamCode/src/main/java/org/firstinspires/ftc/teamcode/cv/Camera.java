@@ -4,38 +4,69 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.cv.testing.Pipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class Camera {
-    private HardwareMap hardwareMap;
+
+    public static final int SPIKE_LEFT = 1;
+    public static final int SPIKE_CENTER = 2;
+    public static final int SPIKE_RIGHT = 3;
+
     private Telemetry telemetry;
 
-    public TeamPropPipeline pipeline;
+    public Pipeline pipeline;
 
-    public OpenCvCamera cam;
+    public OpenCvCamera camera1;
+    public OpenCvCamera camera2;
 
     private final int PIXEL_HEIGHT = 240;
     private final int PIXEL_WIDTH = 320;
 
     public Camera(HardwareMap hardwareMap, Telemetry telemetry){
-        this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        cam = OpenCvCameraFactory.getInstance()
+        camera1 = OpenCvCameraFactory.getInstance()
                 .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+//        camera2 = OpenCvCameraFactory.getInstance()
+//                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"));
 
-        pipeline = new TeamPropPipeline(cam, telemetry);
+        pipeline = new Pipeline(camera1, telemetry);
     }
 
     public void initCamera(){
-        cam.setPipeline(pipeline);
+        camera1.setPipeline(pipeline);
+//        camera2.setPipeline(pipeline);
 
-        cam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        initCamera(camera1);
+//        initCamera(camera2);
+
+        telemetry.setMsTransmissionInterval(50);
+    }
+
+    public void closeCamera(){
+        camera1.stopStreaming();
+//        camera2.stopStreaming();
+        camera1.closeCameraDevice();
+//        camera2.closeCameraDevice();
+    }
+
+    public void camTelemetry(){
+        telemetry.addLine();
+        telemetry.addLine();
+    }
+
+    public int getZone(){
+        return pipeline.getZone();
+    }
+
+    private void initCamera(OpenCvCamera camera){
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                cam.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -45,27 +76,5 @@ public class Camera {
             }
         });
 
-        telemetry.setMsTransmissionInterval(50);
     }
-
-    public void closeCamera(){
-        cam.stopStreaming();
-        cam.closeCameraDevice();
-    }
-
-    public void camTelemetry(){
-        telemetry.addLine();
-        telemetry.addData("Frame Count", cam.getFrameCount());
-        telemetry.addData("FPS", String.format("%.2f", cam.getFps()));
-        telemetry.addData("Total frame time ms", cam.getTotalFrameTimeMs());
-        telemetry.addData("Pipeline time ms", cam.getPipelineTimeMs());
-        telemetry.addData("Overhead time ms", cam.getOverheadTimeMs());
-        telemetry.addData("Theoretical max FPS", cam.getCurrentPipelineMaxFps());
-        telemetry.addLine();
-    }
-
-    public int getZone(){
-        return pipeline.getZone();
-    }
-
 }
