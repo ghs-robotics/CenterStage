@@ -11,10 +11,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class Camera {
 
-    public static final int SPIKE_LEFT = 1;
-    public static final int SPIKE_CENTER = 2;
-    public static final int SPIKE_RIGHT = 3;
-
     private Telemetry telemetry;
 
     public Pipeline pipeline;
@@ -24,6 +20,7 @@ public class Camera {
 
     private final int PIXEL_HEIGHT = 240;
     private final int PIXEL_WIDTH = 320;
+
 
     public Camera(HardwareMap hardwareMap, Telemetry telemetry){
         this.telemetry = telemetry;
@@ -58,7 +55,7 @@ public class Camera {
         telemetry.addLine();
     }
 
-    public int getZone(){
+    public int getSpikeZone(){
         return pipeline.getZone();
     }
 

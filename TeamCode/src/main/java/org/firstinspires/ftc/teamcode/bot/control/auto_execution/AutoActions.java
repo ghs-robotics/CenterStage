@@ -7,16 +7,18 @@ import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
 
 public class AutoActions {
     // identities
+    public static final int DELIVER = -2; // not used here, used in Handler to add a series of actions
     public static final int DONE = -1;
     public static final int MOVE = 0;
     public static final int INTAKE = 1;
     public static final int LIFT = 2;
-    public static final int PLACE = 3;
+    public static final int PLACE = 3; // spits it out the intake
     public static final int ALIGN = 4;
     public static final int WAIT = 5;
-    public static final int DROP = 6;
+    public static final int DROP = 6; // drops it out of the
     public static final int EXTEND = 7;
     public static final int RETRACT = 8;
+
 
     private Robot robot;
 
@@ -160,7 +162,7 @@ public class AutoActions {
                 runLift();
                 break;
             case PLACE:
-                placePixel();
+                placePixel(); //spit it out the intake
                 break;
             case ALIGN:
                 alignBotToTag();

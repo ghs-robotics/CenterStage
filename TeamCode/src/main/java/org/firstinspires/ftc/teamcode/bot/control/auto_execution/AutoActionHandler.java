@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DELIVER;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -65,7 +70,13 @@ public class AutoActionHandler {
      *               This one is for actions that do not require parameters
      */
     public void add(int action){
-        actionList.add(new AutoActions(action, robot));
+        if (action == DELIVER){
+            add(LIFT);
+            add(EXTEND);
+            add(DROP);
+        } else {
+            actionList.add(new AutoActions(action, robot));
+        }
     }
 
     /**
@@ -94,7 +105,7 @@ public class AutoActionHandler {
      * Gets the zone (spike mark) that was detected by the camera.
      */
     public void findAndSetZone(){
-        zone = robot.cam.getZone();
+        zone = robot.cam.getSpikeZone();
         for (AutoActions a: actionList)
             a.setZone(zone);
     }
