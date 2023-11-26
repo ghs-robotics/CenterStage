@@ -35,45 +35,34 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
 
-            // toggle drive mode. True is metaDrive, False is regular drive - left bumper
-            if(gp1.driveMode)
+            if(gp1.teleBooleans.get(0)) {
                 driveMode = !driveMode;
+            }
 
-            // driving
-            robot.drive.calculateDrivePowers(gp1.drivingX, gp1.drivingY, gp1.drivingRot, driveMode);
+            robot.drive.calculateDrivePowers(gp1.teleDoubles.get(0),
+                    gp1.teleDoubles.indexOf(1), gp1.teleDoubles.indexOf(2), driveMode);
 
-            // runs hang servos and winds the string - dpad down and dpad up
-            robot.hang.hang(gp1.loweringHanging, gp1.raisingHanging);
+            robot.hang.hang(gp1.teleBooleans.get(1), gp1.teleBooleans.get(2));
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            // available buttons dpad_left, dpad_right
+            robot.intake.changeIntakeHeight(gp2.teleBooleans.get(3), gp2.teleBooleans.get(4));
 
-            // changes intake height - left bumper and right bumper
-            robot.intake.changeIntakeHeight(gp2.raisingIntake, gp2.loweringIntake);
+            robot.intake.pixelIn(gp2.teleDoubles.get(3));
 
-            // runs intake analogly - left and right trigger
-            robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
+            robot.delivery.changeDropPosition(gp2.teleBooleans.get(5));
 
-            // changes drop servo position - b
-            robot.delivery.changeDropPosition(gp2.dropPixel);
+            robot.delivery.driveLift(gp2.teleDoubles.get(4));
 
-            // drives lift - left joystick, y-axis
-            robot.delivery.driveLift(gp2.driveLift);
+            robot.delivery.setExtensionPower(gp2.teleDoubles.get(5));
 
-            // extends outtake - right joystick y-axis
-            robot.delivery.setExtensionPower(gp2.extendOuttake);
+            robot.delivery.changeLiftHeight(gp2.teleBooleans.get(6), gp2.teleBooleans.get(7));
 
-            // runs lift to set height - dpad up
-            robot.delivery.changeLiftHeight(gp2.liftSetHeight, gp2.LiftToPosition);
+            robot.delivery.setRunLiftToPosition(gp2.teleBooleans.get(7));
 
-            // changes mode from driving lift to setting lift position or vice versa - dpad down
-            robot.delivery.setRunLiftToPosition(gp2.LiftToPosition);
-
-            // Launches drone - a button
-            robot.drone.launchDrone(gp2.launchDrone);
+            robot.drone.launchDrone(gp2.teleBooleans.get(8));
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY

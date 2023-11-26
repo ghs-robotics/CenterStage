@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
+import java.util.ArrayList;
+
 public class TeleOpProfile extends Controller {
     private int name;
 
@@ -11,6 +13,9 @@ public class TeleOpProfile extends Controller {
     private final String[] opName;
 
     public boolean driverOp;
+
+    public ArrayList<Boolean> teleBooleans = new ArrayList<Boolean>();
+    public ArrayList<Double> teleDoubles = new ArrayList<Double>();
 
     public boolean driveMode;
     public double drivingX;
@@ -30,7 +35,7 @@ public class TeleOpProfile extends Controller {
 
     public double driveLift;
     public boolean liftSetHeight;
-    public boolean LiftToPosition;
+    public boolean liftToPosition;
 
     public boolean launchDrone;
 
@@ -59,15 +64,38 @@ public class TeleOpProfile extends Controller {
     }
 
     public void setIvanGamepad2() {
-        raisingIntake = left_bumper.pressed();
-        loweringIntake = right_bumper.pressed();
+        loweringIntake = left_bumper.pressed();
+        raisingIntake = right_bumper.pressed();
         pixelIn = right_trigger - left_trigger;
         dropPixel = b.pressed();
         driveLift = left_stick_y;
         extendOuttake = right_stick_y;
         liftSetHeight = dpad_down.pressed();
-        LiftToPosition = y.pressed();
+        liftToPosition = y.pressed();
         launchDrone = a.pressed();
+    }
+
+    public void addToList () {
+        // gamepad 1
+        teleBooleans.add(driveMode); // 0
+        teleBooleans.add(loweringHanging); // 1
+        teleBooleans.add(raisingHanging); // 2
+
+        teleDoubles.add(drivingX); // 0
+        teleDoubles.add(drivingY); // 1
+        teleDoubles.add(drivingRot); // 2
+
+        // gamepad 2
+        teleBooleans.add(loweringIntake); // 3
+        teleBooleans.add(raisingIntake); // 4
+        teleBooleans.add(dropPixel); // 5
+        teleBooleans.add(liftSetHeight); // 6
+        teleBooleans.add(liftToPosition); // 7
+        teleBooleans.add(launchDrone); // 8
+
+        teleDoubles.add(pixelIn); // 3
+        teleDoubles.add(driveLift); // 4
+        teleDoubles.add(extendOuttake); // 5
     }
 
     public void update() {

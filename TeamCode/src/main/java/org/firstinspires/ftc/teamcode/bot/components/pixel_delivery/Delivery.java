@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Delivery {
     private DcMotor liftMotor1;
@@ -12,6 +13,8 @@ public class Delivery {
 
     private CRServo extensionServo;
     private Servo droppingServo;
+
+    private TouchSensor touchSensor;
 
     private int[] liftMotorPos = {0, 200, 400, 600, 1000};
     private double[] dropServoPos = {0.1, 0.5, 0.6};
@@ -36,6 +39,8 @@ public class Delivery {
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
         extensionServo = hardwareMap.get(CRServo.class, "extend");
         droppingServo = hardwareMap.get(Servo.class, "drop");
+
+        touchSensor = hardwareMap.get(TouchSensor.class, "touch");
 
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD); // currently polarity is reversed
@@ -220,5 +225,9 @@ public class Delivery {
 
     public int getLiftPosition() {
         return liftMotor1.getCurrentPosition();
+    }
+
+    public boolean getTouchSensorStatus () {
+        return touchSensor.isPressed();
     }
 }

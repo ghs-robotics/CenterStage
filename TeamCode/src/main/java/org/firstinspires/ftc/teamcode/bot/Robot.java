@@ -100,6 +100,7 @@ public class Robot {
         telemetry.addData("lift target Pos: ", delivery.getLiftLvl());
         telemetry.addData("Lift Preset On: ", delivery.getLiftMode());
         telemetry.addData("drop position", delivery.getDropPosition());
+        telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
 //        telemetry.addData("extend position", deliver.getExtendPosition());
         telemetry.addLine();
     }
