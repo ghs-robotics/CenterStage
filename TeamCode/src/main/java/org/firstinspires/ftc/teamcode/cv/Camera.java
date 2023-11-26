@@ -50,8 +50,9 @@ public class Camera {
 //        camera2.closeCameraDevice();
     }
 
-    public void camTelemetry(){
+    public void getTelemetry(){
         telemetry.addLine();
+        pipeline.getTelemetry();
         telemetry.addLine();
     }
 

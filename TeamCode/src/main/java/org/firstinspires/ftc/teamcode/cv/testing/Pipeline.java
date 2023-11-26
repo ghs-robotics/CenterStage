@@ -114,6 +114,10 @@ public class Pipeline extends OpenCvPipeline {
         telemetry.addData("dump:     ", display.dump());
         telemetry.addData("type:     ", display.depth());
         telemetry.addLine();
+        telemetry.addData("zone 1 counter", zone1count);
+        telemetry.addData("zone 2 counter", zone2count);
+        telemetry.addData("zone 3 counter", zone3count);
+        telemetry.addLine();
     }
 
 }

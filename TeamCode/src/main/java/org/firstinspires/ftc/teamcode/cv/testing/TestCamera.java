@@ -5,8 +5,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.cv.Camera;
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
@@ -38,7 +36,7 @@ public class TestCamera extends LinearOpMode {
             gp1.update();
             gp2.update();
 
-            cam.camTelemetry();
+            cam.getTelemetry();
             telemetry.update();
         }
         cam.closeCamera();

@@ -24,15 +24,16 @@ public class TestAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        camera = new Camera(hardwareMap, telemetry);
 
-
-
+        camera.initCamera();
 
         telemetry.addLine("queuing actions");
 
         waitForStart();
 
         while (opModeIsActive()){
+            camera.getTelemetry();
         }
 
     }
