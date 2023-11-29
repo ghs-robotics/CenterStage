@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cv.testing;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
@@ -20,20 +20,22 @@ import org.firstinspires.ftc.teamcode.cv.Camera;
 
 @Autonomous
 public class TestAuto extends LinearOpMode {
-    Camera camera;
+    Robot robot;
+    AutoActionHandler actionHandler;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        camera = new Camera(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry);
 
-        camera.initCamera();
+        robot.init();
+
 
         telemetry.addLine("queuing actions");
 
         waitForStart();
 
         while (opModeIsActive()){
-            camera.getTelemetry();
+            robot.update();
         }
 
     }

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.cv.Camera;
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
-public class TestCamera extends LinearOpMode {
+public class TestCameraAuto extends LinearOpMode {
 
     Controller gp1;
     Controller gp2;
