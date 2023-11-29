@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
 public class Tele extends LinearOpMode {
@@ -27,6 +28,9 @@ public class Tele extends LinearOpMode {
         telemetry.addLine("Initializing");
         robot.update();
 
+        gp1.addToList1();
+        gp2.addToList2();
+
         while (opModeIsActive()){
             gp1.update();
             gp2.update();
@@ -48,21 +52,21 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            robot.intake.changeIntakeHeight(gp2.teleBooleans.get(3), gp2.teleBooleans.get(4));
+            robot.intake.changeIntakeHeight(gp2.teleBooleans.get(0), gp2.teleBooleans.get(1));
 
-            robot.intake.pixelIn(gp2.teleDoubles.get(3));
+            robot.intake.pixelIn(gp2.teleDoubles.get(0));
 
-            robot.delivery.changeDropPosition(gp2.teleBooleans.get(5));
+            robot.delivery.changeDropPosition(gp2.teleBooleans.get(2));
 
-            robot.delivery.driveLift(gp2.teleDoubles.get(4));
+            robot.delivery.driveLift(gp2.teleDoubles.get(1));
 
-            robot.delivery.setExtensionPower(gp2.teleDoubles.get(5));
+            robot.delivery.setExtensionPower(gp2.teleDoubles.get(2));
 
-            robot.delivery.changeLiftHeight(gp2.teleBooleans.get(6), gp2.teleBooleans.get(7));
+            robot.delivery.changeLiftHeight(gp2.teleBooleans.get(3), gp2.teleBooleans.get(4));
 
-            robot.delivery.setRunLiftToPosition(gp2.teleBooleans.get(7));
+            robot.delivery.setRunLiftToPosition(gp2.teleBooleans.get(4));
 
-            robot.drone.launchDrone(gp2.teleBooleans.get(8));
+            robot.drone.launchDrone(gp2.teleBooleans.get(5));
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
@@ -70,6 +74,8 @@ public class Tele extends LinearOpMode {
 
             robot.update();
             robot.getTeleOpTelemetry();
+            gp1.updateList1();
+            gp2.updateList2();
         }
     }
 }

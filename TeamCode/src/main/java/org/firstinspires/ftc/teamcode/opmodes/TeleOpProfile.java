@@ -75,27 +75,52 @@ public class TeleOpProfile extends Controller {
         launchDrone = a.pressed();
     }
 
-    public void addToList () {
-        // gamepad 1
-        teleBooleans.add(driveMode); // 0
-        teleBooleans.add(loweringHanging); // 1
-        teleBooleans.add(raisingHanging); // 2
+        public void addToList1 () {
+            // gamepad 1
+            teleBooleans.add(driveMode); // 0
+            teleBooleans.add(loweringHanging); // 1
+            teleBooleans.add(raisingHanging); // 2
 
-        teleDoubles.add(drivingX); // 0
-        teleDoubles.add(drivingY); // 1
-        teleDoubles.add(drivingRot); // 2
+            teleDoubles.add(drivingX); // 0
+            teleDoubles.add(drivingY); // 1
+            teleDoubles.add(drivingRot); // 2
+        }
 
+        public void addToList2 () {
         // gamepad 2
-        teleBooleans.add(loweringIntake); // 3
-        teleBooleans.add(raisingIntake); // 4
-        teleBooleans.add(dropPixel); // 5
-        teleBooleans.add(liftSetHeight); // 6
-        teleBooleans.add(liftToPosition); // 7
-        teleBooleans.add(launchDrone); // 8
+        teleBooleans.add(loweringIntake); // 0
+        teleBooleans.add(raisingIntake); // 1
+        teleBooleans.add(dropPixel); // 2
+        teleBooleans.add(liftSetHeight); // 3
+        teleBooleans.add(liftToPosition); // 4
+        teleBooleans.add(launchDrone); // 5
 
-        teleDoubles.add(pixelIn); // 3
-        teleDoubles.add(driveLift); // 4
-        teleDoubles.add(extendOuttake); // 5
+        teleDoubles.add(pixelIn); // 0
+        teleDoubles.add(driveLift); // 1
+        teleDoubles.add(extendOuttake); // 2
+    }
+
+    public void updateList1 () {
+        teleBooleans.set(0, driveMode);
+        teleBooleans.set(1, loweringIntake);
+        teleBooleans.set(2, raisingIntake);
+
+        teleDoubles.set(0, drivingX);
+        teleDoubles.set(1, drivingY);
+        teleDoubles.set(2, drivingRot);
+    }
+
+    public void updateList2 () {
+        teleBooleans.set(0, loweringIntake);
+        teleBooleans.set(1, raisingIntake);
+        teleBooleans.set(2, dropPixel);
+        teleBooleans.set(3, liftSetHeight);
+        teleBooleans.set(4, liftToPosition);
+        teleBooleans.set(5, launchDrone);
+
+        teleDoubles.set(0, pixelIn);
+        teleDoubles.set(1, driveLift);
+        teleDoubles.set(2, extendOuttake);
     }
 
     public void update() {

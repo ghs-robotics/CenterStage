@@ -58,7 +58,7 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
 
     /**
-     * runs extention, stops when elapsed time is over 700ms
+     * runs extension, stops when elapsed time is over 700ms
      * @param dir direction
      * @param curMillisecond time
      * @return while running if less than 700 is false, after 700 its true and stops running
@@ -113,7 +113,6 @@ public class Delivery {
      * @param power how much power is wanted
      */
     public void driveLift (double power) {
-
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         sentPower = power;
@@ -123,6 +122,19 @@ public class Delivery {
         } else if (Math.abs(power) < 0.1) {
             setLiftPower(0);
         }
+        if (getTouchSensorStatus()) {
+            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+    }
+
+    // next two functions for TuneLift OpMode
+    public void driveLiftMotor1 (double power) {
+        liftMotor1.setPower(power);
+    }
+
+    public void driveLiftMotor2 (double power) {
+        liftMotor2.setPower(power);
     }
 
     /**
@@ -158,7 +170,6 @@ public class Delivery {
         }
         setLiftPower(power);
     }
-
 
     //-------------------------------------------------------------------------------------
     //                                   Drop Functions
