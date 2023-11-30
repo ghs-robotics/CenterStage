@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.cv;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -30,17 +31,28 @@ public class Camera {
 //        camera2 = OpenCvCameraFactory.getInstance()
 //                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"));
 
+
         pipeline = new Pipeline(camera1, telemetry);
+        camera1.setPipeline(pipeline);
     }
 
     public void initCamera(){
-        camera1.setPipeline(pipeline);
 //        camera2.setPipeline(pipeline);
 
-        initCamera(camera1);
-//        initCamera(camera2);
+        camera1.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera1.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+            }
 
-        telemetry.setMsTransmissionInterval(50);
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addLine("Error: Camera could not open");
+                telemetry.update();
+            }
+        });
+
+        telemetry.setMsTransmissionInterval(5);
     }
 
     public void closeCamera(){
@@ -60,19 +72,4 @@ public class Camera {
         return pipeline.getZone();
     }
 
-    private void initCamera(OpenCvCamera camera){
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-                telemetry.addLine("Error: Camera could not open");
-                telemetry.update();
-            }
-        });
-
-    }
 }

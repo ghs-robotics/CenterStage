@@ -28,13 +28,15 @@ public class Pipeline extends OpenCvPipeline {
     Telemetry telemetry;
 
     Mat hsv = new Mat();
-    Mat display = new Mat();
 
     int zone1count;
     int zone2count;
     int zone3count;
 
     int spikeZone;
+
+    Scalar upperBlue = new Scalar(255, 180, 230);
+    Scalar lowerBlue = new Scalar(15, 140, 100);
 
     public static final int SPIKE_LEFT = 1;
     public static final int SPIKE_CENTER = 2;
@@ -47,22 +49,26 @@ public class Pipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        Imgproc.cvtColor(input, hsv, Imgproc.COLOR_BGR2HSV, 3);
+        Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2HSV, 3);
 
-        display = processHSV(hsv);
+//        Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
+//        Scalar darkRange = new Scalar(BLOCK_DARK_S, BLOCK_DARK_H, BLOCK_DARK_V);
 
-        zone1count = countPixels(1);
-        zone2count = countPixels(2);
-        zone3count = countPixels(3);
+        Core.inRange(input, lowerBlue, upperBlue, input);
 
-        if (zone1count > zone2count && zone1count > zone3count)
-            spikeZone = SPIKE_LEFT;
-        else if (zone2count > zone1count && zone2count > zone3count)
-            spikeZone = SPIKE_CENTER;
-        else
-            spikeZone = SPIKE_RIGHT;
+        this.hsv = input;
+//        zone1count = countPixels(1);
+//        zone2count = countPixels(2);
+//        zone3count = countPixels(3);
+//
+//        if (zone1count > zone2count && zone1count > zone3count)
+//            spikeZone = SPIKE_LEFT;
+//        else if (zone2count > zone1count && zone2count > zone3count)
+//            spikeZone = SPIKE_CENTER;
+//        else
+//            spikeZone = SPIKE_RIGHT;
 
-        return display;
+        return input;
     }
 
     public int getZone(){
@@ -72,28 +78,15 @@ public class Pipeline extends OpenCvPipeline {
     private int countPixels(int z){
         int counter = 0;
 
-        int row = (z - 1) * display.rows() / 3;
+        int row = (z - 1) * hsv.rows() / 3;
 
-        for (int col = 0; col < display.cols(); col++){
-            for (int r = row; r < (display.rows() * z) / 3; row++){
-                double[] dataList = display.get(row, col);
+        for (int col = 0; col < hsv.cols(); col++){
+            for (int r = row; r < (hsv.rows() * z) / 3; row++){
 
-                if (dataList[0] == 255)
-                    counter++;
             }
         }
 
         return counter;
-    }
-
-    private Mat processHSV(Mat input){
-        Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
-        Scalar darkRange = new Scalar(BLOCK_DARK_S, BLOCK_DARK_H, BLOCK_DARK_V);
-
-        if (FILTER)
-            Core.inRange(input, lightRange, darkRange, input);
-
-        return input;
     }
 
     @Override
@@ -108,11 +101,11 @@ public class Pipeline extends OpenCvPipeline {
     }
 
     public void getTelemetry(){
-        telemetry.addLine();
         telemetry.addLine("Pipeline telemetry");
-        telemetry.addData("channels: ", display.channels());
-        telemetry.addData("dump:     ", display.dump());
-        telemetry.addData("type:     ", display.depth());
+        telemetry.addData("channels: ", hsv.channels());
+        telemetry.addData("channels info: ", hsv.checkVector());
+        telemetry.addData("dump:     ", hsv.dump());
+        telemetry.addData("type:     ", hsv.depth());
         telemetry.addLine();
         telemetry.addData("zone 1 counter", zone1count);
         telemetry.addData("zone 2 counter", zone2count);

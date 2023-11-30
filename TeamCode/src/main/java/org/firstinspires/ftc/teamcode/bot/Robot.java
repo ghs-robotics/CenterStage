@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -28,8 +30,13 @@ public class Robot {
     public Hanging hang;
 //    public Drone drone;
 
+    FtcDashboard dashboard;
+
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
+//        dashboard = FtcDashboard.getInstance();
+//        this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
         this.telemetry = telemetry;
         gyro = new Gyro(hardwareMap);
         drive = new BallDrive(hardwareMap, gyro);
@@ -41,6 +48,7 @@ public class Robot {
 
         cam = new Camera(hardwareMap, telemetry);
 
+//        dashboard.startCameraStream(cam.camera1, 0);
     }
 
     /**
@@ -48,6 +56,7 @@ public class Robot {
      */
     public void init(){
         //init cameras
+        cam.initCamera();
         gyro.resetHeading();
         drive.resetEncoders();
         delivery.resetEncoders();
