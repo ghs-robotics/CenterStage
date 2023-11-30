@@ -37,6 +37,9 @@ public class TeleOpProfile extends Controller {
     public boolean liftSetHeight;
     public boolean liftToPosition;
 
+    public double driveLeftLift;
+    public double driveRightLift;
+
     public boolean launchDrone;
 
     public TeleOpProfile(Gamepad gamepad, boolean driverOp) {
@@ -73,6 +76,9 @@ public class TeleOpProfile extends Controller {
         liftSetHeight = dpad_down.pressed();
         liftToPosition = y.pressed();
         launchDrone = a.pressed();
+
+        driveLeftLift = left_stick_y;
+        driveRightLift = right_stick_y;
     }
 
         public void addToList1 () {

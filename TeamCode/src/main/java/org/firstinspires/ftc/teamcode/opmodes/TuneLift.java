@@ -1,17 +1,20 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
+@TeleOp
 public class TuneLift extends LinearOpMode {
     Robot robot;
-    Controller gp;
+    TeleOpProfile gp2;
 
+@Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
-        gp = new Controller(gamepad2);
+        gp2 = new TeleOpProfile(gamepad2,false);
 
         robot.init();
         waitForStart();
@@ -19,10 +22,10 @@ public class TuneLift extends LinearOpMode {
         robot.update();
 
         while (opModeIsActive()) {
-            gp.update();
+            gp2.update();
 
-            robot.delivery.driveLiftMotor1(gp.left_stick_y);
-            robot.delivery.driveLiftMotor2(gp.right_stick_y);
+            robot.delivery.driveLiftMotor1(gp2.driveLeftLift);
+            robot.delivery.driveLiftMotor2(gp2.driveRightLift);
 
             robot.update();
             robot.getTeleOpTelemetry();

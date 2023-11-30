@@ -28,6 +28,8 @@ public class Delivery {
     private int liftLvl = 60;
     private int dropLvl = 60;
 
+    private int liftZeroPosError;
+
     private boolean runLiftToPosition;
 
     /**
@@ -43,7 +45,7 @@ public class Delivery {
         touchSensor = hardwareMap.get(TouchSensor.class, "touch");
 
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD); // currently polarity is reversed
+        liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE); // currently polarity is reversed
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -51,6 +53,8 @@ public class Delivery {
         droppingServo.setPosition(0.1);
 
         runLiftToPosition = false;
+
+        liftZeroPosError = 0 - liftMotor1.getCurrentPosition();
     }
 
     //-------------------------------------------------------------------------------------
@@ -113,7 +117,7 @@ public class Delivery {
      * @param power how much power is wanted
      */
     public void driveLift (double power) {
-        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         sentPower = power;
 
@@ -122,19 +126,30 @@ public class Delivery {
         } else if (Math.abs(power) < 0.1) {
             setLiftPower(0);
         }
-        if (getTouchSensorStatus()) {
-            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
     }
 
     // next two functions for TuneLift OpMode
     public void driveLiftMotor1 (double power) {
-        liftMotor1.setPower(power);
+        touchSensorEncoderReset();
+        if (getLiftPosition() > 0) {
+            liftMotor1.setPower(power);
+        } else {
+            liftMotor1.setPower(-Math.abs(power));
+        }
     }
 
     public void driveLiftMotor2 (double power) {
-        liftMotor2.setPower(power);
+        if (getLiftPosition() > 0) {
+            liftMotor2.setPower(power);
+        } else  {
+            liftMotor2.setPower(-Math.abs(power));
+        }
+    }
+
+    public void touchSensorEncoderReset () {
+        if (getTouchSensorStatus()) {
+            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
     }
 
     /**
@@ -155,7 +170,7 @@ public class Delivery {
     }
 
     /**
-     * limits how much power lift has
+     * limits lift position and power
      * @param power wanted amount of power
      */
     private void limitLift(double power){
@@ -210,8 +225,7 @@ public class Delivery {
      * resets encoders
      */
     public void resetEncoders() {
-        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftZeroPosError += 0 - getLiftPosition();
     }
 
     public int getExtensionLvl(){
@@ -235,7 +249,7 @@ public class Delivery {
     }
 
     public int getLiftPosition() {
-        return liftMotor1.getCurrentPosition();
+        return liftMotor1.getCurrentPosition() + liftZeroPosError;
     }
 
     public boolean getTouchSensorStatus () {
