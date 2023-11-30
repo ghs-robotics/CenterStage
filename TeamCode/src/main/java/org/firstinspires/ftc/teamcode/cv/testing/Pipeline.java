@@ -8,6 +8,8 @@ import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_L
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_V;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.CANNY;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.FILTER;
+import static org.opencv.core.CvType.CV_8U;
+import static org.opencv.core.CvType.CV_8UC1;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
@@ -57,6 +59,8 @@ public class Pipeline extends OpenCvPipeline {
         Core.inRange(input, lowerBlue, upperBlue, input);
 
         this.hsv = input;
+
+        this.hsv.convertTo(hsv, CV_8UC1);
 //        zone1count = countPixels(1);
 //        zone2count = countPixels(2);
 //        zone3count = countPixels(3);
@@ -103,7 +107,6 @@ public class Pipeline extends OpenCvPipeline {
     public void getTelemetry(){
         telemetry.addLine("Pipeline telemetry");
         telemetry.addData("channels: ", hsv.channels());
-        telemetry.addData("channels info: ", hsv.checkVector());
         telemetry.addData("dump:     ", hsv.dump());
         telemetry.addData("type:     ", hsv.depth());
         telemetry.addLine();

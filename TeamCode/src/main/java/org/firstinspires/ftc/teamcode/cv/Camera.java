@@ -52,7 +52,7 @@ public class Camera {
             }
         });
 
-        telemetry.setMsTransmissionInterval(5);
+        telemetry.setMsTransmissionInterval(500);
     }
 
     public void closeCamera(){
