@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_L
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_V;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.CANNY;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.FILTER;
+import static org.opencv.core.CvType.CV_32SC1;
 import static org.opencv.core.CvType.CV_8U;
 import static org.opencv.core.CvType.CV_8UC1;
 
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -44,7 +46,7 @@ public class Pipeline extends OpenCvPipeline {
     public static final int SPIKE_CENTER = 2;
     public static final int SPIKE_RIGHT = 3;
 
-    public Pipeline (OpenCvCamera camera, Telemetry telemetry){
+    public Pipeline(OpenCvCamera camera, Telemetry telemetry) {
         cam = camera;
         this.telemetry = telemetry;
     }
@@ -53,15 +55,19 @@ public class Pipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2HSV, 3);
 
-//        Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
-//        Scalar darkRange = new Scalar(BLOCK_DARK_S, BLOCK_DARK_H, BLOCK_DARK_V);
+        Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
+        Scalar darkRange = new Scalar(BLOCK_DARK_S, BLOCK_DARK_H, BLOCK_DARK_V);
 
-        Core.inRange(input, lowerBlue, upperBlue, input);
+//        Core.inRange(input, lowerBlue, upperBlue, input);
+
+        Core.inRange(input, lightRange, darkRange, input);
 
         this.hsv = input;
 
         this.hsv.convertTo(hsv, CV_8UC1);
-//        zone1count = countPixels(1);
+
+
+        zone1count = countPixels(1);
 //        zone2count = countPixels(2);
 //        zone3count = countPixels(3);
 //
@@ -72,23 +78,29 @@ public class Pipeline extends OpenCvPipeline {
 //        else
 //            spikeZone = SPIKE_RIGHT;
 
-        return input;
+        return hsv;
     }
 
-    public int getZone(){
+    public int getZone() {
         return spikeZone;
     }
 
-    private int countPixels(int z){
+    private int countPixels(int z) {
         int counter = 0;
 
-        int row = (z - 1) * hsv.rows() / 3;
+        if (!hsv.isContinuous())
+            return -1;
 
-        for (int col = 0; col < hsv.cols(); col++){
-            for (int r = row; r < (hsv.rows() * z) / 3; row++){
+        //int row = (z - 1) * hsv.rows() / 3;
+        Size sizeA = hsv.size();
+        for (int col = 0; col < sizeA.height; col++)
+            for (int row = 0; row < sizeA.width; row++) {
+                double[] mask = hsv.get(row, col);
+                telemetry.addLine("running " + row + " " + col);
+                if (mask != null)
+                    counter++;
 
             }
-        }
 
         return counter;
     }
