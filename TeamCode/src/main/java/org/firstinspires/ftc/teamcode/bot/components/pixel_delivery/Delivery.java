@@ -115,6 +115,10 @@ public class Delivery {
         setLiftPower(power);
     }
 
+    public void tuneLift(double lm1, double lm2){
+        setLiftPower(lm1);
+        setLiftPower(lm2);
+    }
 
     //-------------------------------------------------------------------------------------
     //                                   Drop Functions
