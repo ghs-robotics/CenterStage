@@ -115,6 +115,7 @@ public class Delivery {
         setLiftPower(power);
     }
 
+    // should only be used for the tuning teleop
     public void tuneLift(double lm1, double lm2){
         setLiftPower(lm1);
         setLiftPower(lm2);

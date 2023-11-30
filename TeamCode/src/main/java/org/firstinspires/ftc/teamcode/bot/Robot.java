@@ -46,7 +46,7 @@ public class Robot {
         delivery = new Delivery(hardwareMap);
         hang = new Hanging(hardwareMap);
 
-        cam = new Camera(hardwareMap, telemetry);
+        //cam = new Camera(hardwareMap, telemetry);
 
 //        dashboard.startCameraStream(cam.camera1, 0);
     }
@@ -56,7 +56,7 @@ public class Robot {
      */
     public void init(){
         //init cameras
-        cam.initCamera();
+        //cam.initCamera();
         gyro.resetHeading();
         drive.resetEncoders();
         delivery.resetEncoders();
