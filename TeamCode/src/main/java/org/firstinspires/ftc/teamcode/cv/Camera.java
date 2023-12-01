@@ -23,6 +23,7 @@ public class Camera {
     private final int PIXEL_WIDTH = 320;
 
 
+
     public Camera(HardwareMap hardwareMap, Telemetry telemetry){
         this.telemetry = telemetry;
 

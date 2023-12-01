@@ -34,7 +34,7 @@ public class Delivery {
         droppingServo = hardwareMap.get(Servo.class, "drop");
 
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD); // currently polarity is reversed
+        liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE); // currently polarity is reversed
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -48,9 +48,9 @@ public class Delivery {
     //                                   Auto Functions
     //-------------------------------------------------------------------------------------
 
-    public boolean autoRunExtension(double dir, double curMillisecond){
+    public boolean autoRunExtension(double position, double curMillisecond){
         if (curMillisecond < 550){
-            setExtensionPower(dir);
+            setExtensionPower(position);
         }else
             setExtensionPower(0);
         return curMillisecond > 700;
@@ -65,11 +65,11 @@ public class Delivery {
         liftLvl = target;
         target = liftMotorPos[getLiftLvl()];
 
-        if (getLiftPosition() < target - 25 || getLiftPosition() > target + 25)
-            driveLift((getLiftPosition() - target) / 350.0);
+        if (getLiftPosition() < target - 5 || getLiftPosition() > target + 5)
+            driveLift((getLiftPosition() - target) / 10.0);
         else
             driveLift(-0.1);
-        return getLiftPosition() < target - 25 || getLiftPosition() > target + 25;
+        return getLiftPosition() < target - 5 || getLiftPosition() > target + 5;
     }
 
     //-------------------------------------------------------------------------------------
@@ -117,8 +117,8 @@ public class Delivery {
 
     // should only be used for the tuning teleop
     public void tuneLift(double lm1, double lm2){
-        setLiftPower(lm1);
-        setLiftPower(lm2);
+        liftMotor1.setPower(lm1);
+        liftMotor2.setPower(lm2);
     }
 
     //-------------------------------------------------------------------------------------

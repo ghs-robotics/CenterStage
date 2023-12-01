@@ -8,6 +8,8 @@ import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_L
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_V;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.CANNY;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.FILTER;
+import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.PIXEL_HEIGHT;
+import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.PIXEL_WIDTH;
 import static org.opencv.core.CvType.CV_32SC1;
 import static org.opencv.core.CvType.CV_8U;
 import static org.opencv.core.CvType.CV_8UC1;
@@ -37,7 +39,7 @@ public class Pipeline extends OpenCvPipeline {
     int zone2count;
     int zone3count;
 
-    int spikeZone;
+    int spikeZone = -1;
 
     Scalar upperBlue = new Scalar(255, 180, 230);
     Scalar lowerBlue = new Scalar(15, 140, 100);
@@ -53,6 +55,7 @@ public class Pipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        cam.stopStreaming();
         Imgproc.cvtColor(input, input, Imgproc.COLOR_BGR2HSV, 3);
 
         Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
@@ -78,6 +81,7 @@ public class Pipeline extends OpenCvPipeline {
 //        else
 //            spikeZone = SPIKE_RIGHT;
 
+        cam.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT);
         return hsv;
     }
 

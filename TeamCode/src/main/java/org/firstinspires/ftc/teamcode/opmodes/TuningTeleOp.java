@@ -36,8 +36,10 @@ public class TuningTeleOp extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
-            robot.delivery.tuneLift(gp1.left_stick_y, gp2.left_stick_y);
-
+            if (gp1.left_stick_y + gp1.right_stick_y == 0)
+                robot.delivery.driveLift(gp2.left_stick_y);
+            else
+                robot.delivery.tuneLift(gp1.left_stick_y, gp1.right_stick_y);
             robot.update();
         }
 
