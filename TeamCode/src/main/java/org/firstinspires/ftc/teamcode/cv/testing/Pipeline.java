@@ -59,12 +59,24 @@ public class Pipeline extends OpenCvPipeline {
 
     ElapsedTime timer;
 
+    boolean resetTimer;
+
     public Pipeline(OpenCvCamera camera, Telemetry telemetry, boolean red) {
         cam = camera;
         this.telemetry = telemetry;
         timer = new ElapsedTime();
 
+        resetTimer = false;
+
         timer.reset();
+
+        if (red){
+            lowerRangeInUse = lightRange;
+            upperRangeInUse = darkRange;
+        } else {
+            upperRangeInUse = darkBlue;
+            lowerRangeInUse = darkBlue;
+        }
     }
 
     @Override
@@ -84,7 +96,7 @@ public class Pipeline extends OpenCvPipeline {
         Mat finalMat = new Mat();
         Mat edges = new Mat();
 
-        Core.inRange(hsv, lightRange, darkRange, thresh);
+        Core.inRange(hsv, lowerRangeInUse, upperRangeInUse, thresh);
 
         if (FILTER || CANNY) {
             Core.bitwise_and(hsv, hsv, masked, thresh);
@@ -137,7 +149,7 @@ public class Pipeline extends OpenCvPipeline {
                 Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
             }
 
-            if (timer.milliseconds() < 150000)
+            if (timer.milliseconds() < 750 && resetTimer)
                 SPIKE_ZONE = zone;
         }
 
@@ -161,6 +173,11 @@ public class Pipeline extends OpenCvPipeline {
 
     public int getZone() {
         return spikeZone;
+    }
+
+    public void resetDetectionTimer(){
+        timer.reset();
+        resetTimer = true;
     }
 
 

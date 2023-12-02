@@ -57,6 +57,10 @@ public class Camera {
         telemetry.setMsTransmissionInterval(100);
     }
 
+    public void detectProp(){
+        pipeline.resetDetectionTimer();
+    }
+
     public void closeCamera(){
         camera1.stopStreaming();
 //        camera2.stopStreaming();

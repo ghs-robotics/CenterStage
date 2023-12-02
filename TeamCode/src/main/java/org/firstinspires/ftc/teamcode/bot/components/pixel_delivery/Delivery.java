@@ -47,11 +47,11 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
 
     public boolean autoRunExtension(double dir, double curMillisecond){
-        if (curMillisecond < 550){
+        if (curMillisecond < 350){
             setExtendPower(dir);
         }else
             setExtendPower(0);
-        return curMillisecond > 700;
+        return curMillisecond > 500;
     }
 
     public boolean autoDropPixels(double targetPos){
