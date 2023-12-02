@@ -25,8 +25,9 @@ public class AutoRed extends LinearOpMode {
         robot.init();
 
         // create list of actions to run
-        actionHandler.add(AutoPresets.getBeginningNearBackDrop(robot, telemetry));
-        actionHandler.add(MOVE, new ParamHandler(3 * TICKS_PER_TILE_X, -860, 0.0));
+//        actionHandler.add(AutoPresets.getBeginningNearBackDrop(robot, telemetry));
+        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
+//        actionHandler.add(MOVE, new ParamHandler(3 * TICKS_PER_TILE_X, -860, 0.0));
 //        actionHandler.add(RETRACT);
 
 
