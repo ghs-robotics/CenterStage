@@ -54,23 +54,17 @@ public class Tele extends LinearOpMode {
             // changes intake height - left bumper and right bumper
             robot.intake.changeIntakeHeight(gp2.raisingIntake, gp2.loweringIntake);
 
-            // runs intake analogly - left and right trigger
+            // runs intake - left and right trigger
             robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
 
+            // extends outtake - right joystick y-axis
+            robot.delivery.setExtensionPosition(gp2.extendOuttake);
+
             // changes drop servo position - b
-            robot.delivery.changeDropPosition(gp2.dropPixel);
+            robot.delivery.setDropPosition(gp2.dropPixel);
 
             // drives lift - left joystick, y-axis
             robot.delivery.driveLift(gp2.driveLift);
-
-            // extends outtake - right joystick y-axis
-            robot.delivery.setExtensionPower(gp2.extendOuttake);
-
-            // runs lift to set height - dpad up
-            robot.delivery.changeLiftHeight(gp2.liftSetHeight, gp2.liftToPosition);
-
-            // changes mode from driving lift to setting lift position or vice versa - dpad down
-            robot.delivery.setRunLiftToPosition(gp2.liftToPosition);
 
             // Launches drone - a button
             robot.drone.launchDrone(gp2.launchDrone);

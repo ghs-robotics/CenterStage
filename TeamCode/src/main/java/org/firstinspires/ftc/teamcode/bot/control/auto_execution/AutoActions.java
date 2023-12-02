@@ -71,7 +71,7 @@ public class AutoActions {
     }
 
     private void runIntake(){
-        robot.intake.setIntakeHeight(params.intakeLevel);
+        robot.intake.setIntakePosition(params.intakeLevel);
 
         resetTimer();
 

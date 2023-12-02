@@ -57,7 +57,6 @@ public class Robot {
     public void shutOff(){
         drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
-        delivery.setExtensionPower(0);
         delivery.driveLift(0);
     }
 
@@ -90,18 +89,16 @@ public class Robot {
 
     private void intakeTelemetry(){
         telemetry.addLine("Intake Telemetry");
-        telemetry.addData("intake position: ", intake.getIntakePos());
+        telemetry.addData("intake position: ", intake.getIntakePosition());
         telemetry.addLine();
     }
 
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
         telemetry.addData("lift position: ", delivery.getLiftPosition());
-        telemetry.addData("lift target Pos: ", delivery.getLiftLvl());
-        telemetry.addData("Lift Preset On: ", delivery.getLiftMode());
+        telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
         telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
-//        telemetry.addData("extend position", deliver.getExtendPosition());
         telemetry.addLine();
     }
 }
