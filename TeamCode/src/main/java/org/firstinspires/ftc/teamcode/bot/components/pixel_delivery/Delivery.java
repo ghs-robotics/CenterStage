@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,14 +11,14 @@ public class Delivery {
     private DcMotor liftMotor1;
     private DcMotor liftMotor2;
 
-    private Servo extendServo;
+    private CRServo extendServo;
     private Servo dropServo;
 
     private TouchSensor touchSensor;
 
-    private double[] extendServoPos = {0};
-
-    private int extendLvl = 60;
+//    private double[] extendServoPos = {0.4, 0.5, 0.6};
+//
+//    private int extendLvl = 60;
 
     public static final double DROPPER_INTAKING = 0.1;
     public static final double DROPPER_FIRST = 0.5;
@@ -25,14 +26,10 @@ public class Delivery {
 
     private double sentPower;
 
-    /**
-     * adds all the variables to robot class, sets dropping servo to 0
-     * @param hardwareMap is how the code interacts with the robot
-     */
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
-        extendServo = hardwareMap.get(Servo.class, "extend");
+        extendServo = hardwareMap.get(CRServo.class, "extend");
         dropServo = hardwareMap.get(Servo.class, "drop");
 
         touchSensor = hardwareMap.get(TouchSensor.class, "touch");
@@ -41,18 +38,20 @@ public class Delivery {
         liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE); // currently polarity is reversed
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        extendServo.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     //-------------------------------------------------------------------------------------
     //                                   Auto Functions
     //-------------------------------------------------------------------------------------
 
-    /**
-     * runs extension, stops when elapsed time is over 700ms
-     * @param dir direction
-     * @param curMillisecond time
-     * @return while running if less than 700 is false, after 700 its true and stops running
-     */
+//    /**
+//     * runs extension, stops when elapsed time is over 700ms
+//     * @param dir direction
+//     * @param curMillisecond time
+//     * @return while running if less than 700 is false, after 700 its true and stops running
+//     */
 //    public boolean autoRunExtension(double dir, double curMillisecond){
 //        if (curMillisecond < 550){
 //            setExtensionPower(dir);
@@ -61,11 +60,6 @@ public class Delivery {
 //        return curMillisecond > 700;
 //    }
 
-    /**
-     * drops pixel
-     * @param targetPos position servo needs to be to drop pixels
-     * @return  is false and keeps going until reaches position, then true and stops
-     */
     public boolean autoDropPixels(double targetPos){
         dropServo.setPosition(targetPos);
         return dropServo.getPosition() == targetPos;
@@ -142,22 +136,35 @@ public class Delivery {
             power = 0;
         } else if (getLiftPosition() > limit - 150){
             power *= (limit - getLiftPosition()) / 200.0;
-        } else if (getLiftPosition() < 0 && power > 0){
+        } else if (getLiftPosition() <= 0 && power > 0){
             power = 0;
         }
         setLiftPower(power);
     }
 
     //-------------------------------------------------------------------------------------
-    //                                   Simple Functions
+    //                                   Extension Functions
     //-------------------------------------------------------------------------------------
 
-    public void changeExtensionLength (boolean decrease, boolean increase) {
-        if (decrease) {
-            extendLvl -= 1;
-        }
-        if (increase) {
-            extendLvl += 1;
+//    public void changeExtensionLength (boolean decrease, boolean increase) {
+//        if (decrease) {
+//            extendLvl -= 1;
+//        }
+//        if (increase) {
+//            extendLvl += 1;
+//        }
+//        setExtensionPosition();
+//    }
+
+    //-------------------------------------------------------------------------------------
+    //                                   Drop Functions
+    //-------------------------------------------------------------------------------------
+
+    public void changeDropPosition(boolean pressing) {
+        if (pressing) {
+            dropServo.setPosition(0.3);
+        } else {
+            dropServo.setPosition(0.23);
         }
     }
 
@@ -165,43 +172,30 @@ public class Delivery {
     //                                   Simple Functions
     //-------------------------------------------------------------------------------------
 
-    /**
-     * @param power sets the power of both motors on the lift
-     */
-    private void setLiftPower(double power){
-        liftMotor1.setPower(power);
-        liftMotor2.setPower(power);
-    }
-
-    /**
-     * resets encoders
-     */
     public void resetEncoders () {
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    private void setLiftPower(double power){
+        liftMotor1.setPower(power);
+        liftMotor2.setPower(power);
     }
 
     public int getLiftPosition () {
         return -liftMotor1.getCurrentPosition();
     }
 
-    public void setExtensionPosition (boolean pressed) {
-        if (pressed) {
-            extendLvl += 1;
-        }
+//    private void setExtensionPosition () {
+//        extendServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
+//    }
 
-    }
+//    public double getExtensionPosition () {
+//        return extendServo.getPosition();
+//    }
 
-    public double getExtensionPosition () {
-        return extendServo.getPosition();
-    }
-
-    public void setDropPosition (boolean released) {
-        if (released) {
-            dropServo.setPosition(0.2);
-        } else {
-            dropServo.setPosition(0);
-        }
+    public void setExtendPower (double power) {
+        extendServo.setPower(power);
     }
 
     public double getDropPosition () {

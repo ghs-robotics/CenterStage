@@ -31,7 +31,10 @@ public class TeleOpProfile extends Controller {
     public double pixelIn;
     public boolean dropPixel;
 
+    public boolean retractOuttake;
     public boolean extendOuttake;
+
+    public double powerExtension;
 
     public double driveLift;
 
@@ -67,10 +70,18 @@ public class TeleOpProfile extends Controller {
     public void setIvanGamepad2() {
         loweringIntake = left_bumper.pressed();
         raisingIntake = right_bumper.pressed();
+
         pixelIn = right_trigger - left_trigger;
-        extendOuttake = x.pressed();
-        dropPixel = b.released();
+
+        retractOuttake = dpad_left.pressed();
+        extendOuttake = dpad_right.pressed();
+
+        powerExtension = right_stick_y;
+
+        dropPixel = b.pressing();
+
         driveLift = left_stick_y;
+
         launchDrone = a.pressed();
 
         driveLeftLift = left_stick_y;

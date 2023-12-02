@@ -10,7 +10,7 @@ public class Intake {
     private DcMotor intakeMotor;
     private Servo intakeServo;
 
-    double[] pos = {0.01, 0.05, 0.08, 0.12, 0.15, 0.2};
+    double[] intakeServoPos = {0.01, 0.05, 0.08, 0.12, 0.15, 0.2};
 
     int intakeLvl = 60;
 
@@ -37,7 +37,7 @@ public class Intake {
         // the zero is a placeholder. it is an auto function
         // you can fix it hehe
         int diff = targetLevel - 0;
-        intakeServo.setPosition(pos[Math.abs(intakeLvl % pos.length)]);
+        setIntakePosition();
     }
 
     //-------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ public class Intake {
     //-------------------------------------------------------------------------------------
 
     private void setIntakePosition() {
-        intakeServo.setPosition(Math.abs(intakeLvl % pos.length));
+        intakeServo.setPosition(intakeServoPos[Math.abs(intakeLvl % intakeServoPos.length)]);
     }
 
     public double getIntakePosition () {
