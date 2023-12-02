@@ -38,7 +38,6 @@ public class Robot {
         drone = new Drone(hardwareMap);
 
         cam = new Camera();
-
     }
 
     /**

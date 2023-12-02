@@ -65,18 +65,10 @@ public class Delivery {
         return dropServo.getPosition() == targetPos;
     }
 
-    /**
-     * sets the lift position
-     */
 //    public void setLiftPosition() {
 //        liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
 //    }
 
-    /**
-     * raises lift to desired position
-     * @param target the desired point
-     * @return if position less than desired, is false, keeps running, and if higher, then true and stops
-     */
 //    public boolean driveLiftToPosition(int target){
 //        liftLvl = target;
 //        target = liftMotorPos[getLiftLvl()];
@@ -92,10 +84,6 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
-    /**
-     * sets lift motor power
-     * @param power how much power is wanted
-     */
     public void driveLift (double power) {
         touchSensorEncoderReset();
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -125,10 +113,6 @@ public class Delivery {
         }
     }
 
-    /**
-     * limits lift position and power
-     * @param power wanted amount of power
-     */
     private void limitLift(double power){
         int limit = 1430;
 
@@ -164,7 +148,7 @@ public class Delivery {
         if (pressing) {
             dropServo.setPosition(0.3);
         } else {
-            dropServo.setPosition(0.23);
+            dropServo.setPosition(0.18);
         }
     }
 
