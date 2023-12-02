@@ -12,6 +12,8 @@ import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActi
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.RETRACT;
 import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
 
+import android.animation.TimeAnimator;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActionHandler;
@@ -34,8 +36,8 @@ public class AutoPresets {
 
     public static AutoActionHandler getRouteA(Robot r, Telemetry t){
         routeA = new AutoActionHandler(r, t);
-        routeA.add(INTAKE, new ParamHandler(INTAKE, 0));
-        routeA.add(LIFT, new ParamHandler(LIFT, 1));
+        routeA.add(MOVE, new ParamHandler(20, (int) (-2.3 * TICKS_PER_TILE_Y), 0.0));
+        routeA.add(LIFT, new ParamHandler(LIFT, 100));
         routeA.add(EXTEND);
         routeA.add(DROP);
         routeA.add(RETRACT);

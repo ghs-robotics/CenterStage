@@ -62,7 +62,7 @@ public class AutoActions {
 
         boolean there = robot.nav.runToPosition(x, params.y, params.heading);
 
-        endAction = there || timer.milliseconds() > 10000;
+        endAction = there || timer.milliseconds() > 5000;
     }
 
     private void dropPixels(){
