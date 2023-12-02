@@ -19,12 +19,14 @@ public class Camera {
     public OpenCvCamera camera1;
     public OpenCvCamera camera2;
 
+    private boolean red;
+
     private final int PIXEL_HEIGHT = 240;
     private final int PIXEL_WIDTH = 320;
 
     public static int SPIKE_ZONE = -1;
 
-    public Camera(HardwareMap hardwareMap, Telemetry telemetry){
+    public Camera(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
         this.telemetry = telemetry;
 
         camera1 = OpenCvCameraFactory.getInstance()

@@ -52,7 +52,7 @@ public class Robot {
         delivery = new Delivery(hardwareMap);
         drone = new Drone(hardwareMap);
 
-        cam = new Camera(hardwareMap, telemetry);
+        cam = new Camera(hardwareMap, telemetry, RED);
 
 //        dashboard.startCameraStream(cam.camera1, 0);
     }

@@ -55,11 +55,11 @@ public class AutoActions {
      */
     private void moveTo(){
         resetTimer();
-        int y = params.y;
+        int x = params.x;
         if (robot.RED)
-            y *= -1;
+            x *= -1;
 
-        boolean there = robot.nav.runToPosition(params.x, y, params.heading);
+        boolean there = robot.nav.runToPosition(x, params.y, params.heading);
 
         endAction = there || timer.milliseconds() > 10000;
     }

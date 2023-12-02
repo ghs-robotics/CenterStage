@@ -23,7 +23,7 @@ public class TestCameraAuto extends LinearOpMode {
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        cam = new Camera(hardwareMap, telemetry);
+        cam = new Camera(hardwareMap, telemetry, false);
 
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);

@@ -29,7 +29,7 @@ public class AutoRed extends LinearOpMode {
 //        actionHandler.add(MOVE, new ParamHandler((TICKS_PER_TILE), (int) -(TICKS_PER_TILE * 1.3), 0.0));
 //        actionHandler.add(DELIVER, new ParamHandler(DELIVER, 1, 0));
 //        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.3), 0.0));
-        actionHandler.add(MOVE, new ParamHandler(blue * 100, (int) -(TICKS_PER_TILE * 1.6), 0.0));
+        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.6), 0.0));
 //        actionHandler.add(LIFT);
 //        actionHandler.add(EXTEND);
         actionHandler.add(DROP);

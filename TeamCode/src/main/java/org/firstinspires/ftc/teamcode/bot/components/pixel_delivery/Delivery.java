@@ -148,7 +148,7 @@ public class Delivery {
         if (pressing) {
             dropServo.setPosition(0.3);
         } else {
-            dropServo.setPosition(0.23);
+            dropServo.setPosition(0.21);
         }
     }
 
