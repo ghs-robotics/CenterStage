@@ -18,6 +18,7 @@ public class AutoActions {
     public static final int DROP = 6; // drops it out of the
     public static final int EXTEND = 7;
     public static final int RETRACT = 8;
+    public static final int DETECT = 9;
 
 
     private Robot robot;
@@ -122,6 +123,13 @@ public class AutoActions {
             endAction = true;
     }
 
+    private void detectSpikeMark(){
+        if (!timerReset)
+            robot.cam.detectProp();
+        resetTimer();
+        endAction = timer.milliseconds() > 750;
+    }
+
     private void alignBotToTag(){
         // looks for the required tag
         // requires the use of moving to align itself
@@ -182,6 +190,9 @@ public class AutoActions {
                 break;
             case RETRACT:
                 retractDropper();
+                break;
+            case DETECT:
+                detectSpikeMark();
                 break;
         }
     }

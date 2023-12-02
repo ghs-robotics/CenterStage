@@ -11,13 +11,8 @@ import com.acmerobotics.roadrunner.ftc.FlightRecorder;
 import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 
@@ -42,7 +37,8 @@ public final class Navigation {
 
     private final double MM_PER_TICK = (35 * Math.PI) / (8192);
 
-    public static final int TICKS_PER_TILE = 600;
+    public static final int TICKS_PER_TILE_X = 595;
+    public static final int TICKS_PER_TILE_Y = 620;
 
     private double x;
     private double y;
@@ -146,11 +142,11 @@ public final class Navigation {
             yPow = 0;
         }
 
-        if (rotDiffClock >= rotDiffCounterClock){
-            rotPow = rotDiffClock / 10.0;
-        } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
-            rotPow = rotDiffCounterClock /10.0;
-        }
+//        if (rotDiffClock >= rotDiffCounterClock){
+//            rotPow = rotDiffClock / 10.0;
+//        } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
+//            rotPow = rotDiffCounterClock /10.0;
+//        }
 
 
         drive.calculateDrivePowers(xPow , yPow, rotPow, true);

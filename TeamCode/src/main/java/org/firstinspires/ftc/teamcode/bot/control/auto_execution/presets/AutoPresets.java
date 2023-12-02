@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets;
 
+import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE_X;
+import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE_Y;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DELIVER;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
@@ -19,16 +21,16 @@ public class AutoPresets {
     private static AutoActionHandler routeA;
     private static AutoActionHandler beginning;
 
-    static double[] leftSpikePos = {1, 2, 0.0};
-    static double[] centerSpikePos = {1, 2, 0.0};
-    static double[] rightSpikePos = {1, 2, 0.0};
+    static double[] leftSpikePos = {788, 45, 0.0};
+    static double[] centerSpikePos = {900, -131, 0.0};
+    static double[] rightSpikePos = {755, -530, 0.0};
 
-    static double[] leftBackDropPos = {1, 2, 0.0};
-    static double[] centerBackDropPos = {1, 2, 0.0};
-    static double[] rightBackDropPos = {1, 2, 0.0};
+    static double[] leftBackDropPos = {744, -880, 0.0};
+    static double[] centerBackDropPos = {580, -875, 0.0};
+    static double[] rightBackDropPos = {470, -860, 0.0};
 
-    static int pixelStackX = 10;
-    static int pixelStackY = 10;
+    static int pixelStackX = 3 * TICKS_PER_TILE_X + 20;
+    static int pixelStackY = (int) (1.2 * TICKS_PER_TILE_Y);
 
     public static AutoActionHandler getRouteA(Robot r, Telemetry t){
         routeA = new AutoActionHandler(r, t);
@@ -61,6 +63,7 @@ public class AutoPresets {
         beginning.add(PLACE);
         beginning.add(MOVE, new ParamHandler((int) backDropPos[0], (int) spikePos[1], 0.0));
         beginning.add(MOVE, new ParamHandler(backDropPos));
+        beginning.add(DELIVER);
 
         return beginning;
     }
@@ -81,6 +84,7 @@ public class AutoPresets {
             spikePos = rightSpikePos;
             backDropPos = rightBackDropPos;
         }
+        backDropPos[1] -= 2 * TICKS_PER_TILE_Y;
 
         beginning.add(MOVE, new ParamHandler((int) spikePos[0], 0, 0.0));
         beginning.add(MOVE, new ParamHandler(spikePos));

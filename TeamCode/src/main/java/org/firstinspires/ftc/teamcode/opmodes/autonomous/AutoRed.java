@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
-import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE;
+import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE_X;
+import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE_Y;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
 
@@ -10,27 +11,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActionHandler;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
+import org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets;
 
 @Autonomous
-public class AutoRedLong extends LinearOpMode {
+public class AutoRed extends LinearOpMode {
     Robot robot;
     AutoActionHandler actionHandler;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry, true);
         actionHandler = new AutoActionHandler(robot, telemetry);
         robot.init();
 
         // create list of actions to run
-//        actionHandler.add(MOVE, new ParamHandler((TICKS_PER_TILE), (int) -(TICKS_PER_TILE * 1.3), 0.0));
-//        actionHandler.add(DELIVER, new ParamHandler(DELIVER, 1, 0));
-//        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.3), 0.0));
-        actionHandler.add(MOVE, new ParamHandler((int) -(TICKS_PER_TILE * 2.3), 0, 0.0));
-        actionHandler.add(MOVE, new ParamHandler((int) -(TICKS_PER_TILE * 2.4), (int) -(TICKS_PER_TILE * 1.5), 0.0));
-//        actionHandler.add(LIFT);
-//        actionHandler.add(EXTEND);
-        actionHandler.add(DROP);
+        actionHandler.add(AutoPresets.getBeginningNearBackDrop(robot, telemetry));
+        actionHandler.add(MOVE, new ParamHandler(3 * TICKS_PER_TILE_X, -860, 0.0));
 //        actionHandler.add(RETRACT);
 
 

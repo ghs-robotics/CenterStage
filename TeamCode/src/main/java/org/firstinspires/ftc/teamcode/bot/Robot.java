@@ -54,7 +54,6 @@ public class Robot {
 
         cam = new Camera(hardwareMap, telemetry, RED);
 
-//        dashboard.startCameraStream(cam.camera1, 0);
     }
 
     /**

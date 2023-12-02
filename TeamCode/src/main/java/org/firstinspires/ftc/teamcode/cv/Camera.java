@@ -19,7 +19,6 @@ public class Camera {
     public OpenCvCamera camera1;
     public OpenCvCamera camera2;
 
-    private boolean red;
 
     private final int PIXEL_HEIGHT = 240;
     private final int PIXEL_WIDTH = 320;
@@ -35,7 +34,7 @@ public class Camera {
 //                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"));
 
 
-        pipeline = new Pipeline(camera1, telemetry);
+        pipeline = new Pipeline(camera1, telemetry, red);
         camera1.setPipeline(pipeline);
     }
 
@@ -56,6 +55,10 @@ public class Camera {
         });
 
         telemetry.setMsTransmissionInterval(100);
+    }
+
+    public void detectProp(){
+        pipeline.resetDetectionTimer();
     }
 
     public void closeCamera(){
