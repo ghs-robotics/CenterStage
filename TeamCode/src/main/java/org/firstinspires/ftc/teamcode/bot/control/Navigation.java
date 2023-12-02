@@ -105,7 +105,7 @@ public final class Navigation {
         lastHeading = heading;
 
         this.x += twist.line.y.value();
-        this.y += twist.line.x.value();
+        this.y -= twist.line.x.value();
         this.heading += twist.angle.value();
     }
 
