@@ -22,7 +22,7 @@ public class Camera {
     private final int PIXEL_HEIGHT = 240;
     private final int PIXEL_WIDTH = 320;
 
-
+    public static int SPIKE_ZONE = -1;
 
     public Camera(HardwareMap hardwareMap, Telemetry telemetry){
         this.telemetry = telemetry;
@@ -53,7 +53,7 @@ public class Camera {
             }
         });
 
-        telemetry.setMsTransmissionInterval(500);
+        telemetry.setMsTransmissionInterval(100);
     }
 
     public void closeCamera(){

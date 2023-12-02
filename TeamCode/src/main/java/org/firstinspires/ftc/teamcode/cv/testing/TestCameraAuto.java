@@ -38,6 +38,8 @@ public class TestCameraAuto extends LinearOpMode {
             gp1.update();
             gp2.update();
 
+//            cam.testCounters();
+
             cam.getTelemetry();
             telemetry.update();
         }

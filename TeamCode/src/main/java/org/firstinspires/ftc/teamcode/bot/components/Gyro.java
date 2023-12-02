@@ -29,7 +29,8 @@ public class Gyro {
     public Gyro(HardwareMap hardwareMap) {
         gyro = hardwareMap.get(IMU.class, "imu");
 
-        orientation = new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, DEGREES, 0, 0, 0, 0);
+        orientation = new Orientation(AxesReference.INTRINSIC, AxesOrder.YXZ, DEGREES,
+                0, 0, 0, 0);
 
         revOrientation = new RevHubOrientationOnRobot(orientation);
 

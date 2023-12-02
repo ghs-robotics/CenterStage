@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActi
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.WAIT;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -30,6 +31,7 @@ public class AutoActionHandler {
         this.timer = new ElapsedTime();
         this.robot = robot;
         this.telemetry = telemetry;
+        actionList.add(new AutoActions(WAIT, robot, new ParamHandler(1)));
     }
 
     /**
