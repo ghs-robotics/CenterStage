@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -26,8 +28,21 @@ public class Robot {
     public Delivery delivery;
     public Drone drone;
 
+    public boolean RED;
+
+    FtcDashboard dashboard;
+
+    public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
+        this(hardwareMap, telemetry);
+        this.RED = red;
+
+    }
+
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
+//        dashboard = FtcDashboard.getInstance();
+//        this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
         this.telemetry = telemetry;
         gyro = new Gyro(hardwareMap);
         drive = new BallDrive(hardwareMap, gyro);
@@ -37,7 +52,9 @@ public class Robot {
         delivery = new Delivery(hardwareMap);
         drone = new Drone(hardwareMap);
 
-        cam = new Camera();
+        cam = new Camera(hardwareMap, telemetry, RED);
+
+//        dashboard.startCameraStream(cam.camera1, 0);
     }
 
     /**
@@ -45,9 +62,11 @@ public class Robot {
      */
     public void init(){
         //init cameras
+        cam.initCamera();
         gyro.resetHeading();
         drive.resetEncoders();
         delivery.resetEncoders();
+        nav.resetNav();
     }
 
     public void shutOff(){
@@ -60,7 +79,7 @@ public class Robot {
      * tells the robot parts to retrieve the current information from each part to update the robot.
      */
     public void update(){
-        nav.updatePosition();
+        nav.update();
         telemetry.update();
     }
 

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 
 public class BallDrive implements Drivebase {
@@ -56,7 +55,7 @@ public class BallDrive implements Drivebase {
         double driveY = y;
 
         if(driveMode) {
-            driveX = y * Math.sin(angle) - x * Math.cos(angle);
+            driveX = x * Math.cos(angle) - y * Math.sin(angle) ;
             driveY = y * Math.cos(angle) + x * Math.sin(angle);
         }
         calculateDrivePowers(driveX, driveY, rot);
@@ -83,14 +82,10 @@ public class BallDrive implements Drivebase {
         return metaDriveOn;
     }
 
-    public double[] getEncoderVel(){
-        int x = 1, y = 1;
-        if (rightDrive.getDirection() == DcMotorSimple.Direction.REVERSE)
-            x = -1;
-        if (leftDrive.getDirection() == DcMotorSimple.Direction.REVERSE)
-            y = -1;
+    @Override
+    public DcMotorEx[] getEncoderMotors(){
+        return new DcMotorEx[]{leftDrive, rightDrive};
 
-        return new double[]{leftDrive.getVelocity() * y, rightDrive.getVelocity() * x};
     }
 
     private void setMotorPowers(){

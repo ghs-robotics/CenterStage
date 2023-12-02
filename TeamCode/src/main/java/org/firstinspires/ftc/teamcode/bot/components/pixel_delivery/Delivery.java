@@ -43,42 +43,29 @@ public class Delivery {
     }
 
     //-------------------------------------------------------------------------------------
-    //                                   Auto Functions
+    //                                   AutoRed Functions
     //-------------------------------------------------------------------------------------
 
-//    /**
-//     * runs extension, stops when elapsed time is over 700ms
-//     * @param dir direction
-//     * @param curMillisecond time
-//     * @return while running if less than 700 is false, after 700 its true and stops running
-//     */
-//    public boolean autoRunExtension(double dir, double curMillisecond){
-//        if (curMillisecond < 550){
-//            setExtensionPower(dir);
-//        }else
-//            setExtensionPower(0);
-//        return curMillisecond > 700;
-//    }
+    public boolean autoRunExtension(double dir, double curMillisecond){
+        if (curMillisecond < 550){
+            setExtendPower(dir);
+        }else
+            setExtendPower(0);
+        return curMillisecond > 700;
+    }
 
     public boolean autoDropPixels(double targetPos){
         dropServo.setPosition(targetPos);
         return dropServo.getPosition() == targetPos;
     }
 
-//    public void setLiftPosition() {
-//        liftMotor1.setTargetPosition(liftMotorPos[Math.abs(liftLvl % liftMotorPos.length)]);
-//    }
-
-//    public boolean driveLiftToPosition(int target){
-//        liftLvl = target;
-//        target = liftMotorPos[getLiftLvl()];
-//
-//        if (getLiftPosition() < target - 25 || getLiftPosition() > target + 25)
-//            driveLift((getLiftPosition() - target) / 350.0);
-//        else
-//            driveLift(-0.1);
-//        return getLiftPosition() < target - 25 || getLiftPosition() > target + 25;
-//    }
+    public boolean driveLiftToPosition(int target){
+        if (getLiftPosition() < target - 5 || getLiftPosition() > target + 5)
+            driveLift((getLiftPosition() - target) / 10.0);
+        else
+            driveLift(-0.1);
+        return getLiftPosition() < target - 5 || getLiftPosition() > target + 5;
+    }
 
     //-------------------------------------------------------------------------------------
     //                                   Lift Functions
@@ -139,6 +126,11 @@ public class Delivery {
 //        }
 //        setExtensionPosition();
 //    }
+    // should only be used for the tuning teleop
+    public void tuneLift(double lm1, double lm2){
+        liftMotor1.setPower(lm1);
+        liftMotor2.setPower(lm2);
+    }
 
     //-------------------------------------------------------------------------------------
     //                                   Drop Functions
