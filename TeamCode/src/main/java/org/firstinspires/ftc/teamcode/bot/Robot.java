@@ -113,13 +113,14 @@ public class Robot {
         telemetry.addData("lift position: ", delivery.getLiftPosition());
 //        telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
+        telemetry.addData("tune lift mode: ", delivery.getTuneLiftMode());
         telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
         telemetry.addLine();
     }
 
     private void droneTelemetry () {
         telemetry.addLine("Drone System Telemetry");
-        telemetry.addData("Drone Mode Status: ", drone.getDroneMode());
+        telemetry.addData("Drone Mode: ", drone.getDroneMode());
         telemetry.addLine();
     }
 }
