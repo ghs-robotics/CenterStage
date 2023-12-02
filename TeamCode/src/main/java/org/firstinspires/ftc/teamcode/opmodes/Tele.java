@@ -42,7 +42,7 @@ public class Tele extends LinearOpMode {
 
 
             // driving
-            robot.drive.calculateDrivePowers(gp1.left_stick_y, gp1.left_stick_x,
+            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y,
                     gp1.right_stick_x, driveMode);
 
 
@@ -79,11 +79,11 @@ public class Tele extends LinearOpMode {
 
 
             // changes drop servo position - b
-            robot.delivery.changeDropPosition(gp2.b.pressed());
+            robot.delivery.changeDropPosition(gp2.b.pressing());
 
 
             // launches drone - a button
-            robot.drone.launchDrone(gp2.a.pressed());
+            robot.drone.launchDrone(gp2.a.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY

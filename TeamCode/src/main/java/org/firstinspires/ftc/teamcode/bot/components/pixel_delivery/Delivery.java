@@ -156,7 +156,7 @@ public class Delivery {
     public void changeDropPosition(boolean pressing) {
         if (!tuneLiftMode) {
             if (pressing) {
-                dropServo.setPosition(0.3);
+                dropServo.setPosition(0.4);
             } else {
                 dropServo.setPosition(0.18);
             }
