@@ -82,7 +82,7 @@ public class TeleOpProfile extends Controller {
 
         driveLift = left_stick_y;
 
-        launchDrone = a.pressed();
+        launchDrone = a.pressing();
 
         driveLeftLift = left_stick_y;
         driveRightLift = right_stick_y;

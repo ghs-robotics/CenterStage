@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Drone {
     Servo droneServo;
-    private int launchlvl = 60;
-    private double[] droneServoPos = {0.5, 0.8};
 
     private boolean droneMode = false;
 
@@ -21,17 +19,22 @@ public class Drone {
         }
     }
 
-    public void launchDrone (boolean increase) {
+    public void launchDrone (boolean pressed) {
         if (droneMode) {
-            if (increase) {
-                launchlvl += 1;
+            if (pressed) {
+                droneServo.setPosition(0.8);
+            } else {
+                droneServo.setPosition(0.5);
             }
-            setLaunchPosition();
         }
     }
 
-    public void setLaunchPosition() {
-        droneServo.setPosition(droneServoPos[Math.abs(launchlvl % droneServoPos.length)]);
+    public String getDroneMode () {
+        if (droneMode) {
+            return "Drone Mode On";
+        } else {
+            return "Drone Mode Off";
+        }
     }
 }
 
