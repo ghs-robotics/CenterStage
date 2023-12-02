@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;

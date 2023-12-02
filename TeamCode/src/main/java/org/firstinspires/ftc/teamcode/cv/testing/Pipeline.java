@@ -51,9 +51,15 @@ public class Pipeline extends OpenCvPipeline {
     Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
     Scalar darkRange = new Scalar(BLOCK_DARK_H, BLOCK_DARK_S, BLOCK_DARK_V);
 
+    Scalar lightBlue = new Scalar(0, 100, 40);
+    Scalar darkBlue = new Scalar(70, 255, 200);
+
+    Scalar lowerRangeInUse;
+    Scalar upperRangeInUse;
+
     ElapsedTime timer;
 
-    public Pipeline(OpenCvCamera camera, Telemetry telemetry) {
+    public Pipeline(OpenCvCamera camera, Telemetry telemetry, boolean red) {
         cam = camera;
         this.telemetry = telemetry;
         timer = new ElapsedTime();
