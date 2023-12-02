@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.bot.components;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
+
 public class Drone {
     Servo droneServo;
 
@@ -20,14 +22,14 @@ public class Drone {
     }
 
     public void launchDrone (boolean pressed) {
-        if (droneMode) {
-            if (pressed) {
-                droneServo.setPosition(0.8);
-            } else {
-                droneServo.setPosition(0.5);
+            if (droneMode) {
+                if (pressed) {
+                    droneServo.setPosition(0.8);
+                } else {
+                    droneServo.setPosition(0.5);
+                }
             }
         }
-    }
 
     public String getDroneMode () {
         if (droneMode) {

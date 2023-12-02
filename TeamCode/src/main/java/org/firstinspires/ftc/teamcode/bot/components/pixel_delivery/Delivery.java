@@ -74,15 +74,17 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
 
     public void driveLift (double power) {
-        touchSensorEncoderReset();
-        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        sentPower = power;
+            touchSensorEncoderReset();
+            liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            sentPower = power;
 
-        if (Math.abs(power) > 0.1) {
-            limitLift(power);
-        } else if (Math.abs(power) < 0.1) {
-            setLiftPower(0);
+        if (!tuneLiftMode) {
+            if (Math.abs(power) > 0.1) {
+                limitLift(power);
+            } else if (Math.abs(power) < 0.1) {
+                setLiftPower(0);
+            }
         }
     }
 
@@ -102,7 +104,9 @@ public class Delivery {
     }
 
     public void changeLiftMode (boolean pressed) {
-        tuneLiftMode = !tuneLiftMode;
+        if (pressed) {
+            tuneLiftMode = !tuneLiftMode;
+        }
     }
 
     public void tuneLiftDuringTele (double liftMotorPower1, double liftMotorPower2) {
@@ -150,10 +154,12 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
 
     public void changeDropPosition(boolean pressing) {
-        if (pressing) {
-            dropServo.setPosition(0.3);
-        } else {
-            dropServo.setPosition(0.18);
+        if (!tuneLiftMode) {
+            if (pressing) {
+                dropServo.setPosition(0.3);
+            } else {
+                dropServo.setPosition(0.18);
+            }
         }
     }
 
@@ -188,7 +194,9 @@ public class Delivery {
 //    }
 
     public void setExtendPower (double power) {
-        extendServo.setPower(power);
+        if (!tuneLiftMode) {
+            extendServo.setPower(power);
+        }
     }
 
     public double getDropPosition () {
