@@ -5,16 +5,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Delivery {
     private DcMotor liftMotor1;
     private DcMotor liftMotor2;
 
-    private CRServo extensionServo;
-    private Servo droppingServo;
+    private CRServo extendServo;
+    private Servo dropServo;
 
-    private int[] liftMotorPos = {0, 200, 400, 600, 1000};
-    private double[] dropServoPos = {0.1, 0.5, 0.6};
+    private TouchSensor touchSensor;
+
+//    private double[] extendServoPos = {0.4, 0.5, 0.6};
+//
+//    private int extendLvl = 60;
 
     public static final double DROPPER_INTAKING = 0.1;
     public static final double DROPPER_FIRST = 0.5;
@@ -22,26 +26,20 @@ public class Delivery {
 
     private double sentPower;
 
-    private int liftLvl = 60;
-    private int dropLvl = 60;
-
-    private boolean runLiftToPosition;
-
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
-        extensionServo = hardwareMap.get(CRServo.class, "extend");
-        droppingServo = hardwareMap.get(Servo.class, "drop");
+        extendServo = hardwareMap.get(CRServo.class, "extend");
+        dropServo = hardwareMap.get(Servo.class, "drop");
+
+        touchSensor = hardwareMap.get(TouchSensor.class, "touch");
 
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE); // currently polarity is reversed
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        extensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        droppingServo.setPosition(0.1);
-
-        runLiftToPosition = false;
+        extendServo.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     //-------------------------------------------------------------------------------------
@@ -57,8 +55,8 @@ public class Delivery {
     }
 
     public boolean autoDropPixels(double targetPos){
-        droppingServo.setPosition(targetPos);
-        return droppingServo.getPosition() == targetPos;
+        dropServo.setPosition(targetPos);
+        return dropServo.getPosition() == targetPos;
     }
 
     public boolean driveLiftToPosition(int target){
@@ -76,45 +74,69 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
+    /**
+     * sets lift motor power
+     * @param power how much power is wanted
+     */
     public void driveLift (double power) {
-
-        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        touchSensorEncoderReset();
+        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         sentPower = power;
 
-        if (!runLiftToPosition && Math.abs(power) > 0.1) {
+        if (Math.abs(power) > 0.1) {
             limitLift(power);
         } else if (Math.abs(power) < 0.1) {
             setLiftPower(0);
         }
     }
 
-
-    public void changeLiftHeight (boolean decrease, boolean increase) {
-        if (decrease) {
-            liftLvl -= 1;
-        }
-        if (increase) {
-            liftLvl += 1;
-        }
-
-        if (runLiftToPosition)
-            driveLiftToPosition(liftMotorPos[getLiftLvl()]);
+    // next two functions for TuneLift OpMode
+    public void driveLiftMotor1 (double power) {
+        touchSensorEncoderReset();
+        liftMotor1.setPower(power);
     }
 
+    public void driveLiftMotor2 (double power) {
+        liftMotor2.setPower(power);
+    }
+
+    public void touchSensorEncoderReset () {
+        if (getTouchSensorStatus()) {
+            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
+
+    /**
+     * limits lift position and power
+     * @param power wanted amount of power
+     */
     private void limitLift(double power){
         int limit = 1430;
 
         if (getLiftPosition() > limit && power > 0) {
             power = 0;
-        }else if (getLiftPosition() > limit - 150){
+        } else if (getLiftPosition() > limit - 150){
             power *= (limit - getLiftPosition()) / 200.0;
-        } else if (getLiftPosition() < 0 && power > 0){
+        } else if (getLiftPosition() <= 0 && power > 0){
             power = 0;
         }
         setLiftPower(power);
     }
 
+    //-------------------------------------------------------------------------------------
+    //                                   Extension Functions
+    //-------------------------------------------------------------------------------------
+
+//    public void changeExtensionLength (boolean decrease, boolean increase) {
+//        if (decrease) {
+//            extendLvl -= 1;
+//        }
+//        if (increase) {
+//            extendLvl += 1;
+//        }
+//        setExtensionPosition();
+//    }
     // should only be used for the tuning teleop
     public void tuneLift(double lm1, double lm2){
         liftMotor1.setPower(lm1);
@@ -125,9 +147,11 @@ public class Delivery {
     //                                   Drop Functions
     //-------------------------------------------------------------------------------------
 
-    public void changeDropPosition (boolean increase) {
-        if (increase) {
-            dropLvl += 1;
+    public void changeDropPosition(boolean pressing) {
+        if (pressing) {
+            dropServo.setPosition(0.3);
+        } else {
+            dropServo.setPosition(0.23);
         }
     }
 
@@ -135,30 +159,18 @@ public class Delivery {
     //                                   Simple Functions
     //-------------------------------------------------------------------------------------
 
-    public void setRunLiftToPosition(boolean button){
-        if (button)
-            runLiftToPosition = !runLiftToPosition;
+    public void resetEncoders () {
+        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    /**
-     * @param power sets the power of both motors on the lift
-     */
     private void setLiftPower(double power){
         liftMotor1.setPower(power);
         liftMotor2.setPower(power);
     }
 
-    public void resetEncoders() {
-        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    public int getExtensionLvl(){
-        return Math.abs(dropLvl % dropServoPos.length);
-    }
-
-    public void setExtensionPower(double power) {
-        extensionServo.setPower(power);
+    public int getLiftPosition () {
+        return -liftMotor1.getCurrentPosition();
     }
 
     public boolean getLiftMode(){
@@ -166,14 +178,10 @@ public class Delivery {
     }
 
     public double getDropPosition () {
-        return droppingServo.getPosition();
+        return dropServo.getPosition();
     }
 
-    public int getLiftLvl(){
-        return Math.abs(liftLvl % liftMotorPos.length);
-    }
-
-    public int getLiftPosition() {
-        return liftMotor1.getCurrentPosition();
+    public boolean getTouchSensorStatus () {
+        return touchSensor.isPressed();
     }
 }

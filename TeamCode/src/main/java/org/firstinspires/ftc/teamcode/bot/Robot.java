@@ -5,8 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-//import org.firstinspires.ftc.teamcode.bot.components.Drone;
-import org.firstinspires.ftc.teamcode.bot.components.Hanging;
+import org.firstinspires.ftc.teamcode.bot.components.Drone;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
@@ -27,8 +26,7 @@ public class Robot {
 
     public Intake intake;
     public Delivery delivery;
-    public Hanging hang;
-//    public Drone drone;
+    public Drone drone;
 
     FtcDashboard dashboard;
 
@@ -44,7 +42,7 @@ public class Robot {
         nav = new Navigation(drive, gyro, telemetry);
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
-        hang = new Hanging(hardwareMap);
+        drone = new Drone(hardwareMap);
 
         cam = new Camera(hardwareMap, telemetry);
 
@@ -66,7 +64,6 @@ public class Robot {
     public void shutOff(){
         drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
-        delivery.setExtensionPower(0);
         delivery.driveLift(0);
     }
 
@@ -86,6 +83,7 @@ public class Robot {
         positionTelemetry();
         intakeTelemetry();
         deliveryTelemetry();
+        droneTelemetry();
     }
 
     private void positionTelemetry(){
@@ -99,17 +97,22 @@ public class Robot {
 
     private void intakeTelemetry(){
         telemetry.addLine("Intake Telemetry");
-        telemetry.addData("intake position: ", intake.getIntakePos());
+        telemetry.addData("intake position: ", intake.getIntakePosition());
         telemetry.addLine();
     }
 
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
         telemetry.addData("lift position: ", delivery.getLiftPosition());
-        telemetry.addData("lift target Pos: ", delivery.getLiftLvl());
-        telemetry.addData("Lift Preset On: ", delivery.getLiftMode());
+//        telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
-//        telemetry.addData("extend position", deliver.getExtendPosition());
+        telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
+        telemetry.addLine();
+    }
+
+    private void droneTelemetry () {
+        telemetry.addLine("Drone System Telemetry");
+        telemetry.addData("Drone Mode Status: ", drone.getDroneMode());
         telemetry.addLine();
     }
 }
