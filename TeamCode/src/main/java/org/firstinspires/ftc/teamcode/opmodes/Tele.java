@@ -45,6 +45,10 @@ public class Tele extends LinearOpMode {
             robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y,
                     gp1.right_stick_x, driveMode);
 
+
+            robot.delivery.changeLiftMode(gp1.a.pressed());
+
+
             // changes drone mode - right bumper
             robot.drone.changeDroneMode(gp1.right_bumper.pressed());
 
@@ -69,6 +73,9 @@ public class Tele extends LinearOpMode {
 
             // drives lift - left joystick, y-axis
             robot.delivery.driveLift(gp2.left_stick_y);
+
+
+            robot.delivery.tuneLiftDuringTele(gp2.left_stick_y, gp2.right_stick_y);
 
 
             // changes drop servo position - b

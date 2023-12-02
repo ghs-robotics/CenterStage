@@ -26,6 +26,8 @@ public class Delivery {
 
     private double sentPower;
 
+    private boolean tuneLiftMode = false;
+
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
@@ -84,14 +86,30 @@ public class Delivery {
         }
     }
 
-    // next two functions for TuneLift OpMode
-    public void driveLiftMotor1 (double power) {
-        touchSensorEncoderReset();
-        liftMotor1.setPower(power);
+//    // next two functions for TuneLift OpMode
+//    public void driveLiftMotor1 (double power) {
+//        touchSensorEncoderReset();
+//        liftMotor1.setPower(power);
+//    }
+//
+//    public void driveLiftMotor2 (double power) {
+//        liftMotor2.setPower(power);
+//    }
+
+    public void tuneLift(double liftMotorPower1, double liftMotorPower2){
+        this.liftMotor1.setPower(liftMotorPower1);
+        liftMotor2.setPower(liftMotorPower2);
     }
 
-    public void driveLiftMotor2 (double power) {
-        liftMotor2.setPower(power);
+    public void changeLiftMode (boolean pressed) {
+        tuneLiftMode = !tuneLiftMode;
+    }
+
+    public void tuneLiftDuringTele (double liftMotorPower1, double liftMotorPower2) {
+        if (tuneLiftMode) {
+            this.liftMotor1.setPower(liftMotorPower1);
+            liftMotor2.setPower(liftMotorPower2);
+        }
     }
 
     public void touchSensorEncoderReset () {
@@ -126,11 +144,6 @@ public class Delivery {
 //        }
 //        setExtensionPosition();
 //    }
-    // should only be used for the tuning teleop
-    public void tuneLift(double lm1, double lm2){
-        liftMotor1.setPower(lm1);
-        liftMotor2.setPower(lm2);
-    }
 
     //-------------------------------------------------------------------------------------
     //                                   Drop Functions
@@ -156,6 +169,10 @@ public class Delivery {
     private void setLiftPower(double power){
         liftMotor1.setPower(power);
         liftMotor2.setPower(power);
+    }
+
+    public boolean getTuneLiftMode () {
+        return tuneLiftMode;
     }
 
     public int getLiftPosition () {

@@ -24,8 +24,8 @@ public class TuneLift extends LinearOpMode {
         while (opModeIsActive()) {
             gp2.update();
 
-            robot.delivery.driveLiftMotor1(gp2.left_stick_y);
-            robot.delivery.driveLiftMotor2(gp2.right_stick_y);
+//            robot.delivery.driveLiftMotor1(gp2.left_stick_y);
+//            robot.delivery.driveLiftMotor2(gp2.right_stick_y);
 
             robot.update();
             robot.getTeleOpTelemetry();
