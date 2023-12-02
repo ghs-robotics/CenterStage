@@ -57,7 +57,7 @@ public class AutoActions {
     private void moveTo(){
         resetTimer();
         int x = params.x;
-        if (robot.RED)
+        if (!robot.RED)
             x *= -1;
 
         boolean there = robot.nav.runToPosition(x, params.y, params.heading);
