@@ -115,7 +115,7 @@ public class AutoActionHandler {
     /**
      * @return The action list of this object.
      *
-     * Made for getting presets and adding them to the main Auto queue
+     * Made for getting presets and adding them to the main AutoRed queue
      */
     public ArrayList<AutoActions> getActions(){
 
@@ -142,7 +142,7 @@ public class AutoActionHandler {
     }
 
     /**
-     * Prints the current step in the Auto and gives an idea of how complete the auto is.
+     * Prints the current step in the AutoRed and gives an idea of how complete the auto is.
      */
     public void status(){
         int currentStep = getTotalActions() - actionList.size() + 1;

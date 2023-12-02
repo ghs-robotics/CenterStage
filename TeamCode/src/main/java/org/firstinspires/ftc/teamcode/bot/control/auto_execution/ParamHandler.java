@@ -43,6 +43,12 @@ public class ParamHandler {
         driveXFirst = xFirst;
     }
 
+    public ParamHandler (double[] pos){
+        this.x = (int) pos[0];
+        this.y = (int) pos[1];
+        this.heading = pos[2];
+    }
+
     public ParamHandler( int x, int y, double heading){
         this.x = x;
         this.y = y;

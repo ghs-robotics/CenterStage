@@ -28,7 +28,15 @@ public class Robot {
     public Delivery delivery;
     public Drone drone;
 
+    public boolean RED;
+
     FtcDashboard dashboard;
+
+    public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
+        this(hardwareMap, telemetry);
+        this.RED = red;
+
+    }
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;

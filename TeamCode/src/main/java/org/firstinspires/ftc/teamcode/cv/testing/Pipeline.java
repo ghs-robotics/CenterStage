@@ -56,6 +56,7 @@ public class Pipeline extends OpenCvPipeline {
     public Pipeline(OpenCvCamera camera, Telemetry telemetry) {
         cam = camera;
         this.telemetry = telemetry;
+        timer = new ElapsedTime();
 
         timer.reset();
     }
@@ -130,7 +131,7 @@ public class Pipeline extends OpenCvPipeline {
                 Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
             }
 
-            if (timer.milliseconds() < 1000)
+            if (timer.milliseconds() < 150000)
                 SPIKE_ZONE = zone;
         }
 

@@ -43,7 +43,7 @@ public class Delivery {
     }
 
     //-------------------------------------------------------------------------------------
-    //                                   Auto Functions
+    //                                   AutoRed Functions
     //-------------------------------------------------------------------------------------
 
     public boolean autoRunExtension(double dir, double curMillisecond){

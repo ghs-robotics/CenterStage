@@ -55,9 +55,13 @@ public class AutoActions {
      */
     private void moveTo(){
         resetTimer();
-        boolean there = robot.nav.runToPosition(params.x, params.y, params.heading);
+        int y = params.y;
+        if (robot.RED)
+            y *= -1;
 
-        endAction = there; //|| timer.milliseconds() > 10000;
+        boolean there = robot.nav.runToPosition(params.x, y, params.heading);
+
+        endAction = there || timer.milliseconds() > 10000;
     }
 
     private void dropPixels(){
@@ -88,7 +92,7 @@ public class AutoActions {
 
     private void runLift(){
         // same as intake
-        robot.delivery.driveLiftToPosition(params.liftLevel);
+        robot.delivery.driveLiftToPosition(300);
         resetTimer();
         endAction = timer.milliseconds() > 750;
     }
@@ -114,7 +118,7 @@ public class AutoActions {
     private void placePixel(){
         robot.intake.autoPixelOut();
         resetTimer();
-        if(timer.milliseconds() > 4000)
+        if(timer.milliseconds() > 2500)
             endAction = true;
     }
 
