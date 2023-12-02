@@ -46,11 +46,11 @@ public class Delivery {
     //                                   Auto Functions
     //-------------------------------------------------------------------------------------
 
-    public boolean autoRunExtension(double position, double curMillisecond){
+    public boolean autoRunExtension(double dir, double curMillisecond){
         if (curMillisecond < 550){
-            setExtensionPower(position);
+            setExtendPower(dir);
         }else
-            setExtensionPower(0);
+            setExtendPower(0);
         return curMillisecond > 700;
     }
 
@@ -60,9 +60,6 @@ public class Delivery {
     }
 
     public boolean driveLiftToPosition(int target){
-        liftLvl = target;
-        target = liftMotorPos[getLiftLvl()];
-
         if (getLiftPosition() < target - 5 || getLiftPosition() > target + 5)
             driveLift((getLiftPosition() - target) / 10.0);
         else
@@ -173,8 +170,9 @@ public class Delivery {
         return -liftMotor1.getCurrentPosition();
     }
 
-    public boolean getLiftMode(){
-        return runLiftToPosition;
+
+    public void setExtendPower(double power){
+        extendServo.setPower(power);
     }
 
     public double getDropPosition () {

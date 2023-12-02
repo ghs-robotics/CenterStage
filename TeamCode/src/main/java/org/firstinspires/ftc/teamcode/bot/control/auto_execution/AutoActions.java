@@ -96,9 +96,9 @@ public class AutoActions {
     private void extendDropper(){
         resetTimer();
         if(timer.milliseconds() < 1400)
-            robot.delivery.setExtensionPower(-1);
+            robot.delivery.setExtendPower(-1);
         else
-            robot.delivery.setExtensionPower(0);
+            robot.delivery.setExtendPower(0);
         endAction = timer.milliseconds() > 2000;
     }
 

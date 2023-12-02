@@ -32,13 +32,12 @@ public class Intake {
         conveyorBeltMotor.setPower(-1);
     }
 
-    public void setIntakePosition(int targetLevel){
-        // i literally do not know what to place there (where the 0 is)
-        // the zero is a placeholder. it is an auto function
-        // you can fix it hehe
-        int diff = targetLevel - 0;
+    public void setIntakeHeight(int targetLevel){
+        int diff = targetLevel - getIntakeLvl();
+        intakeLvl += diff;
         setIntakePosition();
     }
+
 
     //-------------------------------------------------------------------------------------
     //                                   Intake Functions
@@ -69,6 +68,10 @@ public class Intake {
 
     public double getIntakePosition () {
         return intakeServo.getPosition();
+    }
+
+    private int getIntakeLvl(){
+        return Math.abs(intakeLvl % intakeServoPos.length);
     }
 }
 
