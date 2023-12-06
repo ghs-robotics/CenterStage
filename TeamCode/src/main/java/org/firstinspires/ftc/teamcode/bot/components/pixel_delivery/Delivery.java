@@ -11,14 +11,14 @@ public class Delivery {
     private DcMotor liftMotor1;
     private DcMotor liftMotor2;
 
-    private CRServo extendServo;
+    private Servo extendServo;
     private Servo dropServo;
 
     private TouchSensor touchSensor;
 
-//    private double[] extendServoPos = {0.4, 0.5, 0.6};
-//
-//    private int extendLvl = 60;
+    private double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
+
+    private int extendLvl = 90;
 
     public static final double DROPPER_INTAKING = 0.1;
     public static final double DROPPER_FIRST = 0.5;
@@ -31,7 +31,7 @@ public class Delivery {
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
         liftMotor2 = hardwareMap.get(DcMotor.class, "lift2");
-        extendServo = hardwareMap.get(CRServo.class, "extend");
+        extendServo = hardwareMap.get(Servo.class, "extend");
         dropServo = hardwareMap.get(Servo.class, "drop");
 
         touchSensor = hardwareMap.get(TouchSensor.class, "touch");
@@ -41,20 +41,23 @@ public class Delivery {
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        extendServo.setDirection(DcMotorSimple.Direction.REVERSE);
+//        extendServo.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        dropServo.setPosition(0.15);
+        extendServo.setPosition(0);
     }
 
     //-------------------------------------------------------------------------------------
     //                                   AutoRed Functions
     //-------------------------------------------------------------------------------------
 
-    public boolean autoRunExtension(double dir, double curMillisecond){
-        if (curMillisecond < 350){
-            setExtendPower(dir);
-        }else
-            setExtendPower(0);
-        return curMillisecond > 500;
-    }
+//    public boolean autoRunExtension(double dir, double curMillisecond){
+//        if (curMillisecond < 350){
+//            setExtendPower(dir);
+//        } else
+//            setExtendPower(0);
+//        return curMillisecond > 500;
+//    }
 
     public boolean autoDropPixels(double targetPos){
         dropServo.setPosition(targetPos);
@@ -123,7 +126,7 @@ public class Delivery {
     }
 
     private void limitLift(double power){
-        int limit = 1430;
+        int limit = 1500;
 
         if (getLiftPosition() > limit && power > 0) {
             power = 0;
@@ -139,15 +142,15 @@ public class Delivery {
     //                                   Extension Functions
     //-------------------------------------------------------------------------------------
 
-//    public void changeExtensionLength (boolean decrease, boolean increase) {
-//        if (decrease) {
-//            extendLvl -= 1;
-//        }
-//        if (increase) {
-//            extendLvl += 1;
-//        }
-//        setExtensionPosition();
-//    }
+    public void changeExtensionLength (boolean decrease, boolean increase) {
+        if (decrease) {
+            extendLvl -= 1;
+        }
+        if (increase) {
+            extendLvl += 1;
+        }
+        setExtensionPosition();
+    }
 
     //-------------------------------------------------------------------------------------
     //                                   Drop Functions
@@ -158,7 +161,7 @@ public class Delivery {
             if (pressing) {
                 dropServo.setPosition(0.4);
             } else {
-                dropServo.setPosition(0.18);
+                dropServo.setPosition(0.15);
             }
         }
     }
@@ -185,19 +188,19 @@ public class Delivery {
         return -liftMotor1.getCurrentPosition();
     }
 
-//    private void setExtensionPosition () {
-//        extendServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
-//    }
-
-//    public double getExtensionPosition () {
-//        return extendServo.getPosition();
-//    }
-
-    public void setExtendPower (double power) {
-        if (!tuneLiftMode) {
-            extendServo.setPower(power);
-        }
+    private void setExtensionPosition () {
+        extendServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
     }
+
+    public double getExtensionPosition () {
+        return extendServo.getPosition();
+    }
+
+//    public void setExtendPower (double power) {
+//        if (!tuneLiftMode) {
+//            extendServo.setPower(power);
+//        }
+//    }
 
     public double getDropPosition () {
         return dropServo.getPosition();

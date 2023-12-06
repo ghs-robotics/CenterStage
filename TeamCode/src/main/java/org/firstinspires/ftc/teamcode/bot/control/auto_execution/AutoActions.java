@@ -101,16 +101,16 @@ public class AutoActions {
     private void extendDropper(){
         resetTimer();
         if(timer.milliseconds() < 1400)
-            robot.delivery.setExtendPower(-1);
-        else
-            robot.delivery.setExtendPower(0);
+//            robot.delivery.setExtendPower(-1);
+//        else
+//            robot.delivery.setExtendPower(0);
         endAction = timer.milliseconds() > 2000;
     }
 
     private void retractDropper(){
         resetTimer();
 
-        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
+//        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
     }
 
     /**

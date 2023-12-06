@@ -111,7 +111,7 @@ public class Robot {
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
         telemetry.addData("lift position: ", delivery.getLiftPosition());
-//        telemetry.addData("extension position: ", delivery.getExtensionPosition());
+        telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
         telemetry.addData("tune lift mode: ", delivery.getTuneLiftMode());
         telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());

@@ -64,11 +64,11 @@ public class Tele extends LinearOpMode {
             robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
 
 
-//            // extends outtake - left and right dpad
-//            robot.delivery.changeExtensionLength(gp2.retractOuttake ,gp2.extendOuttake);
+            // extends outtake - left and right dpad
+            robot.delivery.changeExtensionLength(gp2.dpad_left.pressed(), gp2.dpad_right.pressed());
 
 
-            robot.delivery.setExtendPower(gp2.right_stick_y);
+//            robot.delivery.setExtendPower(gp2.right_stick_y);
 
 
             // drives lift - left joystick, y-axis
