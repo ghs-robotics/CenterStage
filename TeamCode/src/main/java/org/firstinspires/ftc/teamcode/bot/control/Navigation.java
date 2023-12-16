@@ -123,41 +123,33 @@ public final class Navigation {
     public boolean runToPosition(double x, double y, double heading){
         update();
 
-        double xDiff = x - this.x;
-        double yDiff = this.y - y;
-        double rotDiffCounterClock = (this.heading - (Math.toRadians(heading))) % (2 * Math.PI);
-        double rotDiffClock = ((Math.toRadians(heading)) - this.heading) % (2 * Math.PI);
+        double xError = x - this.x;
+        double yError = this.y - y;
+        double counterClockError = (this.heading - (Math.toRadians(heading))) % (2 * Math.PI);
+        double clockwiseError = ((Math.toRadians(heading)) - this.heading) % (2 * Math.PI);
 
-        double xPow = 0;
-        double yPow = 0;
         double rotPow = 0;
 
 
         // todo replace this with PID
-        if (Math.abs(xDiff) > 10) {
-            xPow = increasePower(xDiff / 200.0);
-        } else if (x == 0) {
-            xPow = 0;
+        if (clockwiseError >= counterClockError){
+            rotPow = clockwiseError / 10.0;
+        } else if (Math.abs(counterClockError - clockwiseError) > Math.toRadians(2)){
+            rotPow = -counterClockError /10.0;
         }
 
-        if (Math.abs(yDiff) > 10) {
-            yPow = increasePower(yDiff / 200.0);
-        } else if (y == 0) {
-            yPow = 0;
-        }
-
-        if (rotDiffClock >= rotDiffCounterClock){
-            rotPow = rotDiffClock / 10.0;
-        } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
-            rotPow = rotDiffCounterClock /10.0;
-        }
+        if (Math.abs(xError) > 10) {
+            drive.calculateDrivePowers(increasePower(xError / 200.0), 0, 0, true);
+        } else if (Math.abs(yError) > 10) {
+            drive.calculateDrivePowers(0, increasePower( yError / 200.0), 0, true);
+        } else if (rotPow != 0)
+            drive.calculateDrivePowers(0,0, rotPow, true);
 
 
-        drive.calculateDrivePowers(xPow , yPow, rotPow, true);
         telemetry.addLine("y = " + this.y);
         telemetry.addLine("x = " + this.x);
         telemetry.addLine("heading = " + this.heading);
-        return Math.abs(xDiff) < 10 && Math.abs(yDiff) < 10;
+        return Math.abs(xError) < 10 && Math.abs(yError) < 10;
 
     }
 

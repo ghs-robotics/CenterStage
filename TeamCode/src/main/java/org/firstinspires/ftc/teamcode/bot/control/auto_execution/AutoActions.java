@@ -31,8 +31,6 @@ public class AutoActions {
     private int zone;
     private String description;
 
-    private int moveToCycle;
-
     ParamHandler params;
 
     public AutoActions(int id, Robot robot){
@@ -42,7 +40,6 @@ public class AutoActions {
         timer = new ElapsedTime();
 
         setDescription();
-        moveToCycle = 3;
     }
 
     public AutoActions(int id, Robot robot, ParamHandler params){
