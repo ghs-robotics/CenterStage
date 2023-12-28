@@ -24,7 +24,7 @@ public class Camera {
 
     public static int SPIKE_ZONE = -1;
 
-    public Camera(HardwareMap hardwareMap, Telemetry telemetry){
+    public Camera(HardwareMap hardwareMap, Telemetry telemetry, boolean color){
         this.telemetry = telemetry;
 
         camera1 = OpenCvCameraFactory.getInstance()
@@ -33,7 +33,7 @@ public class Camera {
 //                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"));
 
 
-        pipeline = new Pipeline(camera1, telemetry);
+        pipeline = new Pipeline(camera1, telemetry, color);
         camera1.setPipeline(pipeline);
     }
 

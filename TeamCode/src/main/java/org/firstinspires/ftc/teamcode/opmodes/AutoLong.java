@@ -18,7 +18,7 @@ public class AutoLong extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry, true);
         actionHandler = new AutoActionHandler(robot, telemetry);
         robot.init();
 

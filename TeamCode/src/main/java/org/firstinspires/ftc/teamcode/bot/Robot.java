@@ -30,6 +30,11 @@ public class Robot {
 
     FtcDashboard dashboard;
 
+    public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
+        this(hardwareMap, telemetry);
+        cam = new Camera(hardwareMap, telemetry, red);
+    }
+
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
 //        dashboard = FtcDashboard.getInstance();
@@ -44,7 +49,6 @@ public class Robot {
         delivery = new Delivery(hardwareMap);
         drone = new Drone(hardwareMap);
 
-        cam = new Camera(hardwareMap, telemetry);
 
 //        dashboard.startCameraStream(cam.camera1, 0);
     }

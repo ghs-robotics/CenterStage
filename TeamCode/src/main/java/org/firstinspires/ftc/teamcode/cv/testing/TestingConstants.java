@@ -8,22 +8,22 @@ public class TestingConstants {
     public static int RES_WIDTH = 320;
 
     // found HSV constants but need to find optimal difference
-    public static int BLOCK_DARK_H = 70;
-    public static int BLOCK_LIGHT_H = 10;
+    public static int BLOCK_DARK_H = 255;
+    public static int BLOCK_LIGHT_H = 200;
 
     public static int BLOCK_DARK_S = 255;
-    public static int BLOCK_LIGHT_S = 130;
+    public static int BLOCK_LIGHT_S = 0;
 
-    public static int BLOCK_DARK_V = 200;
-    public static int BLOCK_LIGHT_V = 40;
+    public static int BLOCK_DARK_V = 255;
+    public static int BLOCK_LIGHT_V = 0;
 
     public static int STRICT_LOWER_H = 0;
-    public static int STRICT_LOWER_S = 120;
+    public static int STRICT_LOWER_S = 10;
     public static int STRICT_LOWER_V = 0;
 
-    public static int STRICT_UPPER_H = 190;
+    public static int STRICT_UPPER_H = 255;
     public static int STRICT_UPPER_S = 255;
-    public static int STRICT_UPPER_V = 100;
+    public static int STRICT_UPPER_V = 255;
 
     public static boolean FILTER = true;
     public static boolean CANNY = true;
