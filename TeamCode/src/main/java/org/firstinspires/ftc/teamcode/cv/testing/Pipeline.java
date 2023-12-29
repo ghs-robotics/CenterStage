@@ -12,6 +12,18 @@ import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_BLUE;
 import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_BLUE;
 import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_BLUE;
 import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_RED;
 import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_H;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_S;
@@ -215,7 +227,11 @@ public class Pipeline extends OpenCvPipeline {
     // true is red, false is blue
     private void setRanges(boolean red){
         if (red){
+            firstFilterLower = new Scalar(H_FIRST_LOWER_RED, S_FIRST_LOWER_RED, V_FIRST_LOWER_RED);
+            firstFilterUpper = new Scalar(H_FIRST_UPPER_RED, S_FIRST_UPPER_RED, V_FIRST_UPPER_RED);
 
+            strictLowerFilter = new Scalar(H_STRICT_LOWER_RED, S_STRICT_LOWER_RED, V_STRICT_LOWER_RED);
+            strictUpperFilter = new Scalar(H_STRICT_UPPER_RED, S_STRICT_UPPER_RED, V_STRICT_UPPER_RED);
         }else{
             firstFilterLower = new Scalar(H_FIRST_LOWER_BLUE, S_FIRST_LOWER_BLUE, V_FIRST_LOWER_BLUE);
             firstFilterUpper = new Scalar(H_FIRST_UPPER_BLUE, S_FIRST_UPPER_BLUE, V_FIRST_UPPER_BLUE);
