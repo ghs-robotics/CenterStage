@@ -156,38 +156,44 @@ public class Pipeline extends OpenCvPipeline {
                 boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
             }
 
-            double xLeft = RES_WIDTH / 4.0;
-            double xRight = RES_WIDTH * 1.75 / 3;
+            double xLeft = RES_WIDTH / 3.5;
+            double xRight = RES_WIDTH * 1.9 / 3;
 
             int zone = 0;
-            int zone1 = 0;
-            int zone2 = 0;
-            int zone3 = 0;
+            int zone1Counter = 0;
+            int zone2Counter = 0;
+            int zone3Counter = 0;
 
             for (int i = 0; i != boundingBox.length; i++){
                 if (boundingBox[i].x < xLeft)
-                    zone1++;
+                    zone1Counter++;
                 else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight)
-                    zone2++;
+                    zone2Counter++;
                 else
-                    zone3++;
+                    zone3Counter++;
 
                 Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
             }
 
-            z1Pixels = zone1;
-            z2Pixels = zone2;
-            z3Pixels = zone3;
+            z1Pixels = zone1Counter;
+            z2Pixels = zone2Counter;
+            z3Pixels = zone3Counter;
 
-            if (zone1 > zone2 && zone1 > zone3)
+            if (zone1Counter > zone2Counter && zone1Counter > zone3Counter)
                 zone = 1;
-            else if (zone2 > zone3)
+            else if (zone2Counter > zone3Counter)
                 zone = 2;
             else
                 zone = 3;
 
 //            if (timer.milliseconds() < 1000)
             SPIKE_ZONE = zone;
+
+            Rect left = new Rect(1, 1, (int) xLeft, RES_HEIGHT);
+            Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), RES_HEIGHT);
+            Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 3);
+            Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 3);
+
         }
 
         input.release();
@@ -198,12 +204,15 @@ public class Pipeline extends OpenCvPipeline {
         else
             thresh.copyTo(input);
 
+
+
         hsv.release();
         thresh.release();
         masked.release();
         scaledMask.release();
         finalMat.release();
         edges.release();
+
 
         return input;
     }
