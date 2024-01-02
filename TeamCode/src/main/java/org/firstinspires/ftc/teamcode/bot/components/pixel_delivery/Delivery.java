@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
-import com.qualcomm.robotcore.hardware.CRServo;
+import android.text.method.Touch;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,15 +9,17 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Delivery {
-    private DcMotor liftMotor1;
-    private DcMotor liftMotor2;
+    private final DcMotor liftMotor1;
+    private final DcMotor liftMotor2;
 
-    private Servo extendServo;
-    private Servo dropServo;
+    private final Servo extendServo;
+    private final Servo dropServo;
 
-    private TouchSensor touchSensor;
+    private final TouchSensor touchSensor1;
 
-    private double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
+    private final TouchSensor touchSensor2;
+
+    private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
 
     private int extendLvl = 90;
 
@@ -34,7 +37,8 @@ public class Delivery {
         extendServo = hardwareMap.get(Servo.class, "extend");
         dropServo = hardwareMap.get(Servo.class, "drop");
 
-        touchSensor = hardwareMap.get(TouchSensor.class, "touch");
+        touchSensor1 = hardwareMap.get(TouchSensor.class, "touch1");
+        touchSensor2 = hardwareMap.get(TouchSensor.class, "touch2");
 
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE); // currently polarity is reversed
@@ -77,10 +81,10 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
 
     public void driveLift (double power) {
-            touchSensorEncoderReset();
-            liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            sentPower = power;
+        touchSensorEncoderReset();
+        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        sentPower = power;
 
         if (!tuneLiftMode) {
             if (Math.abs(power) > 0.1) {
@@ -89,21 +93,6 @@ public class Delivery {
                 setLiftPower(0);
             }
         }
-    }
-
-//    // next two functions for TuneLift OpMode
-//    public void driveLiftMotor1 (double power) {
-//        touchSensorEncoderReset();
-//        liftMotor1.setPower(power);
-//    }
-//
-//    public void driveLiftMotor2 (double power) {
-//        liftMotor2.setPower(power);
-//    }
-
-    public void tuneLift(double liftMotorPower1, double liftMotorPower2){
-        this.liftMotor1.setPower(liftMotorPower1);
-        liftMotor2.setPower(liftMotorPower2);
     }
 
     public void changeLiftMode (boolean pressed) {
@@ -120,8 +109,11 @@ public class Delivery {
     }
 
     public void touchSensorEncoderReset () {
-        if (getTouchSensorStatus()) {
+        if (getTouchSensor1Status()) {
             liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+        if (getTouchSensor2Status()) {
+            liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
     }
 
@@ -196,17 +188,14 @@ public class Delivery {
         return extendServo.getPosition();
     }
 
-//    public void setExtendPower (double power) {
-//        if (!tuneLiftMode) {
-//            extendServo.setPower(power);
-//        }
-//    }
-
     public double getDropPosition () {
         return dropServo.getPosition();
     }
 
-    public boolean getTouchSensorStatus () {
-        return touchSensor.isPressed();
+    public boolean getTouchSensor1Status () {
+        return touchSensor1.isPressed();
+    }
+    public boolean getTouchSensor2Status () {
+        return touchSensor2.isPressed();
     }
 }

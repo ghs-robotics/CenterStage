@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -114,7 +113,8 @@ public class Robot {
         telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
         telemetry.addData("tune lift mode: ", delivery.getTuneLiftMode());
-        telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
+        telemetry.addData("touch sensor 1 status", delivery.getTouchSensor1Status());
+        telemetry.addData("touch sensor 2 status", delivery.getTouchSensor2Status());
         telemetry.addLine();
     }
 
