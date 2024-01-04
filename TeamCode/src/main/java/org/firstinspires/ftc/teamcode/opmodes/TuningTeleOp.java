@@ -40,6 +40,8 @@ public class TuningTeleOp extends LinearOpMode {
                 robot.delivery.driveLift(gp2.left_stick_y);
             else
                 robot.delivery.tuneLift(gp1.left_stick_y, gp1.right_stick_y);
+
+            robot.getTeleOpTelemetry();
             robot.update();
         }
 

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.cv;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,6 +8,7 @@ import org.firstinspires.ftc.teamcode.cv.testing.Pipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvSwitchableWebcam;
 
 public class Camera {
 
@@ -16,61 +16,105 @@ public class Camera {
 
     public Pipeline pipeline;
 
-    public OpenCvCamera camera1;
-    public OpenCvCamera camera2;
+    public OpenCvSwitchableWebcam camera;
 
-    private final int PIXEL_HEIGHT = 240;
-    private final int PIXEL_WIDTH = 320;
+    private WebcamName camLeft;
+    private WebcamName camRight;
+
+    private final int PIXEL_HEIGHT = 480;
+    private final int PIXEL_WIDTH = 640;
 
     public static int SPIKE_ZONE = -1;
 
+    private boolean red;
+
     public Camera(HardwareMap hardwareMap, Telemetry telemetry, boolean color){
         this.telemetry = telemetry;
+        this.red = color;
 
-        camera1 = OpenCvCameraFactory.getInstance()
-                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
-//        camera2 = OpenCvCameraFactory.getInstance()
-//                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"));
+        camRight = hardwareMap.get(WebcamName.class, "Webcam 1");
+        camLeft = hardwareMap.get(WebcamName.class, "Webcam 2");
 
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier
+                ("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        pipeline = new Pipeline(camera1, telemetry, color);
-        camera1.setPipeline(pipeline);
-    }
+        camera = OpenCvCameraFactory.getInstance()
+                .createSwitchableWebcam(cameraMonitorViewId, camLeft, camRight);
 
-    public void initCamera(){
-//        camera2.setPipeline(pipeline);
-
-        camera1.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
             @Override
-            public void onOpened() {
-                camera1.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened()
+            {
+                camera.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+                telemetry.setMsTransmissionInterval(100);
             }
 
             @Override
-            public void onError(int errorCode) {
+            public void onError(int errorCode)
+            {
                 telemetry.addLine("Error: Camera could not open");
                 telemetry.update();
             }
         });
 
-        telemetry.setMsTransmissionInterval(100);
+        pipeline = new Pipeline(camera, telemetry, color);
+        camera.setPipeline(pipeline);
+
+    }
+
+    public void initCamera(){
+//        camera2.setPipeline(pipeline);
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+            }
+        });
+
     }
 
     public void closeCamera(){
-        camera1.stopStreaming();
+        camera.stopStreaming();
 //        camera2.stopStreaming();
-        camera1.closeCameraDevice();
+        camera.closeCameraDevice();
 //        camera2.closeCameraDevice();
     }
 
     public void getTelemetry(){
         telemetry.addLine();
         pipeline.getTelemetry();
+        telemetry.addData("camera ", camera.getActiveCamera());
         telemetry.addLine();
     }
 
     public int getSpikeZone(){
         return pipeline.getZone();
+    }
+
+    public void detectProp(){
+        pipeline.resetDectectionTimer();
+    }
+
+    public void switchCamera(boolean changeCam){
+        if (changeCam) {
+            if (camera.getActiveCamera().equals(camLeft))
+                camera.setActiveCamera(camRight);
+            else
+                camera.setActiveCamera(camLeft);
+        }
+    }
+
+    public void setCamera(){
+        if (red)
+            camera.setActiveCamera(camLeft);
+        else
+            camera.setActiveCamera(camRight);
     }
 
 }

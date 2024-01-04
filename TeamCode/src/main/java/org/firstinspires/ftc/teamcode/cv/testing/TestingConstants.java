@@ -4,27 +4,27 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class TestingConstants {
-    public static int RES_HEIGHT = 240;
-    public static int RES_WIDTH = 320;
+    public static int RES_HEIGHT = 480;
+    public static int RES_WIDTH = 640;
 
     // found HSV constants but need to find optimal difference
-    public static int BLOCK_DARK_H = 115;
-    public static int BLOCK_LIGHT_H = 90;
+    public static int BLOCK_DARK_H = 125;
+    public static int BLOCK_LIGHT_H = 100;
 
-    public static int BLOCK_DARK_S = 230;
-    public static int BLOCK_LIGHT_S = 90;
+    public static int BLOCK_DARK_S = 255;
+    public static int BLOCK_LIGHT_S = 75;
 
     public static int BLOCK_DARK_V = 235;
-    public static int BLOCK_LIGHT_V = 60;
+    public static int BLOCK_LIGHT_V = 80;
 
-    public static int STRICT_UPPER_H = 99;
-    public static int STRICT_LOWER_H = 120;
+    public static int STRICT_UPPER_H = 140;
+    public static int STRICT_LOWER_H = 100;
 
-    public static int STRICT_UPPER_S = 25;
-    public static int STRICT_LOWER_S = 100;
+    public static int STRICT_UPPER_S = 255;
+    public static int STRICT_LOWER_S = 70;
 
     public static int STRICT_UPPER_V = 255;
-    public static int STRICT_LOWER_V = 100;
+    public static int STRICT_LOWER_V = 70;
 
     public static boolean FILTER = true;
     public static boolean CANNY = true;

@@ -152,12 +152,13 @@ public class Pipeline extends OpenCvPipeline {
 
             for (int i = 0; i < contours.size(); i++){
                 contoursPoly[i] = new MatOfPoint2f();
-                Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 2, true);
+                Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i],
+                        2, true);
                 boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
             }
 
             double xLeft = RES_WIDTH / 3.5;
-            double xRight = RES_WIDTH * 1.9 / 3;
+            double xRight = RES_WIDTH * 1.96 / 3;
 
             int zone = 0;
             int zone1Counter = 0;
@@ -250,6 +251,9 @@ public class Pipeline extends OpenCvPipeline {
         }
     }
 
+    public void resetDectectionTimer(){
+        timer.reset();
+    }
 
     public void getTelemetry(){
         telemetry.addLine("Pipeline telemetry");

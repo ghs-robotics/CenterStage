@@ -9,12 +9,12 @@ import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 @TeleOp
 public class TuneLift extends LinearOpMode {
     Robot robot;
-    TeleOpProfile gp2;
+    Controller gp2;
 
 @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
-        gp2 = new TeleOpProfile(gamepad2,false);
+        gp2 = new Controller(gamepad2);
 
         robot.init();
         waitForStart();
@@ -24,8 +24,8 @@ public class TuneLift extends LinearOpMode {
         while (opModeIsActive()) {
             gp2.update();
 
-            robot.delivery.driveLiftMotor1(gp2.driveLeftLift);
-            robot.delivery.driveLiftMotor2(gp2.driveRightLift);
+//            robot.delivery.driveLiftMotor1(gp2.left_stick_y);
+//            robot.delivery.driveLiftMotor2(gp2.right_stick_y);
 
             robot.update();
             robot.getTeleOpTelemetry();

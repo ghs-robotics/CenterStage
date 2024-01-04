@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -30,9 +29,12 @@ public class Robot {
 
     FtcDashboard dashboard;
 
+    public boolean RED;
+
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
         this(hardwareMap, telemetry);
         cam = new Camera(hardwareMap, telemetry, red);
+        RED = red;
     }
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
@@ -58,17 +60,17 @@ public class Robot {
      */
     public void init(){
         //init cameras
-        cam.initCamera();
+        nav.resetNav();
         gyro.resetHeading();
         drive.resetEncoders();
         delivery.resetEncoders();
-        nav.resetNav();
     }
 
     public void shutOff(){
         drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
         delivery.driveLift(0);
+        nav.resetNav();
     }
 
     /**
@@ -95,7 +97,7 @@ public class Robot {
         telemetry.addData("Meta Drive Mode On: ", drive.getDriveMode());
         telemetry.addData("x pos: ", nav.getX());
         telemetry.addData("y pos: ", nav.getY());
-        telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));
+        telemetry.addData("gyro heading: ", Math.toDegrees(nav.getHeading()));
         telemetry.addLine();
     }
 

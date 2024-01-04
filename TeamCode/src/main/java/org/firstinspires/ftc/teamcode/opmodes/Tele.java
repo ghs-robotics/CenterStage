@@ -4,12 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
 public class Tele extends LinearOpMode {
     Robot robot;
-    TeleOpProfile gp1;
-    TeleOpProfile gp2;
+     Controller gp1;
+    Controller gp2;
 
     boolean driveMode;
 
@@ -17,8 +18,8 @@ public class Tele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
 
-        gp1 = new TeleOpProfile(gamepad1, true);
-        gp2 = new TeleOpProfile(gamepad2, false);
+        gp1 = new Controller(gamepad1);
+        gp2 = new Controller(gamepad2);
 
         driveMode = false;
 
@@ -36,12 +37,17 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
 
             // toggle drive mode. True is metaDrive, False is regular drive - left bumper
-            if(gp1.driveMode)
+            if(gp1.left_bumper.pressed())
                 driveMode = !driveMode;
 
 
             // driving
-            robot.drive.calculateDrivePowers(gp1.drivingX, gp1.drivingY, gp1.drivingRot, driveMode);
+            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y,
+                    gp1.right_stick_x, driveMode);
+
+
+            robot.delivery.changeLiftMode(gp1.b.pressed());
+
 
             // changes drone mode - right bumper
             robot.drone.changeDroneMode(gp1.right_bumper.pressed());
@@ -51,7 +57,7 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
 
             // changes intake height - left bumper and right bumper
-            robot.intake.changeIntakeHeight(gp2.raisingIntake, gp2.loweringIntake);
+            robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
 
 
             // runs intake - left and right trigger
@@ -61,17 +67,23 @@ public class Tele extends LinearOpMode {
 //            // extends outtake - left and right dpad
 //            robot.delivery.changeExtensionLength(gp2.retractOuttake ,gp2.extendOuttake);
 
-            robot.delivery.setExtendPower(gp2.powerExtension);
 
-            // changes drop servo position - b
-            robot.delivery.changeDropPosition(gp2.dropPixel);
+            robot.delivery.setExtendPower(gp2.right_stick_y);
 
 
             // drives lift - left joystick, y-axis
-            robot.delivery.driveLift(gp2.driveLift);
+            robot.delivery.driveLift(gp2.left_stick_y);
+
+
+            robot.delivery.tuneLiftDuringTele(gp2.left_stick_y, gp2.right_stick_y);
+
+
+            // changes drop servo position - b
+            robot.delivery.changeDropPosition(gp2.b.pressing());
+
 
             // launches drone - a button
-            robot.drone.launchDrone(gp2.launchDrone);
+            robot.drone.launchDrone(gp2.a.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY

@@ -39,7 +39,7 @@ public class BallDrive implements Drivebase {
 
     @Override
     public void calculateDrivePowers(double x, double y, double rot) {
-        bp = x + rot;
+        bp = x;
         lp = y - rot;
         rp = y + rot;
 
@@ -84,7 +84,7 @@ public class BallDrive implements Drivebase {
 
     @Override
     public DcMotorEx[] getEncoderMotors(){
-        return new DcMotorEx[]{leftDrive, rightDrive};
+        return new DcMotorEx[]{leftDrive, rightDrive, backDrive};
 
     }
 

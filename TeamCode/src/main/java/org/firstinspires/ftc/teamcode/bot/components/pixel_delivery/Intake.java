@@ -24,7 +24,7 @@ public class Intake {
     }
 
     //-------------------------------------------------------------------------------------
-    //                                   Auto Functions
+    //                                   AutoRed Functions
     //-------------------------------------------------------------------------------------
 
     public void autoPixelOut () {
@@ -44,19 +44,19 @@ public class Intake {
     //-------------------------------------------------------------------------------------
 
     public void pixelIn (double power) {
-        intakeMotor.setPower(power / 2);
-        conveyorBeltMotor.setPower(power);
-    }
+            intakeMotor.setPower(power / 2);
+            conveyorBeltMotor.setPower(power);
+        }
 
     public void changeIntakeHeight(boolean decrease, boolean increase) {
-        if (decrease) {
-            intakeLvl -= 1;
+            if (decrease) {
+                intakeLvl -= 1;
+            }
+            if (increase) {
+                intakeLvl += 1;
+            }
+            setIntakePosition();
         }
-        if (increase) {
-            intakeLvl += 1;
-        }
-        setIntakePosition();
-    }
 
     //-------------------------------------------------------------------------------------
     //                                   Simple Functions

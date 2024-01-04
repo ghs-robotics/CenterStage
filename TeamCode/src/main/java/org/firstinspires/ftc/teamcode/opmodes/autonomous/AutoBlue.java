@@ -1,5 +1,8 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE_X;
+import static org.firstinspires.ftc.teamcode.bot.control.Navigation.TICKS_PER_TILE_Y;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,23 +14,21 @@ import org.firstinspires.ftc.teamcode.bot.control.auto_execution.ParamHandler;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets;
 
 @Autonomous
-public class TestAuto extends LinearOpMode {
+public class AutoBlue extends LinearOpMode {
     Robot robot;
     AutoActionHandler actionHandler;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry, false);
         actionHandler = new AutoActionHandler(robot, telemetry);
         robot.init();
 
         // create list of actions to run
-//        actionHandler.add(MOVE, new ParamHandler((TICKS_PER_TILE / 2), (int) -(TICKS_PER_TILE / 2),
-//                0.0, true));
-//        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
-        actionHandler.add(MOVE, new ParamHandler(100, 1000, 0));
-//        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.3), 0.0));
-//        actionHandler.add(MOVE, new ParamHandler(100, (int) -(TICKS_PER_TILE * 1.7), 0.0));
+//        actionHandler.add(AutoPresets.getBeginningNearBackDrop(robot, telemetry));
+        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
+//        actionHandler.add(MOVE, new ParamHandler(3 * TICKS_PER_TILE_X, -860, 0.0));
+//        actionHandler.add(RETRACT);
 
 
 
@@ -43,8 +44,7 @@ public class TestAuto extends LinearOpMode {
             actionHandler.run();
             actionHandler.status();
             robot.update();
-            //robot.getAutoTelemetry();
+//            robot.getTelemetry();
         }
-
     }
 }
