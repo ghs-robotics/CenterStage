@@ -19,7 +19,7 @@ public class Robot {
 
     public Camera cam;
 
-    public Drivebase drive;
+    public BallDrive drive;
     public Navigation nav;
     private Gyro gyro;
 
@@ -63,11 +63,13 @@ public class Robot {
         nav.resetNav();
         gyro.resetHeading();
         drive.resetEncoders();
+        drive.resetCoords();
         delivery.resetEncoders();
     }
 
     public void shutOff(){
         drive.calculateDrivePowers(0,0,0);
+        drive.resetCoords();
         intake.pixelIn(0);
         delivery.driveLift(0);
         nav.resetNav();

@@ -57,8 +57,9 @@ public class AutoActions {
         if (!robot.RED)
             x *= -1;
 
-        boolean there = robot.nav.runToPosition(x, params.y, params.heading);
-
+//        boolean there = robot.nav.runToPosition(x, params.y, params.heading);
+        // testing some stuff
+        boolean there = robot.drive.runToPosition(x, params.y, params.heading);
         endAction = there || timer.milliseconds() > 5000;
     }
 

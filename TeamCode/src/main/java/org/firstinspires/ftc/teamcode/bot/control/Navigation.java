@@ -234,6 +234,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
+import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 import org.opencv.core.Mat;
 
@@ -286,11 +287,9 @@ public class Navigation {
     private double y;
     private double heading;
 
-    Drivebase drive;
+    BallDrive drive;
 
-    private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
-
-    public Navigation(Drivebase drive, Gyro gyro, Telemetry telemetry) {
+    public Navigation(BallDrive drive, Gyro gyro, Telemetry telemetry) {
         this.drive = drive;
         this.telemetry = telemetry;
 
@@ -320,71 +319,9 @@ public class Navigation {
     }
 
     public void update(){
-        updatePose();
 
-//        x = pose.position.x;
-//        y = pose.position.y;
-        heading = gyro.getHeading();
     }
 
-    public PoseVelocity2d updatePose() {
-        Twist2dDual<Time> twist = this.updateTwist();
-
-//        pose = pose.plus(twist.value());
-//
-//        this.x += twist.line.y.value();
-//        this.y += twist.line.x.value();
-//        this.heading += twist.angle.value();
-
-        poseHistory.add(pose);
-        while (poseHistory.size() > 100) {
-            poseHistory.removeFirst();
-        }
-
-        return twist.velocity().value();
-    }
-
-    private Twist2dDual<Time> updateTwist(){
-        PositionVelocityPair parLeftPosVel = parLeft.getPositionAndVelocity();
-        PositionVelocityPair parRightPosVel = parRight.getPositionAndVelocity();
-        PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
-
-        int parLeftPosDelta = parLeftPosVel.position - lastLeftParPos;
-        int parRightPosDelta = parRightPosVel.position - lastRightParPos;
-        int perpPosDelta = perpPosVel.position - lastPerpPos;
-
-        Twist2dDual<Time> twist = new Twist2dDual<>(
-                new Vector2dDual<>(
-                        new DualNum<Time>(new double[] {
-                                (PARAMS.parYLeftTicks * parRightPosDelta - PARAMS.parYRightTicks * parLeftPosDelta)
-                                        / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
-                                (PARAMS.parYLeftTicks * parRightPosVel.velocity - PARAMS.parYRightTicks * parLeftPosVel.velocity)
-                                        / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
-                        }).times(MM_PER_TICK),
-                        new DualNum<Time>(new double[] {
-                                (PARAMS.perpXTicks / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks) *
-                                        (parRightPosDelta - parLeftPosDelta) + perpPosDelta),
-                                (PARAMS.perpXTicks / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks) *
-                                        (parRightPosVel.velocity - parLeftPosVel.velocity) + perpPosVel.velocity),
-                        }).times(MM_PER_TICK)
-                ),
-                new DualNum<>(new double[] {
-                        (parLeftPosDelta - parRightPosDelta) / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
-                        (parLeftPosVel.velocity - parRightPosVel.velocity) / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
-                })
-        );
-
-
-        lastLeftParPos = parLeftPosVel.position;
-        lastRightParPos = parRightPosVel.position;
-        lastPerpPos = perpPosVel.position;
-//
-        this.x += twist.line.y.value();
-        this.y += twist.line.x.value();
-//        this.heading += twist.angle.value();
-
-        return twist;
-    }
 
     public double getX() {
         return x;
@@ -398,33 +335,4 @@ public class Navigation {
         return gyro.getHeading();
     }
 
-
-    private void drawPoseHistory(Canvas c) {
-        double[] xPoints = new double[poseHistory.size()];
-        double[] yPoints = new double[poseHistory.size()];
-
-        int i = 0;
-        for (Pose2d t : poseHistory) {
-            xPoints[i] = t.position.x;
-            yPoints[i] = t.position.y;
-
-            i++;
-        }
-
-        c.setStrokeWidth(1);
-        c.setStroke("#3F51B5");
-        c.strokePolyline(xPoints, yPoints);
-    }
-
-    private static void drawRobot(Canvas c, Pose2d t) {
-        final double ROBOT_RADIUS = 9;
-
-        c.setStrokeWidth(1);
-        c.strokeCircle(t.position.x, t.position.y, ROBOT_RADIUS);
-
-        Vector2d halfv = t.heading.vec().times(0.5 * ROBOT_RADIUS);
-        Vector2d p1 = t.position.plus(halfv);
-        Vector2d p2 = p1.plus(halfv);
-        c.strokeLine(p1.x, p1.y, p2.x, p2.y);
-    }
 }

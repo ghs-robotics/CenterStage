@@ -20,6 +20,10 @@ public class BallDrive implements Drivebase {
 
     private boolean metaDriveOn;
 
+    private double x;
+    private double y;
+    private double heading;
+
     public BallDrive(HardwareMap hardwareMap, Gyro gyro) {
 
         leftDrive = hardwareMap.get(DcMotorEx.class, "left");
@@ -36,6 +40,52 @@ public class BallDrive implements Drivebase {
 
         this.gyro = gyro;
     }
+
+    public void update(){
+        double lTracking = 153.275;
+        double rTracking = 164.109;
+        double bTracking = 80;
+
+        int left = leftDrive.getCurrentPosition();
+        int right = rightDrive.getCurrentPosition();
+        int back = backDrive.getCurrentPosition();
+
+        heading = (left - right) / (lTracking - rTracking);
+
+        double y = 2 * (right / heading + rTracking) * Math.sin(heading / 2);
+        double x = 2 * (back / heading + bTracking) * Math.sin(heading / 2);
+
+        this.x = x;
+        this.y = y;
+    }
+
+    public boolean runToPosition(int tarX, int tarY){
+        return runToPosition(tarX, tarY, 0);
+    }
+
+    public boolean runToPosition(int tarX, int tarY, double tarHeading){
+        int maxError = 100; // should be in ticks
+        double headingError = 30;
+        double slowingRangeMultiplier = 1.5;
+
+        double xPower = 0;
+        double yPower = 0;
+        double rotPower = 0;
+
+        if (Math.abs(tarX - x) > maxError)
+            xPower = (tarX - x) / (maxError * slowingRangeMultiplier);
+        else if (Math.abs(tarY - y) > maxError)
+            yPower = -(tarY - y) / (maxError * slowingRangeMultiplier);
+        else if (Math.abs(tarHeading - heading) > headingError){
+            rotPower = (tarHeading - heading) / (headingError * slowingRangeMultiplier);
+        }
+        else
+            return true;
+
+        calculateDrivePowers(xPower, yPower, rotPower, true);
+        return false;
+    }
+
 
     @Override
     public void calculateDrivePowers(double x, double y, double rot) {
@@ -64,7 +114,7 @@ public class BallDrive implements Drivebase {
     @Override
     public int[] getEncoderTicks() {
         // 0 gets y, 1 gets x
-        int[] ticks = {leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition()};
+        int[] ticks = {leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition(), backDrive.getCurrentPosition()};
         return ticks;
     }
 
@@ -72,9 +122,11 @@ public class BallDrive implements Drivebase {
     public void resetEncoders() {
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -92,5 +144,23 @@ public class BallDrive implements Drivebase {
         leftDrive.setPower(lp);
         rightDrive.setPower(rp);
         backDrive.setPower(bp);
+    }
+
+    public void resetCoords(){
+        x = 0;
+        y = 0;
+        heading = 0;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getHeading() {
+        return heading;
     }
 }
