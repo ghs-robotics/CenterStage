@@ -174,9 +174,9 @@ public class Delivery {
         double l2Multiplier = 1;
 
         if(getLift1Position() - getLift2Position() > 20)
-            l1Multiplier = .6;
+            l1Multiplier = .5;
         if (getLift2Position() - getLift1Position() > 20)
-            l2Multiplier = .6;
+            l2Multiplier = .5;
 
         liftMotor1.setPower(power * l1Multiplier);
         liftMotor2.setPower(power * l2Multiplier);
