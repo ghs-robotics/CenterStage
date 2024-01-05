@@ -53,13 +53,13 @@ public class AutoActions {
      */
     private void moveTo(){
         resetTimer();
-        int x = params.x;
         if (!robot.RED)
-            x *= -1;
+            params.x *= -1;
 
+        robot.getAutoTelemetry();
 //        boolean there = robot.nav.runToPosition(x, params.y, params.heading);
         // testing some stuff
-        boolean there = robot.drive.runToPosition(x, params.y, params.heading);
+        boolean there = robot.drive.runToPosition(params.x, params.y);
         endAction = there || timer.milliseconds() > 5000;
     }
 
