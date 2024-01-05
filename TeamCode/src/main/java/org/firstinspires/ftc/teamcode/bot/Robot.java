@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.bot.components.Drone;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
-import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
 import org.firstinspires.ftc.teamcode.bot.control.Navigation;
 import org.firstinspires.ftc.teamcode.cv.Camera;
@@ -110,7 +109,8 @@ public class Robot {
 
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
-        telemetry.addData("lift position: ", delivery.getLiftPosition());
+        telemetry.addData("lift position 1: ", delivery.getLift1Position());
+        telemetry.addData("lift position 2: ", delivery.getLift2Position());
         telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
         telemetry.addData("tune lift mode: ", delivery.getTuneLiftMode());
