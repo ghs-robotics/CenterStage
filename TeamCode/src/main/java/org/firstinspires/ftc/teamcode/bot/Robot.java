@@ -19,7 +19,7 @@ public class Robot {
 
     public Camera cam;
 
-    public Drivebase drive;
+    public BallDrive drive;
     public Navigation nav;
     private Gyro gyro;
 
@@ -27,14 +27,14 @@ public class Robot {
     public Delivery delivery;
     public Drone drone;
 
-    public boolean RED;
-
     FtcDashboard dashboard;
+
+    public boolean RED;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
         this(hardwareMap, telemetry);
-        this.RED = red;
-
+        cam = new Camera(hardwareMap, telemetry, red);
+        RED = red;
     }
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
@@ -51,8 +51,7 @@ public class Robot {
         delivery = new Delivery(hardwareMap);
         drone = new Drone(hardwareMap);
 
-        cam = new Camera(hardwareMap, telemetry, RED);
-
+//        dashboard.startCameraStream(cam.camera1, 0);
     }
 
     /**
@@ -60,17 +59,19 @@ public class Robot {
      */
     public void init(){
         //init cameras
-        cam.initCamera();
+        nav.resetNav();
         gyro.resetHeading();
         drive.resetEncoders();
+        drive.resetCoords();
         delivery.resetEncoders();
-        nav.resetNav();
     }
 
     public void shutOff(){
         drive.calculateDrivePowers(0,0,0);
+        drive.resetCoords();
         intake.pixelIn(0);
         delivery.driveLift(0);
+        nav.resetNav();
     }
 
     /**
@@ -97,7 +98,7 @@ public class Robot {
         telemetry.addData("Meta Drive Mode On: ", drive.getDriveMode());
         telemetry.addData("x pos: ", nav.getX());
         telemetry.addData("y pos: ", nav.getY());
-        telemetry.addData("gyro heading: ", Math.toDegrees(nav.getGyroHeading()));
+        telemetry.addData("gyro heading: ", Math.toDegrees(nav.getHeading()));
         telemetry.addLine();
     }
 
@@ -120,7 +121,7 @@ public class Robot {
 
     private void droneTelemetry () {
         telemetry.addLine("Drone System Telemetry");
-        telemetry.addData("Drone Mode: ", drone.getDroneMode());
+        telemetry.addData("Drone Mode Status: ", drone.getDroneMode());
         telemetry.addLine();
     }
 }

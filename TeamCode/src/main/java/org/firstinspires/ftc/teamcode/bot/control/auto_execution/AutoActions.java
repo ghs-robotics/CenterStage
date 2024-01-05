@@ -32,8 +32,6 @@ public class AutoActions {
     private int zone;
     private String description;
 
-    private int moveToCycle;
-
     ParamHandler params;
 
     public AutoActions(int id, Robot robot){
@@ -43,7 +41,6 @@ public class AutoActions {
         timer = new ElapsedTime();
 
         setDescription();
-        moveToCycle = 3;
     }
 
     public AutoActions(int id, Robot robot, ParamHandler params){
@@ -60,8 +57,9 @@ public class AutoActions {
         if (!robot.RED)
             x *= -1;
 
-        boolean there = robot.nav.runToPosition(x, params.y, params.heading);
-
+//        boolean there = robot.nav.runToPosition(x, params.y, params.heading);
+        // testing some stuff
+        boolean there = robot.drive.runToPosition(x, params.y, params.heading);
         endAction = there || timer.milliseconds() > 5000;
     }
 

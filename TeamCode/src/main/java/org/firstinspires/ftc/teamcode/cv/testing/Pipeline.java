@@ -1,5 +1,29 @@
 package org.firstinspires.ftc.teamcode.cv.testing;
 
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_RED;
 import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_H;
 import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_S;
@@ -51,36 +75,32 @@ public class Pipeline extends OpenCvPipeline {
     Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
     Scalar darkRange = new Scalar(BLOCK_DARK_H, BLOCK_DARK_S, BLOCK_DARK_V);
 
-    Scalar lightBlue = new Scalar(0, 100, 40);
-    Scalar darkBlue = new Scalar(70, 255, 200);
+    Scalar firstFilterLower;
+    Scalar firstFilterUpper;
 
-    Scalar lowerRangeInUse;
-    Scalar upperRangeInUse;
+    Scalar strictLowerFilter;
+    Scalar strictUpperFilter;
 
     ElapsedTime timer;
 
-    boolean resetTimer;
+    int z1Pixels;
+    int z2Pixels;
+    int z3Pixels;
 
-    public Pipeline(OpenCvCamera camera, Telemetry telemetry, boolean red) {
+    // true == red, false == blue
+    public Pipeline(OpenCvCamera camera, Telemetry telemetry, boolean color) {
         cam = camera;
         this.telemetry = telemetry;
         timer = new ElapsedTime();
 
-        resetTimer = false;
+        setRanges(color);
 
         timer.reset();
-
-        if (red){
-            lowerRangeInUse = lightRange;
-            upperRangeInUse = darkRange;
-        } else {
-            upperRangeInUse = darkBlue;
-            lowerRangeInUse = darkBlue;
-        }
     }
 
     @Override
     public Mat processFrame(Mat input) {
+
         Mat hsv = new Mat();
 
         Imgproc.cvtColor(input, hsv, Imgproc.COLOR_BGR2HSV);
@@ -96,7 +116,8 @@ public class Pipeline extends OpenCvPipeline {
         Mat finalMat = new Mat();
         Mat edges = new Mat();
 
-        Core.inRange(hsv, lowerRangeInUse, upperRangeInUse, thresh);
+//        Core.inRange(hsv, lightRange, darkRange, thresh);
+        Core.inRange(hsv, firstFilterLower, firstFilterUpper, thresh);
 
         if (FILTER || CANNY) {
             Core.bitwise_and(hsv, hsv, masked, thresh);
@@ -108,7 +129,8 @@ public class Pipeline extends OpenCvPipeline {
             Scalar strictLowerHSV = new Scalar(STRICT_LOWER_H, STRICT_LOWER_S, STRICT_LOWER_V);
             Scalar strictHighHSV = new Scalar(STRICT_UPPER_H, STRICT_UPPER_S, STRICT_UPPER_V);
 
-            Core.inRange(scaledMask, strictLowerHSV, strictHighHSV, scaledThresh);
+//            Core.inRange(scaledMask, strictLowerHSV, strictHighHSV, scaledThresh);
+            Core.inRange(scaledMask, strictLowerFilter, strictUpperFilter, scaledThresh);
 
             Core.bitwise_and(hsv, hsv, finalMat, scaledThresh);
 
@@ -130,27 +152,49 @@ public class Pipeline extends OpenCvPipeline {
 
             for (int i = 0; i < contours.size(); i++){
                 contoursPoly[i] = new MatOfPoint2f();
-                Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 2, true);
+                Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i],
+                        2, true);
                 boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
             }
 
-            double xLeft = RES_WIDTH / 3.0;
-            double xRight = RES_WIDTH * 2.0 / 3;
+            double xLeft = RES_WIDTH / 3.5;
+            double xRight = RES_WIDTH * 1.96 / 3;
 
             int zone = 0;
+            int zone1Counter = 0;
+            int zone2Counter = 0;
+            int zone3Counter = 0;
+
             for (int i = 0; i != boundingBox.length; i++){
                 if (boundingBox[i].x < xLeft)
-                    zone = 1;
+                    zone1Counter++;
                 else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight)
-                    zone = 2;
+                    zone2Counter++;
                 else
-                    zone = 3;
+                    zone3Counter++;
 
                 Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
             }
 
-            if (timer.milliseconds() < 750 && resetTimer)
-                SPIKE_ZONE = zone;
+            z1Pixels = zone1Counter;
+            z2Pixels = zone2Counter;
+            z3Pixels = zone3Counter;
+
+            if (zone1Counter > zone2Counter && zone1Counter > zone3Counter)
+                zone = 1;
+            else if (zone2Counter > zone3Counter)
+                zone = 2;
+            else
+                zone = 3;
+
+//            if (timer.milliseconds() < 1000)
+            SPIKE_ZONE = zone;
+
+            Rect left = new Rect(1, 1, (int) xLeft, RES_HEIGHT);
+            Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), RES_HEIGHT);
+            Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 3);
+            Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 3);
+
         }
 
         input.release();
@@ -161,6 +205,8 @@ public class Pipeline extends OpenCvPipeline {
         else
             thresh.copyTo(input);
 
+
+
         hsv.release();
         thresh.release();
         masked.release();
@@ -168,16 +214,12 @@ public class Pipeline extends OpenCvPipeline {
         finalMat.release();
         edges.release();
 
+
         return input;
     }
 
     public int getZone() {
         return spikeZone;
-    }
-
-    public void resetDetectionTimer(){
-        timer.reset();
-        resetTimer = true;
     }
 
 
@@ -192,10 +234,33 @@ public class Pipeline extends OpenCvPipeline {
 
     }
 
+    // true is red, false is blue
+    private void setRanges(boolean red){
+        if (red){
+            firstFilterLower = new Scalar(H_FIRST_LOWER_RED, S_FIRST_LOWER_RED, V_FIRST_LOWER_RED);
+            firstFilterUpper = new Scalar(H_FIRST_UPPER_RED, S_FIRST_UPPER_RED, V_FIRST_UPPER_RED);
+
+            strictLowerFilter = new Scalar(H_STRICT_LOWER_RED, S_STRICT_LOWER_RED, V_STRICT_LOWER_RED);
+            strictUpperFilter = new Scalar(H_STRICT_UPPER_RED, S_STRICT_UPPER_RED, V_STRICT_UPPER_RED);
+        }else{
+            firstFilterLower = new Scalar(H_FIRST_LOWER_BLUE, S_FIRST_LOWER_BLUE, V_FIRST_LOWER_BLUE);
+            firstFilterUpper = new Scalar(H_FIRST_UPPER_BLUE, S_FIRST_UPPER_BLUE, V_FIRST_UPPER_BLUE);
+
+            strictLowerFilter = new Scalar(H_STRICT_LOWER_BLUE, S_STRICT_LOWER_BLUE, V_STRICT_LOWER_BLUE);
+            strictUpperFilter = new Scalar(H_STRICT_UPPER_BLUE, S_STRICT_UPPER_BLUE, V_STRICT_UPPER_BLUE);
+        }
+    }
+
+    public void resetDectectionTimer(){
+        timer.reset();
+    }
 
     public void getTelemetry(){
         telemetry.addLine("Pipeline telemetry");
         telemetry.addData("zone ", SPIKE_ZONE);
+        telemetry.addData("zone 1 ", z1Pixels);
+        telemetry.addData("zone 2 ", z2Pixels);
+        telemetry.addData("zone 3 ", z3Pixels);
         telemetry.addLine();
     }
 

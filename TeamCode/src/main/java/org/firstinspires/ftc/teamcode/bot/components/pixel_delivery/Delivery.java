@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
-import android.text.method.Touch;
-
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -55,13 +54,13 @@ public class Delivery {
     //                                   AutoRed Functions
     //-------------------------------------------------------------------------------------
 
-//    public boolean autoRunExtension(double dir, double curMillisecond){
-//        if (curMillisecond < 350){
-//            setExtendPower(dir);
-//        } else
-//            setExtendPower(0);
-//        return curMillisecond > 500;
-//    }
+    public boolean autoRunExtension(double dir, double curMillisecond){
+        if (curMillisecond < 350){
+            setExtendPower(dir);
+        }else
+            setExtendPower(0);
+        return curMillisecond > 500;
+    }
 
     public boolean autoDropPixels(double targetPos){
         dropServo.setPosition(targetPos);

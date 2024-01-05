@@ -1,35 +1,278 @@
+//package org.firstinspires.ftc.teamcode.bot.control;
+//
+//import com.acmerobotics.dashboard.canvas.Canvas;
+//import com.acmerobotics.roadrunner.DualNum;
+//import com.acmerobotics.roadrunner.Pose2d;
+//import com.acmerobotics.roadrunner.PoseVelocity2d;
+//import com.acmerobotics.roadrunner.Rotation2d;
+//import com.acmerobotics.roadrunner.Time;
+//import com.acmerobotics.roadrunner.Twist2dDual;
+//import com.acmerobotics.roadrunner.Vector2d;
+//import com.acmerobotics.roadrunner.Vector2dDual;
+//import com.acmerobotics.roadrunner.ftc.Encoder;
+//import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
+//import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
+//import com.acmerobotics.roadrunner.ftc.RawEncoder;
+//import com.qualcomm.robotcore.hardware.DcMotor;
+//import com.qualcomm.robotcore.hardware.DcMotorEx;
+//
+//import org.firstinspires.ftc.robotcore.external.Telemetry;
+//import org.firstinspires.ftc.teamcode.bot.components.Gyro;
+//import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
+//import org.opencv.core.Mat;
+//
+//import java.util.LinkedList;
+//
+//public class Navigation {
+//
+//    private double kS = 0;
+//    private double kV = 0;
+//    private double kA = 0;
+//
+//    public boolean runToPosition(int targetX, int targetY, double heading) {
+//        if (Math.abs(targetX - x) < 25)
+//            drive.calculateDrivePowers((targetX - x) / 50.0, 0, 0, true);
+//        else if (Math.abs(targetY - y) < 30) {
+//            drive.calculateDrivePowers(0, -(targetY - y) / 50.0, 0, true);
+//
+//        } else
+//            return true;
+//
+//        return false;
+//    }
+//
+//    public static class Params {
+//        public double parYLeftTicks = 0.0; // y position of the parallel encoder (in tick units)
+//        public double parYRightTicks = 1.0; // y position of the parallel encoder (in tick units)
+//        public double perpXTicks = 0.0; // x position of the perpendicular encoder (in tick units)
+//    }
+//
+//    public static Params PARAMS = new Params();
+//
+//    public final Encoder parLeft, parRight, perp;
+//    public final Gyro gyro;
+//
+//    private int lastLeftParPos, lastRightParPos, lastPerpPos;
+//    private Rotation2d lastHeading;
+//
+//    private Pose2d pose;
+//
+//
+//    private double lastRawHeadingVel, headingVelOffset;
+//    private Telemetry telemetry;
+//
+//    private final double MM_PER_TICK = (35 * Math.PI) / (8192);
+//
+//    public static final int TICKS_PER_TILE_X = 600;
+//    public static final int TICKS_PER_TILE_Y = 600;
+//
+//    private double x;
+//    private double y;
+//    private double heading;
+//
+//    Drivebase drive;
+//
+//    private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
+//
+//    public Navigation(Drivebase drive, Gyro gyro, Telemetry telemetry) {
+//        this.drive = drive;
+//        this.telemetry = telemetry;
+//
+//        this.pose = new Pose2d(0,0, gyro.getHeading());
+//
+//        parLeft = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[0]));
+//        parRight = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[1]));
+//        perp = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[2]));
+//        this.gyro = gyro;
+//
+//        lastLeftParPos = parLeft.getPositionAndVelocity().position;
+//        lastRightParPos = parLeft.getPositionAndVelocity().position + 1;
+//        lastPerpPos = perp.getPositionAndVelocity().position;
+//        lastHeading = Rotation2d.exp(gyro.getHeading());
+//    }
+//
+//    public void resetNav() {
+//        x = 0;
+//        y = 0;
+//        heading = 0;
+//
+//        pose = new Pose2d(0,0,0);
+//        for (DcMotorEx motor: drive.getEncoderMotors()) {
+//            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        }
+//    }
+//
+//    public void update(){
+//        updatePose();
+//
+////        x = pose.position.x;
+////        y = pose.position.y;
+//        heading = gyro.getHeading();
+//    }
+//
+//    public PoseVelocity2d updatePose() {
+//        Twist2dDual<Time> twist = this.updateTwist();
+//
+////        pose = pose.plus(twist.value());
+////
+////        this.x += twist.line.y.value();
+////        this.y += twist.line.x.value();
+////        this.heading += twist.angle.value();
+//
+//        poseHistory.add(pose);
+//        while (poseHistory.size() > 100) {
+//            poseHistory.removeFirst();
+//        }
+//
+//        return twist.velocity().value();
+//    }
+//
+//    private Twist2dDual<Time> updateTwist(){
+//        PositionVelocityPair parLeftPosVel = parLeft.getPositionAndVelocity();
+//        PositionVelocityPair parRightPosVel = parRight.getPositionAndVelocity();
+//        PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
+//
+//        int parLeftPosDelta = parLeftPosVel.position - lastLeftParPos;
+//        int parRightPosDelta = parRightPosVel.position - lastRightParPos;
+//        int perpPosDelta = perpPosVel.position - lastPerpPos;
+//
+//        Twist2dDual<Time> twist = new Twist2dDual<>(
+//                new Vector2dDual<>(
+//                        new DualNum<Time>(new double[] {
+//                                (PARAMS.parYLeftTicks * parRightPosDelta - PARAMS.parYRightTicks * parLeftPosDelta)
+//                                        / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
+//                                (PARAMS.parYLeftTicks * parRightPosVel.velocity - PARAMS.parYRightTicks * parLeftPosVel.velocity)
+//                                        / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
+//                        }).times(MM_PER_TICK),
+//                        new DualNum<Time>(new double[] {
+//                                (PARAMS.perpXTicks / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks) *
+//                                        (parRightPosDelta - parLeftPosDelta) + perpPosDelta),
+//                                (PARAMS.perpXTicks / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks) *
+//                                        (parRightPosVel.velocity - parLeftPosVel.velocity) + perpPosVel.velocity),
+//                        }).times(MM_PER_TICK)
+//                ),
+//                new DualNum<>(new double[] {
+//                        (parLeftPosDelta - parRightPosDelta) / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
+//                        (parLeftPosVel.velocity - parRightPosVel.velocity) / (PARAMS.parYLeftTicks - PARAMS.parYRightTicks),
+//                })
+//        );
+//
+//
+//        lastLeftParPos = parLeftPosVel.position;
+//        lastRightParPos = parRightPosVel.position;
+//        lastPerpPos = perpPosVel.position;
+////
+//        this.x += twist.line.y.value();
+//        this.y += twist.line.x.value();
+////        this.heading += twist.angle.value();
+//
+//        return twist;
+//    }
+//
+//    public double getX() {
+//        return x;
+//    }
+//
+//    public double getY() {
+//        return y;
+//    }
+//
+//    public double getHeading() {
+//        return gyro.getHeading();
+//    }
+//
+//
+//    private void drawPoseHistory(Canvas c) {
+//        double[] xPoints = new double[poseHistory.size()];
+//        double[] yPoints = new double[poseHistory.size()];
+//
+//        int i = 0;
+//        for (Pose2d t : poseHistory) {
+//            xPoints[i] = t.position.x;
+//            yPoints[i] = t.position.y;
+//
+//            i++;
+//        }
+//
+//        c.setStrokeWidth(1);
+//        c.setStroke("#3F51B5");
+//        c.strokePolyline(xPoints, yPoints);
+//    }
+//
+//    private static void drawRobot(Canvas c, Pose2d t) {
+//        final double ROBOT_RADIUS = 9;
+//
+//        c.setStrokeWidth(1);
+//        c.strokeCircle(t.position.x, t.position.y, ROBOT_RADIUS);
+//
+//        Vector2d halfv = t.heading.vec().times(0.5 * ROBOT_RADIUS);
+//        Vector2d p1 = t.position.plus(halfv);
+//        Vector2d p2 = p1.plus(halfv);
+//        c.strokeLine(p1.x, p1.y, p2.x, p2.y);
+//    }
+//}
+
+
 package org.firstinspires.ftc.teamcode.bot.control;
 
-import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.roadrunner.DualNum;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Time;
 import com.acmerobotics.roadrunner.Twist2dDual;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.Vector2dDual;
 import com.acmerobotics.roadrunner.ftc.Encoder;
-import com.acmerobotics.roadrunner.ftc.FlightRecorder;
 import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
+import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
+import org.opencv.core.Mat;
 
-@Config
-public final class Navigation {
+import java.util.LinkedList;
+
+public class Navigation {
+
+    private double kS = 0;
+    private double kV = 0;
+    private double kA = 0;
+
+    public boolean runToPosition(int targetX, int targetY, double heading) {
+        if (Math.abs(targetX - x) < 25)
+            drive.calculateDrivePowers((targetX - x) / 50.0, 0, 0, true);
+        else if (Math.abs(targetY - y) < 30) {
+            drive.calculateDrivePowers(0, -(targetY - y) / 50.0, 0, true);
+
+        } else
+            return true;
+
+        return false;
+    }
+
     public static class Params {
-        public double parYTicks = 0.0; // y position of the parallel encoder (in tick units)
+        public double parYLeftTicks = 0.0; // y position of the parallel encoder (in tick units)
+        public double parYRightTicks = 1.0; // y position of the parallel encoder (in tick units)
         public double perpXTicks = 0.0; // x position of the perpendicular encoder (in tick units)
     }
 
     public static Params PARAMS = new Params();
 
-    public final Encoder par, perp;
+    public final Encoder parLeft, parRight, perp;
     public final Gyro gyro;
 
-    private int lastParPos, lastPerpPos;
+    private int lastLeftParPos, lastRightParPos, lastPerpPos;
     private Rotation2d lastHeading;
+
+    private Pose2d pose;
 
 
     private double lastRawHeadingVel, headingVelOffset;
@@ -37,320 +280,59 @@ public final class Navigation {
 
     private final double MM_PER_TICK = (35 * Math.PI) / (8192);
 
-    public static final int TICKS_PER_TILE_X = 595;
-    public static final int TICKS_PER_TILE_Y = 620;
+    public static final int TICKS_PER_TILE_X = 600;
+    public static final int TICKS_PER_TILE_Y = 600;
 
     private double x;
     private double y;
     private double heading;
 
-    Drivebase drive;
+    BallDrive drive;
 
-    public Navigation(Drivebase drive, Gyro imu, Telemetry telemetry) {
+    public Navigation(BallDrive drive, Gyro gyro, Telemetry telemetry) {
         this.drive = drive;
         this.telemetry = telemetry;
 
-        par = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[0]));
-        perp = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[1]));
-        this.gyro = imu;
+        this.pose = new Pose2d(0,0, gyro.getHeading());
 
-        lastParPos = par.getPositionAndVelocity().position;
+        parLeft = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[0]));
+        parRight = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[1]));
+        perp = new OverflowEncoder(new RawEncoder(drive.getEncoderMotors()[2]));
+        this.gyro = gyro;
+
+        lastLeftParPos = parLeft.getPositionAndVelocity().position;
+        lastRightParPos = parLeft.getPositionAndVelocity().position + 1;
         lastPerpPos = perp.getPositionAndVelocity().position;
         lastHeading = Rotation2d.exp(gyro.getHeading());
-
-
-        FlightRecorder.write("TWO_DEAD_WHEEL_PARAMS", PARAMS);
     }
 
-    // see https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/617
-    private double getHeadingVelocity() {
-        double rawHeadingVel = gyro.getHeadingVelocity();
-        if (Math.abs(rawHeadingVel - lastRawHeadingVel) > Math.PI) {
-            headingVelOffset -= Math.signum(rawHeadingVel) * 2 * Math.PI;
+    public void resetNav() {
+        x = 0;
+        y = 0;
+        heading = 0;
+
+        pose = new Pose2d(0,0,0);
+        for (DcMotorEx motor: drive.getEncoderMotors()) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        lastRawHeadingVel = rawHeadingVel;
-        return headingVelOffset + rawHeadingVel;
     }
 
-    public void update() {
-        PositionVelocityPair parPosVel = par.getPositionAndVelocity();
-        PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
-        Rotation2d heading = Rotation2d.exp(gyro.getHeading());
-
-        int parPosDelta = parPosVel.position - lastParPos;
-        int perpPosDelta = perpPosVel.position - lastPerpPos;
-        double headingDelta = heading.minus(lastHeading);
-
-        double headingVel = getHeadingVelocity();
-
-        Twist2dDual<Time> twist = new Twist2dDual<>(
-                new Vector2dDual<>(
-                        new DualNum<Time>(new double[] {
-                                parPosDelta - PARAMS.parYTicks * headingDelta,
-                                parPosVel.velocity - PARAMS.parYTicks * headingVel,
-                        }).times(MM_PER_TICK),
-                        new DualNum<Time>(new double[] {
-                                perpPosDelta - PARAMS.perpXTicks * headingDelta,
-                                perpPosVel.velocity - PARAMS.perpXTicks * headingVel,
-                        }).times(MM_PER_TICK)
-                ),
-                new DualNum<>(new double[] {
-                        headingDelta,
-                        headingVel,
-                })
-        );
-
-        lastParPos = parPosVel.position;
-        lastPerpPos = perpPosVel.position;
-        lastHeading = heading;
-
-        this.x += twist.line.y.value();
-        this.y += twist.line.x.value();
-        this.heading += twist.angle.value();
-    }
-
-    // code i wrote
-    /**
-     * @param x target x position
-     * @param y target y position
-     * @param heading target heading in degrees
-     * @return whether or not the robot is at target position and facing target direction
-     */
-    public boolean runToPosition(double x, double y, double heading){
-        update();
-
-        double xDiff = x - this.x;
-        double yDiff = this.y - y;
-        double rotDiffCounterClock = (this.heading - (Math.toRadians(heading))) % (2 * Math.PI);
-        double rotDiffClock = ((Math.toRadians(heading)) - this.heading) % (2 * Math.PI);
-
-        double xPow = 0;
-        double yPow = 0;
-        double rotPow = 0;
-
-
-        // todo replace this with PID
-        if (Math.abs(xDiff) > 10) {
-            xPow = increasePower(xDiff / 200.0);
-        } else if (x == 0) {
-            xPow = 0;
-        }
-
-        if (Math.abs(yDiff) > 10) {
-            yPow = increasePower(yDiff / 200.0);
-        } else if (y == 0) {
-            yPow = 0;
-        }
-
-//        if (rotDiffClock >= rotDiffCounterClock){
-//            rotPow = rotDiffClock / 10.0;
-//        } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
-//            rotPow = rotDiffCounterClock /10.0;
-//        }
-
-
-        drive.calculateDrivePowers(xPow , yPow, rotPow, true);
-        telemetry.addLine("y = " + this.y);
-        telemetry.addLine("x = " + this.x);
-        telemetry.addLine("heading = " + this.heading);
-        return Math.abs(xDiff) < 10 && Math.abs(yDiff) < 10;
+    public void update(){
 
     }
 
-    private double increasePower(double power){
-        if (Math.abs(power) < 0.05){
-            int sign = (int) (power / Math.abs(power));
 
-            if (sign < 0)
-                return -0.1;
-            else
-                return 0.1;
-        }
-
-        return power;
-    }
-
-    public double getX(){
+    public double getX() {
         return x;
     }
 
-    /**
-     * @return y coordinate
-     */
-    public double getY(){
+    public double getY() {
         return y;
     }
 
-    /**
-     * @return heading of the robot in only radians
-     */
-    public double getGyroHeading(){
-        return heading;
+    public double getHeading() {
+        return gyro.getHeading();
     }
 
-    public void resetNav(){
-        drive.resetEncoders();
-        gyro.resetHeading();
-
-        this.x = 0;
-        this.y = 0;
-        this.heading = 0;
-    }
 }
-//package org.firstinspires.ftc.teamcode.bot.control;
-//
-//import org.firstinspires.ftc.robotcore.external.Telemetry;
-//import org.firstinspires.ftc.teamcode.bot.components.Gyro;
-//import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
-//
-//public class Navigation {
-//    // axis based on the robot's starting position
-//    private double x;
-//    private double y;
-//    private double gyroHeading;
-//
-//    private int yEncoder;
-//    private int xEncoder;
-//
-//    private int deltaX;
-//    private int deltaY;
-//    private double deltaHeading;
-//
-//    private final int TICKS_PER_REV = 8192;
-//    private final double WHEEL_RAD = 17.5; // in mm
-//
-//    private final double[] X_DIS_FROM_CENTER = new double[]{164.109, 48.88, 171.23}; // in mm
-//    private final double[] Y_DIS_FROM_CENTER = new double[]{153.275, 60.916, 164.94}; // in mm
-//
-//
-//    Telemetry telemetry;
-//
-//    Drivebase drive;
-//    Gyro gyro;
-//
-//    public Navigation(Drivebase drive, Gyro gyro, Telemetry telemetry){
-//        this.drive = drive;
-//        this.gyro = gyro;
-//
-//        this.telemetry = telemetry;
-//
-//        this.x = 0;
-//        this.y = 0;
-//
-//        updatePosition();
-//    }
-//
-//    public void updatePosition(){
-//        updateEncoders();
-//
-//        this.gyroHeading = gyro.getHeading();
-//        this.deltaHeading = gyro.getDeltaHeading();
-//
-//        // update x position
-//        this.x = 2 * (xEncoder / gyroHeading + 12757.38) * (Math.sin(gyroHeading / 2));
-////        this.x = xEncoder;
-//
-//        // update y position
-//        this.y = 2 * (yEncoder / gyroHeading + 4538.41) * (Math.sin(gyroHeading / 2));
-////        this.y = yEncoder;
-//
-//    }
-//
-//    public int runToPosition(double x, double y, double heading, boolean xFirst, int cycle){
-//        boolean done;
-//
-//        if (xFirst)
-//            done = runToPosition(x, 0, 0);
-//        else if (cycle == 0)
-//            done = runToPosition(0, 0, heading);
-//        else
-//            done = runToPosition(0, y, 0);
-//
-//
-//        if (done)
-//            return cycle--;
-//        else
-//            return cycle;
-//    }
-//
-//    /**
-//     * @param x target x position
-//     * @param y target y position
-//     * @param heading target heading in degrees
-//     * @return whether or not the robot is at target position and facing target direction
-//     */
-//    public boolean runToPosition(double x, double y, double heading){
-//        updatePosition();
-//
-//        double xDiff = x - this.x;
-//        double yDiff = this.y - y;
-//        double rotDiffCounterClock = (this.gyroHeading - (Math.toRadians(heading))) % (2 * Math.PI);
-//        double rotDiffClock = ((Math.toRadians(heading)) - this.gyroHeading) % (2 * Math.PI);
-//
-//        double xPow = 0;
-//        double yPow = 0;
-//        double rotPow = 0;
-//
-//
-//        if (Math.abs(xDiff) > TICKS_PER_TILE / 25.0) {
-//            xPow = xDiff / 10.0;
-//        } else if (x == 0) {
-//            xPow = 0;
-//        }
-//
-//        if (Math.abs(yDiff) > TICKS_PER_TILE / 25.0) {
-//            yPow = yDiff / 10.0;
-//        } else if (y == 0) {
-//            yPow = 0;
-//        }
-//
-//        if (rotDiffClock >= rotDiffCounterClock){
-//            rotPow = rotDiffClock / 10.0;
-//        } else if (Math.abs(rotDiffCounterClock - rotDiffClock) > Math.toRadians(2)){
-//            rotPow = rotDiffCounterClock /10.0;
-//        } else if (heading == 0)
-//            rotPow = 0;
-//
-//        drive.calculateDrivePowers(xPow , yPow, rotPow, true);
-//        telemetry.addLine("y = " + this.y);
-//        telemetry.addLine("x = " + this.x);
-//        telemetry.addLine("heading = " + this.gyroHeading);
-//        telemetry.addLine(String.valueOf(xPow + yPow + rotPow == 0));
-//        return xPow + yPow + rotPow < 0.1;
-//
-//    }
-//
-//    /**
-//     * Helper function that updates the encoder values every cycle
-//     */
-//    private void updateEncoders() {
-//        deltaX = xEncoder + drive.getEncoderTicks()[1];
-//        deltaY = yEncoder + drive.getEncoderTicks()[0];
-//
-//        xEncoder = -drive.getEncoderTicks()[1];
-//        yEncoder = -drive.getEncoderTicks()[0];
-//
-//
-//    }
-//
-//    /**
-//     * @return x coordinate
-//     */
-//    public double getX(){
-//        return x;
-//    }
-//
-//    /**
-//     * @return y coordinate
-//     */
-//    public double getY(){
-//        return y;
-//    }
-//
-//    /**
-//     * @return heading of the robot in only radians
-//     */
-//    public double getGyroHeading(){
-//        return gyroHeading;
-//    }
-//}

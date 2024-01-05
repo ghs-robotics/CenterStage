@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.cv.Camera;
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
-@Autonomous
+@TeleOp
 public class TestCameraAuto extends LinearOpMode {
 
     Controller gp1;
@@ -23,13 +23,15 @@ public class TestCameraAuto extends LinearOpMode {
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        cam = new Camera(hardwareMap, telemetry, false);
+        cam = new Camera(hardwareMap, telemetry, true);
 
         gp1 = new Controller(gamepad1);
         gp2 = new Controller(gamepad2);
 
-        dashboard.startCameraStream(cam.camera1, 0);
-        cam.initCamera();
+        dashboard.startCameraStream(cam.camera, 0);
+
+        cam.setCamera();
+
         waitForStart();
 
         telemetry.addLine("Initializing");
@@ -38,7 +40,7 @@ public class TestCameraAuto extends LinearOpMode {
             gp1.update();
             gp2.update();
 
-//            cam.testCounters();
+            cam.switchCamera(gp1.a.pressed());
 
             cam.getTelemetry();
             telemetry.update();
