@@ -25,9 +25,7 @@ public class Delivery {
     public static final double DROPPER_FIRST = 0.5;
     public static final double DROPPER_SECOND = 0.6;
 
-    private double sentPower;
-
-    private boolean tuneLiftMode = false;
+    public boolean liftBackToZero;
 
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
@@ -68,9 +66,9 @@ public class Delivery {
 
     public boolean driveLiftToPosition(int target){
         if (getLift1Position() < target - 5 || getLift1Position() > target + 5)
-            driveLift((getLift1Position() - target) / 10.0);
+            driveLift1((getLift1Position() - target) / 10.0);
         else
-            driveLift(-0.1);
+            driveLift1(-0.1);
         return getLift1Position() < target - 5 || getLift1Position() > target + 5;
     }
 
@@ -78,31 +76,33 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
-    public void driveLift (double power) {
+    public void driveLift1(double power) {
         touchSensorEncoderReset();
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        sentPower = power;
 
-        if (!tuneLiftMode) {
-            if (Math.abs(power) > 0.1) {
-                limitLift(power);
-            } else if (Math.abs(power) < 0.1) {
-                setLiftPower(0);
-            }
+        if (Math.abs(power) > 0.1 && !liftBackToZero) {
+            limitLift(power);
+        } else if (Math.abs(power) < 0.1 && !liftBackToZero) {
+            setLiftPower(0);
+        }
+
+        if (liftBackToZero) {
+            liftMotor1.setPower(power);
         }
     }
 
-    public void changeLiftMode (boolean pressed) {
-        if (pressed) {
-            tuneLiftMode = !tuneLiftMode;
-        }
-    }
+    public void driveLift2 (double power) {
+        touchSensorEncoderReset();
+        liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-    public void tuneLiftDuringTele (double liftMotorPower1, double liftMotorPower2) {
-        if (tuneLiftMode) {
-            this.liftMotor1.setPower(liftMotorPower1);
-            liftMotor2.setPower(liftMotorPower2);
+        if (Math.abs(power) > 0.1 && !liftBackToZero) {
+            limitLift(power);
+        } else if (Math.abs(power) < 0.1 && !liftBackToZero) {
+            setLiftPower(0);
+        }
+
+        if (liftBackToZero) {
+            liftMotor2.setPower(power);
         }
     }
 
@@ -120,16 +120,23 @@ public class Delivery {
     }
 
     private void limitLift(double power){
-        int limit = 1500;
+//        int limit = 1500;
 
-        if (getLift1Position() > limit && getLift2Position() > limit && power > 0) {
-            power = 0;
-        } else if (getLift1Position() > limit - 150 && getLift2Position() > limit - 150){
-            power *= (limit - getLift1Position()) / 200.0;
-        } else if (getLift1Position() <= 0 && getLift2Position() <= 0 && power > 0){
+//        if (getLift1Position() > limit && getLift2Position() > limit && power > 0) {
+//            power = 0;
+//        } else if (getLift1Position() > limit - 150 && getLift2Position() > limit - 150){
+//            power *= (limit - getLift1Position()) / 200.0;
+//        }
+        if (getLift1Position() <= 0 && getLift2Position() <= 0 && power > 0) {
             power = 0;
         }
         setLiftPower(power);
+    }
+
+    public void liftBackToZero (boolean pressed) {
+        if (pressed) {
+            liftBackToZero = !liftBackToZero;
+        }
     }
 
     //-------------------------------------------------------------------------------------
@@ -151,14 +158,12 @@ public class Delivery {
     //-------------------------------------------------------------------------------------
 
     public void changeDropPosition(boolean pressing) {
-        if (!tuneLiftMode) {
             if (pressing) {
                 dropServo.setPosition(0.4);
             } else {
                 dropServo.setPosition(0.15);
             }
         }
-    }
 
     //-------------------------------------------------------------------------------------
     //                                   Simple Functions
@@ -167,6 +172,8 @@ public class Delivery {
     public void resetEncoders () {
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private void setLiftPower(double power){
@@ -180,10 +187,6 @@ public class Delivery {
 
         liftMotor1.setPower(power * l1Multiplier);
         liftMotor2.setPower(power * l2Multiplier);
-    }
-
-    public boolean getTuneLiftMode () {
-        return tuneLiftMode;
     }
 
     public int getLift1Position() {
@@ -211,5 +214,9 @@ public class Delivery {
     }
     public boolean getTouchSensor2Status () {
         return touchSensor2.isPressed();
+    }
+
+    public boolean getLiftBackToZeroStatus () {
+        return liftBackToZero;
     }
 }

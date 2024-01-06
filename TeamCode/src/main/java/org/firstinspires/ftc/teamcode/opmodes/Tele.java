@@ -46,11 +46,8 @@ public class Tele extends LinearOpMode {
                     gp1.right_stick_x, driveMode);
 
 
-            robot.delivery.changeLiftMode(gp1.b.pressed());
-
-
-            // changes drone mode - right bumper
-            robot.drone.changeDroneMode(gp1.right_bumper.pressed());
+            // launches drone - a button
+            robot.drone.launchDrone(gp1.a.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -68,22 +65,18 @@ public class Tele extends LinearOpMode {
             robot.delivery.changeExtensionLength(gp2.dpad_left.pressed(), gp2.dpad_right.pressed());
 
 
-//            robot.delivery.setExtendPower(gp2.right_stick_y);
-
-
             // drives lift - left joystick, y-axis
-            robot.delivery.driveLift(gp2.left_stick_y);
+            robot.delivery.driveLift1(gp2.left_stick_y);
 
 
-            robot.delivery.tuneLiftDuringTele(gp2.left_stick_y, gp2.right_stick_y);
+            robot.delivery.driveLift2(gp2.right_stick_y);
 
 
             // changes drop servo position - b
             robot.delivery.changeDropPosition(gp2.b.pressing());
 
+            robot.delivery.liftBackToZero(gp2.a.pressed());
 
-            // launches drone - a button
-            robot.drone.launchDrone(gp2.a.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
