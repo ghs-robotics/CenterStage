@@ -31,7 +31,7 @@ public class AutoActionHandler {
         this.timer = new ElapsedTime();
         this.robot = robot;
         this.telemetry = telemetry;
-        actionList.add(new AutoActions(WAIT, robot, new ParamHandler(1)));
+        actionList.add(new AutoActions(WAIT, robot, 0.05));
     }
 
     /**
@@ -59,13 +59,23 @@ public class AutoActionHandler {
         actionList.addAll(actionHandler.getActions());
     }
 
-    /**
-     * @param action the identity of the action (see the public static constant in AutoActions)
-     * @param params any parameters the action needs
-     */
-    public void add(int action, ParamHandler params){
-        actionList.add(new AutoActions(action, robot, params));
+    public void add (int action, int x, int y, double heading){
+        actionList.add(new AutoActions(action, robot, x, y, heading));
     }
+
+    public void add(int action, double value) {
+        actionList.add(new AutoActions(action, robot, value));
+    }
+
+    public void add(int action, int value){
+        actionList.add(new AutoActions(action, robot, value));
+    }
+
+    public void add (int action, double[] pos){
+        actionList.add(new AutoActions(action, robot, pos));
+    }
+
+
 
     /**
      * @param action the identity of the action (see the public static constant in AutoActions)

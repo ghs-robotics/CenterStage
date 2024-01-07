@@ -32,7 +32,15 @@ public class AutoActions {
     private int zone;
     private String description;
 
-    ParamHandler params;
+    double x;
+    double y;
+    double heading; // in degrees
+
+    int intakeLevel;
+    int liftLevel;
+    int outtakeLevel;
+
+    double waitTime;
 
     public AutoActions(int id, Robot robot){
         this.identity = id;
@@ -43,10 +51,31 @@ public class AutoActions {
         setDescription();
     }
 
-    public AutoActions(int id, Robot robot, ParamHandler params){
-        this(id, robot);
-        this.params = params;
+    public AutoActions(int id, Robot r, int x, int y, double heading){
+        this(id, r);
+        this.x = x;
+        this.y = y;
+        this.heading = heading;
     }
+
+    public AutoActions(int id, Robot robot, double value){
+        this(id, robot);
+        if (id == INTAKE)
+            this.intakeLevel = (int) value;
+        if (id == LIFT)
+            this.liftLevel = (int) (value + 100);
+        if (id == WAIT)
+            waitTime = value;
+    }
+
+    public AutoActions (int id, Robot robot, double[] pos){
+        this(id, robot);
+
+        this.x = (int) pos[0];
+        this.y = (int) pos[1];
+        this.heading = pos[2];
+    }
+
 
     /**
      * Driving the rob
@@ -54,13 +83,13 @@ public class AutoActions {
     private void moveTo(){
         resetTimer();
         if (!robot.RED)
-            params.x *= -1;
+            x *= -1;
 
-        robot.getAutoTelemetry();
-//        boolean there = robot.nav.runToPosition(x, params.y, params.heading);
+//        robot.getAutoTelemetry();
+//        boolean there = robot.nav.runToPosition(x, y, heading);
         // testing some stuff
-        boolean there = robot.drive.runToPosition(params.x, params.y);
-        endAction = there || timer.milliseconds() > 5000;
+//        boolean there = robot.drive.runToPosition(x, y);
+        endAction =  timer.milliseconds() > 5000;
     }
 
     private void dropPixels(){
@@ -74,7 +103,7 @@ public class AutoActions {
     }
 
     private void runIntake(){
-        robot.intake.setIntakeHeight(params.intakeLevel);
+        robot.intake.setIntakeHeight(intakeLevel);
 
         resetTimer();
 
@@ -140,7 +169,7 @@ public class AutoActions {
     private void waiting() {
         resetTimer();
 
-        endAction = timer.milliseconds() > (params.waitTime * 1000);
+        endAction = timer.milliseconds() > (waitTime * 1000);
     }
 
     private void shutOffBot(){

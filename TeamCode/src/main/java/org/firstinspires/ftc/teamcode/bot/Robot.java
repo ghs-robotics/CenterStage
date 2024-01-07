@@ -8,9 +8,7 @@ import org.firstinspires.ftc.teamcode.bot.components.Drone;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.drive.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
-import org.firstinspires.ftc.teamcode.bot.components.drive.Drivebase;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
-import org.firstinspires.ftc.teamcode.bot.control.Navigation;
 import org.firstinspires.ftc.teamcode.cv.Camera;
 
 public class Robot {
@@ -20,7 +18,6 @@ public class Robot {
     public Camera cam;
 
     public BallDrive drive;
-    public Navigation nav;
     private Gyro gyro;
 
     public Intake intake;
@@ -46,7 +43,6 @@ public class Robot {
         gyro = new Gyro(hardwareMap);
         drive = new BallDrive(hardwareMap, gyro);
 
-        nav = new Navigation(drive, gyro, telemetry);
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
         drone = new Drone(hardwareMap);
@@ -60,7 +56,6 @@ public class Robot {
      */
     public void init(){
         //init cameras
-        nav.resetNav();
         gyro.resetHeading();
         drive.resetEncoders();
         drive.resetCoords();
@@ -68,18 +63,14 @@ public class Robot {
     }
 
     public void shutOff(){
-        drive.calculateDrivePowers(0,0,0);
-        drive.resetCoords();
         intake.pixelIn(0);
         delivery.driveLift(0);
-        nav.resetNav();
     }
 
     /**
      * tells the robot parts to retrieve the current information from each part to update the robot.
      */
     public void update(){
-        nav.update();
         drive.update();
         telemetry.update();
     }
