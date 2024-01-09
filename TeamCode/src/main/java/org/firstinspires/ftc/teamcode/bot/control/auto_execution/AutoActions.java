@@ -85,11 +85,9 @@ public class AutoActions {
         if (!robot.RED)
             x *= -1;
 
-//        robot.getAutoTelemetry();
 //        boolean there = robot.nav.runToPosition(x, y, heading);
-        // testing some stuff
-//        boolean there = robot.drive.runToPosition(x, y);
-        endAction =  timer.milliseconds() > 5000;
+        boolean there = robot.drive.runToPosition(x, y);
+        endAction = there;//||  timer.milliseconds() > 5000;
     }
 
     private void dropPixels(){

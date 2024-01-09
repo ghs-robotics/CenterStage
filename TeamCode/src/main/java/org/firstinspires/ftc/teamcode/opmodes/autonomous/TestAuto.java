@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.WAIT;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -23,13 +24,13 @@ public class TestAuto extends LinearOpMode {
         // create list of actions to run
 //                0.0, true));
 //        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
-        actionHandler.add(MOVE, 150, 100, 0.0);
+        actionHandler.add(MOVE, 150, 0, 0.0);
+//        actionHandler.add(WAIT, 20);
 
 
-
-
-        telemetry.addLine("queuing actions");
-        telemetry.addLine(actionHandler.getTotalActions() + " total actions");
+//        telemetry.addLine("queuing actions");
+//        telemetry.addLine(actionHandler.getTotalActions() + " total actions");
+        robot.getAutoTelemetry();
 
         actionHandler.init();
         waitForStart();
@@ -37,10 +38,10 @@ public class TestAuto extends LinearOpMode {
 
         while (opModeIsActive()){
             actionHandler.run();
-            actionHandler.status();
             robot.update();
             robot.getAutoTelemetry();
-            telemetry.addData("x error", robot.drive.errorX);
+            telemetry.addLine();
+            actionHandler.status();
             //robot.getAutoTelemetry();
         }
 

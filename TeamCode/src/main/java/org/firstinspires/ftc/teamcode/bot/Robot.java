@@ -18,7 +18,7 @@ public class Robot {
     public Camera cam;
 
     public BallDrive drive;
-    private Gyro gyro;
+    private final Gyro gyro;
 
     public Intake intake;
     public Delivery delivery;
@@ -47,8 +47,6 @@ public class Robot {
         delivery = new Delivery(hardwareMap);
         drone = new Drone(hardwareMap);
 
-
-//        dashboard.startCameraStream(cam.camera1, 0);
     }
 
     /**
@@ -57,12 +55,12 @@ public class Robot {
     public void init(){
         //init cameras
         gyro.resetHeading();
-        drive.resetEncoders();
         drive.resetCoords();
         delivery.resetEncoders();
     }
 
     public void shutOff(){
+        drive.resetCoords();
         intake.pixelIn(0);
         delivery.driveLift(0);
     }
@@ -91,7 +89,11 @@ public class Robot {
         telemetry.addData("Meta Drive Mode On: ", drive.getDriveMode());
         telemetry.addData("x pos: ", drive.getX());
         telemetry.addData("y pos: ", drive.getY());
+        telemetry.addLine();
+        telemetry.addData("x out", drive.getXError());
+        telemetry.addData("y out", drive.getYError());
         telemetry.addData("gyro heading: ", drive.getHeading());
+        telemetry.addLine(String.valueOf(drive.resetCounter));
         telemetry.addLine();
     }
 

@@ -26,6 +26,8 @@ public class PID {
 
     private double targetRange = 0;
 
+    private double error;
+
 
     public PID (double p, double i, double d) {
         P = p;
@@ -88,7 +90,11 @@ public class PID {
     }
 
     public void setTarget (double target) {
+        if (this.target == target)
+            return;
+
         this.target = target;
+        reset();
     }
 
     public double getOutput (double actual, double target) {
@@ -103,7 +109,7 @@ public class PID {
             target = constrain(target, actual - targetRange, actual + targetRange);
         }
 
-        double error = target - actual;
+        error = target - actual;
 
         Poutput = P * error;
 
@@ -197,5 +203,9 @@ public class PID {
             if (I < 0) {I = -I;}
             if (D < 0) {D = -D;}
         }
+    }
+
+    public double getError() {
+        return error;
     }
 }

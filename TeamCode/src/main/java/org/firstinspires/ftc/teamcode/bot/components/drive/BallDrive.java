@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
+import org.firstinspires.ftc.teamcode.bot.control.PID;
 
 public class BallDrive {
     private DcMotor leftDrive;
@@ -29,10 +30,13 @@ public class BallDrive {
     private double deltaL, deltaR, deltaB, deltaH;
     private double lastH;
 
+    private final double MM_PER_TICK = (35 * Math.PI) / 8192;
+
     private PID xPID;
     private PID yPID;
 
-    public double errorX;
+    public double resetCounter;
+    public double error;
 
     public BallDrive(HardwareMap hardwareMap, Gyro gyro) {
 
@@ -48,8 +52,8 @@ public class BallDrive {
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        xPID = new PID();
-        yPID = new PID();
+        xPID = new PID(.5, .2, .1);
+        yPID = new PID(.5, .2, .1);
 
         lastL = 0;
         lastR = 0;
@@ -58,27 +62,45 @@ public class BallDrive {
         this.gyro = gyro;
     }
 
-    public boolean runToPosition(double x, double y){
-        xPID.setTarget(x);
-        yPID.setTarget(y);
-
-        double xPower = xPID.getOutput(x);
-        double yPower = yPID.getOutput(y);
-
-        calculateDrivePowers(xPower, yPower, 0, true);
-
-        return xPID.getError() + yPID.getError() < 100;
-    }
-
-
     public void update(){
         updateValues();
-
-        double arc = (deltaR + deltaL) * .5;
-
-        x += arc * Math.cos(heading + deltaH *.5);
-        y += arc * Math.sin(heading + deltaH *.5);
+        updatePosition();
     }
+
+    private void updatePosition(){
+        double ds = (deltaR + deltaL) * .5;
+
+        double dx1 = ds * Math.cos(deltaH / 2);
+        double dy1 = ds * Math.sin(deltaH / 2);
+
+        double dx2 = deltaB * Math.sin(deltaH / 2);
+        double dy2 = deltaB * Math.cos(deltaH / 2);
+
+        double dy = dx1 * Math.cos(heading) + dx2 * Math.sin(heading);
+        double dx = - dy1 * Math.sin(heading) + dy2 * Math.cos(heading);
+
+        this.y += MM_PER_TICK * dy;
+        this.x += MM_PER_TICK * dx;
+
+    }
+
+    public boolean runToPosition(double targetX, double targetY){
+        xPID.setTarget(targetX);
+        yPID.setTarget(targetY);
+
+        double xPower = xPID.getOutput(this.x);
+        double yPower = yPID.getOutput(this.y);
+
+        // TODO Incorporate PID
+//        if (Math.abs(xPower) > .05)
+//            calculateDrivePowers(xPower, 0, 0, true);
+//        else
+//            calculateDrivePowers(0, yPower, 0, true);
+
+//        calculateDrivePowers(xPower, yPower, 0, true);
+        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 5;
+    }
+
 
     public void calculateDrivePowers(double x, double y, double rot) {
         bp = x;
@@ -101,7 +123,7 @@ public class BallDrive {
         calculateDrivePowers(driveX, driveY, rot);
     }
 
-    public void resetEncoders() {
+    private void resetEncoders() {
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -126,7 +148,18 @@ public class BallDrive {
         x = 0;
         y = 0;
         heading = 0;
+
+        resetCounter++;
     }
+
+    public double getXError(){
+        return xPID.getOutput(x);
+    }
+
+    public double getYError(){
+        return yPID.getOutput(y);
+    }
+
 
     public double getX() {
         return x;
@@ -157,69 +190,5 @@ public class BallDrive {
         lastH = heading;
     }
 
-    private class PID{
-        private double lastError;
-        private double lastIntegral;
 
-        private double error;
-        private double integral;
-        private double derivative;
-
-        private double kp = .6;
-        private double ki = 1.2;
-        private double kd = 0.05;
-        private double bias = 0;
-
-        private double target;
-
-        private ElapsedTime timer;
-
-        private double lastIterationTime;
-
-        PID(double p, double i, double d){
-            this();
-            kp = p;
-            ki = i;
-            kd = d;
-        }
-
-        PID(){
-            timer = new ElapsedTime();
-        }
-
-        double getOutput(double current){
-            double iterationTime = timer.milliseconds() - lastIterationTime;
-            lastIterationTime += iterationTime;
-
-            error = target - current;
-            integral = lastIntegral + error * iterationTime;
-            derivative = (error - lastError) / iterationTime;
-
-            double out = kp * error + ki * integral + kd * derivative + bias;
-
-            lastError = error;
-            lastIntegral = integral;
-
-            return out;
-        }
-
-        double getError(){
-            return error;
-        }
-
-        void setTarget(double target){
-            if (this.target == target)
-                return;
-
-            this.target = target;
-            lastError = 0;
-            lastIntegral = 0;
-            error = 0;
-            integral = 0;
-            derivative = 0;
-            timer.reset();
-            lastIterationTime = 0;
-        }
-
-    }
 }
