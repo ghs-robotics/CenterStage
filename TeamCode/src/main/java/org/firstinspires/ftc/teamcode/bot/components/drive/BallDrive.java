@@ -52,8 +52,8 @@ public class BallDrive {
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        xPID = new PID(.5, .2, .1);
-        yPID = new PID(.5, .2, .1);
+        xPID = new PID(.05, .2, .01);
+        yPID = new PID(.05, .2, .01);
 
         lastL = 0;
         lastR = 0;
