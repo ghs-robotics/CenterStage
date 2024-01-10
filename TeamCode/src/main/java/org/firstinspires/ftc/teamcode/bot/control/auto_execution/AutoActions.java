@@ -91,7 +91,7 @@ public class AutoActions {
 
     private void runLift(){
         // same as intake
-        robot.delivery.driveLiftToPosition(300);
+//        robot.delivery.driveLiftToPosition(300);
         resetTimer();
         endAction = timer.milliseconds() > 750;
     }
@@ -102,7 +102,7 @@ public class AutoActions {
 //            robot.delivery.setExtendPower(-1);
 //        else
 //            robot.delivery.setExtendPower(0);
-        endAction = timer.milliseconds() > 2000;
+                endAction = timer.milliseconds() > 2000;
     }
 
     private void retractDropper(){

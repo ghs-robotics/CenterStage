@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.teamcode.bot.control.PID;
+import org.firstinspires.ftc.teamcode.bot.control.TestPID;
+
 public class Delivery {
     private final DcMotor liftMotor1;
     private final DcMotor liftMotor2;
@@ -25,7 +28,7 @@ public class Delivery {
     public static final double DROPPER_FIRST = 0.5;
     public static final double DROPPER_SECOND = 0.6;
 
-    public boolean liftBackToZero;
+    private final TestPID pid;
 
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
@@ -41,10 +44,10 @@ public class Delivery {
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-//        extendServo.setDirection(DcMotorSimple.Direction.REVERSE);
-
         dropServo.setPosition(0.15);
         extendServo.setPosition(0);
+
+        pid = new TestPID();
     }
 
     //-------------------------------------------------------------------------------------
@@ -56,45 +59,33 @@ public class Delivery {
         return dropServo.getPosition() == targetPos;
     }
 
-    public boolean driveLiftToPosition(int target){
-        if (getLift1Position() < target - 5 || getLift1Position() > target + 5)
-            driveLift1((getLift1Position() - target) / 10.0);
-        else
-            driveLift1(-0.1);
-        return getLift1Position() < target - 5 || getLift1Position() > target + 5;
-    }
+//    public boolean driveLiftToPosition(int target){
+//        if (getLift1Position() < target - 5 || getLift1Position() > target + 5)
+//            driveLift((getLift1Position() - target) / 10.0);
+//        else
+//            driveLift(-0.1);
+//        return getLift1Position() < target - 5 || getLift1Position() > target + 5;
+//    }
 
     //-------------------------------------------------------------------------------------
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
-    public void driveLift1(double power) {
+    public void driveLift(double power1, double power2) {
         touchSensorEncoderReset();
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        if (Math.abs(power) > 0.1 && !liftBackToZero) {
-            limitLift(power);
-        } else if (Math.abs(power) < 0.1 && !liftBackToZero) {
-            setLiftPower(0);
-        }
-
-        if (liftBackToZero) {
-            liftMotor1.setPower(power);
-        }
-    }
-
-    public void driveLift2 (double power) {
-        touchSensorEncoderReset();
         liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        if (Math.abs(power) > 0.1 && !liftBackToZero) {
-            limitLift(power);
-        } else if (Math.abs(power) < 0.1 && !liftBackToZero) {
-            setLiftPower(0);
+        if (getLift1Position() <= 0 && power1 > 0) {
+            liftMotor1.setPower(0);
+        } else {
+            liftMotor1.setPower(power1);
         }
 
-        if (liftBackToZero) {
-            liftMotor2.setPower(power);
+        if (getLift2Position() <= 0 && power2 > 0) {
+            liftMotor2.setPower(0);
+        } else {
+            liftMotor2.setPower(power2);
         }
     }
 
@@ -106,21 +97,6 @@ public class Delivery {
         if (getTouchSensor2Status()) {
             liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-
-
-    }
-
-    private void limitLift(double power){
-        if (getLift1Position() <= 0 && getLift2Position() <= 0 && power > 0) {
-            power = 0;
-        }
-        setLiftPower(power);
-    }
-
-    public void liftBackToZero (boolean pressed) {
-        if (pressed) {
-            liftBackToZero = !liftBackToZero;
         }
     }
 
@@ -161,24 +137,11 @@ public class Delivery {
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    private void setLiftPower(double power){
-        double l1Multiplier = 1;
-        double l2Multiplier = 1;
-
-        if(getLift1Position() - getLift2Position() > 20)
-            l1Multiplier = .5;
-        if (getLift2Position() - getLift1Position() > 20)
-            l2Multiplier = .5;
-
-        liftMotor1.setPower(power * l1Multiplier);
-        liftMotor2.setPower(power * l2Multiplier);
-    }
-
-    public int getLift1Position() {
+    public double getLift1Position() {
         return -liftMotor1.getCurrentPosition();
     }
 
-    public int getLift2Position () {
+    public double getLift2Position () {
         return liftMotor2.getCurrentPosition();
     }
 
@@ -200,9 +163,5 @@ public class Delivery {
 
     public boolean getTouchSensor2Status () {
         return touchSensor2.isPressed();
-    }
-
-    public boolean getLiftBackToZeroStatus () {
-        return liftBackToZero;
     }
 }

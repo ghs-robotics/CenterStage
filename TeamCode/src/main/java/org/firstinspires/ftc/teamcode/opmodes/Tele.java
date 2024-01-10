@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
@@ -11,6 +12,7 @@ public class Tele extends LinearOpMode {
     Robot robot;
      Controller gp1;
     Controller gp2;
+    Delivery deliver;
 
     boolean driveMode;
 
@@ -65,18 +67,12 @@ public class Tele extends LinearOpMode {
             robot.delivery.changeExtensionLength(gp2.dpad_left.pressed(), gp2.dpad_right.pressed());
 
 
-            // drives lift - left joystick, y-axis
-            robot.delivery.driveLift1(gp2.left_stick_y);
 
-            // drives lift - right joystick, y-axis
-            robot.delivery.driveLift2(gp2.right_stick_y);
+            robot.delivery.driveLift(gp2.left_stick_y, gp2.right_stick_y);
 
 
             // changes drop servo position - b
             robot.delivery.changeDropPosition(gp2.b.pressing());
-
-
-            robot.delivery.liftBackToZero(gp2.a.pressed());
 
 
             //-------------------------------------------------------------------------------------

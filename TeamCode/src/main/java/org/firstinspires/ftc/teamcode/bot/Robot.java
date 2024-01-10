@@ -69,7 +69,7 @@ public class Robot {
         drive.calculateDrivePowers(0,0,0);
         drive.resetCoords();
         intake.pixelIn(0);
-        delivery.driveLift1(0);
+        delivery.driveLift(0, 0);
         nav.resetNav();
     }
 
@@ -113,7 +113,6 @@ public class Robot {
         telemetry.addData("lift position 2: ", delivery.getLift2Position());
         telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
-        telemetry.addData("lift to Zero Status:", delivery.getLiftBackToZeroStatus());
         telemetry.addData("touch sensor 1 status", delivery.getTouchSensor1Status());
         telemetry.addData("touch sensor 2 status", delivery.getTouchSensor2Status());
         telemetry.addLine();
