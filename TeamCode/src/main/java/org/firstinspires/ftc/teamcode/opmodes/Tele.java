@@ -68,12 +68,13 @@ public class Tele extends LinearOpMode {
             // drives lift - left joystick, y-axis
             robot.delivery.driveLift1(gp2.left_stick_y);
 
-
+            // drives lift - right joystick, y-axis
             robot.delivery.driveLift2(gp2.right_stick_y);
 
 
             // changes drop servo position - b
             robot.delivery.changeDropPosition(gp2.b.pressing());
+
 
             robot.delivery.liftBackToZero(gp2.a.pressed());
 

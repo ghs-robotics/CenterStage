@@ -51,14 +51,6 @@ public class Delivery {
     //                                   AutoRed Functions
     //-------------------------------------------------------------------------------------
 
-//    public boolean autoRunExtension(double dir, double curMillisecond){
-//        if (curMillisecond < 350){
-//            setExtendPower(dir);
-//        }else
-//            setExtendPower(0);
-//        return curMillisecond > 500;
-//    }
-
     public boolean autoDropPixels(double targetPos){
         dropServo.setPosition(targetPos);
         return dropServo.getPosition() == targetPos;
@@ -120,13 +112,6 @@ public class Delivery {
     }
 
     private void limitLift(double power){
-//        int limit = 1500;
-
-//        if (getLift1Position() > limit && getLift2Position() > limit && power > 0) {
-//            power = 0;
-//        } else if (getLift1Position() > limit - 150 && getLift2Position() > limit - 150){
-//            power *= (limit - getLift1Position()) / 200.0;
-//        }
         if (getLift1Position() <= 0 && getLift2Position() <= 0 && power > 0) {
             power = 0;
         }
@@ -212,6 +197,7 @@ public class Delivery {
     public boolean getTouchSensor1Status () {
         return touchSensor1.isPressed();
     }
+
     public boolean getTouchSensor2Status () {
         return touchSensor2.isPressed();
     }
