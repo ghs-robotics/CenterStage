@@ -60,7 +60,7 @@ public class Robot {
     }
 
     public void shutOff(){
-        drive.resetCoords();
+//        drive.resetCoords();
         intake.pixelIn(0);
         delivery.driveLift(0);
     }
@@ -91,7 +91,6 @@ public class Robot {
         telemetry.addData("y pos: ", drive.getY());
         telemetry.addLine();
         telemetry.addData("x out", drive.getXError());
-        telemetry.addData("y out", drive.getYError());
         telemetry.addData("gyro heading: ", drive.getHeading());
         telemetry.addLine(String.valueOf(drive.resetCounter));
         telemetry.addLine();

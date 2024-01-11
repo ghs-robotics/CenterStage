@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
+import org.firstinspires.ftc.teamcode.bot.control.PID;
 
 public class AutoActions {
     // identities
@@ -42,11 +43,15 @@ public class AutoActions {
 
     double waitTime;
 
+    private PID xPID;
+    private PID yPID;
+
     public AutoActions(int id, Robot robot){
         this.identity = id;
         this.robot = robot;
         timerReset = false;
         timer = new ElapsedTime();
+
 
         setDescription();
     }
@@ -56,8 +61,27 @@ public class AutoActions {
         this.x = x;
         this.y = y;
         this.heading = heading;
-    }
 
+        double[] pid = {.1775, .0016902, .002005};
+        double outPutLimit = 2;
+        double integralLimit = 3650;
+
+        xPID = new PID(pid);
+        yPID = new PID(pid);
+
+        xPID.setOutputLimits(outPutLimit);
+        yPID.setOutputLimits(outPutLimit);
+
+        xPID.setMaxIOutput(integralLimit);
+        yPID.setMaxIOutput(integralLimit);
+
+        if (!robot.RED)
+            this.x *= -1;
+
+        xPID.setTarget(x);
+        yPID.setTarget(y);
+
+    }
     public AutoActions(int id, Robot robot, double value){
         this(id, robot);
         if (id == INTAKE)
@@ -67,26 +91,17 @@ public class AutoActions {
         if (id == WAIT)
             waitTime = value;
     }
-
     public AutoActions (int id, Robot robot, double[] pos){
-        this(id, robot);
-
-        this.x = (int) pos[0];
-        this.y = (int) pos[1];
-        this.heading = pos[2];
+        this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
     }
-
-
     /**
      * Driving the rob
      */
     private void moveTo(){
         resetTimer();
-        if (!robot.RED)
-            x *= -1;
 
 //        boolean there = robot.nav.runToPosition(x, y, heading);
-        boolean there = robot.drive.runToPosition(x, y);
+        boolean there = robot.drive.runToPosition(xPID, yPID);
         endAction = there;//||  timer.milliseconds() > 5000;
     }
 

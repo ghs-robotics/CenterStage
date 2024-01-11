@@ -28,6 +28,9 @@ public class PID {
 
     private double error;
 
+    public PID(double[] pid){
+        this(pid[0], pid[1], pid[2]);
+    }
 
     public PID (double p, double i, double d) {
         P = p;
@@ -157,7 +160,7 @@ public class PID {
     }
 
     public double getOutput (double actual) {
-        return getOutput(lastActual,target);
+        return getOutput(actual,target);
     }
 
     public void reset () {

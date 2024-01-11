@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.bot.components.drive;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.control.PID;
@@ -32,11 +31,8 @@ public class BallDrive {
 
     private final double MM_PER_TICK = (35 * Math.PI) / 8192;
 
-    private PID xPID;
-    private PID yPID;
-
     public double resetCounter;
-    public double error;
+    public double errorX;
 
     public BallDrive(HardwareMap hardwareMap, Gyro gyro) {
 
@@ -52,8 +48,6 @@ public class BallDrive {
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        xPID = new PID(.05, .2, .01);
-        yPID = new PID(.05, .2, .01);
 
         lastL = 0;
         lastR = 0;
@@ -79,16 +73,12 @@ public class BallDrive {
         double dy = dx1 * Math.cos(heading) + dx2 * Math.sin(heading);
         double dx = - dy1 * Math.sin(heading) + dy2 * Math.cos(heading);
 
-        this.y += MM_PER_TICK * dy;
-        this.x += MM_PER_TICK * dx;
-
+        this.y = this.y + MM_PER_TICK * dy;
+        this.x = this.x + MM_PER_TICK * dx;
     }
 
-    public boolean runToPosition(double targetX, double targetY){
-        xPID.setTarget(targetX);
-        yPID.setTarget(targetY);
-
-        double xPower = xPID.getOutput(this.x);
+    public boolean runToPosition(PID xPID, PID yPID){
+        double xPower = -xPID.getOutput(this.x);
         double yPower = yPID.getOutput(this.y);
 
         // TODO Incorporate PID
@@ -97,8 +87,11 @@ public class BallDrive {
 //        else
 //            calculateDrivePowers(0, yPower, 0, true);
 
-//        calculateDrivePowers(xPower, yPower, 0, true);
-        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 5;
+        calculateDrivePowers(xPower, yPower, 0, true);
+
+        errorX = xPID.getError();
+
+        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 2;
     }
 
 
@@ -153,11 +146,7 @@ public class BallDrive {
     }
 
     public double getXError(){
-        return xPID.getOutput(x);
-    }
-
-    public double getYError(){
-        return yPID.getOutput(y);
+        return errorX;
     }
 
 
@@ -190,5 +179,84 @@ public class BallDrive {
         lastH = heading;
     }
 
+
+//    private class PID{
+//        private double lastError;
+//        private double lastIntegral;
+//
+//        private double error;
+//        private double integral;
+//        private double derivative;
+//
+//        private double kp = .6;
+//        private double ki = 1.2;
+//        private double kd = 0.05;
+//        private double bias = 0;
+//
+//        private double target;
+//
+//        private ElapsedTime timer;
+//
+//        private double lastIterationTime;
+//
+//        private double maxIntegral;
+//
+//        PID(double p, double i, double d){
+//            this();
+//            kp = p;
+//            ki = i;
+//            kd = d;
+//        }
+//
+//        PID(){
+//            timer = new ElapsedTime();
+//        }
+//
+//        double getOutput(double current){
+//            double iterationTime = timer.milliseconds() - lastIterationTime;
+//            lastIterationTime += iterationTime;
+//
+//            error = target - current;
+//            integral = lastIntegral + error * iterationTime;
+//            derivative = (error - lastError) / iterationTime;
+//
+//            constrain();
+//
+//            double out = (kp * error) + (ki * integral) + (kd * derivative) + bias;
+//
+//            lastError = error;
+//            lastIntegral = integral;
+//
+//            return out;
+//        }
+//
+//        double getError(){
+//            return error;
+//        }
+//
+//        void setMaxError(double max){
+//            maxIntegral = max;
+//        }
+//
+//        void constrain(){
+//            if (Math.abs(integral) > maxIntegral)
+//                integral = maxIntegral * (integral / Math.abs(integral));
+//        }
+//
+//        void setTarget(double target){
+//            if (this.target == target)
+//                return;
+//
+//            this.target = target;
+//            lastError = 0;
+//            lastIntegral = 0;
+//            error = 0;
+//            integral = 0;
+//            derivative = 0;
+//            timer.reset();
+//            lastIterationTime = 0;
+//        }
+//
+//    }
 
 }

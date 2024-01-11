@@ -24,7 +24,14 @@ public class TestAuto extends LinearOpMode {
         // create list of actions to run
 //                0.0, true));
 //        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
-        actionHandler.add(MOVE, 150, 0, 0.0);
+//        actionHandler.add(MOVE, 50, 50, 0.0);
+//        actionHandler.add(MOVE, 0, 50, 0.0);
+//        actionHandler.add(MOVE, 0, 0, 0.0);
+        actionHandler.add(MOVE, 250, 0, 0.0);
+        actionHandler.add(WAIT, 0.01);
+        actionHandler.add(MOVE, 50, 0, 0.0);
+        actionHandler.add(WAIT, 1);
+        actionHandler.add(MOVE, 0, 0, 0.0);
 //        actionHandler.add(WAIT, 20);
 
 
