@@ -115,90 +115,73 @@ public class TeamPropPipeline extends OpenCvPipeline {
 //        Core.inRange(hsv, lightRange, darkRange, thresh);
         Core.inRange(hsv, firstFilterLower, firstFilterUpper, thresh);
 
-        if (FILTER || CANNY) {
-            Core.bitwise_and(hsv, hsv, masked, thresh);
+        Core.bitwise_and(hsv, hsv, masked, thresh);
 
-            Scalar avg = Core.mean(masked, thresh);
+        Scalar avg = Core.mean(masked, thresh);
 
-            masked.convertTo(scaledMask, -1, 150 / avg.val[1], 0);
+        masked.convertTo(scaledMask, -1, 150 / avg.val[1], 0);
+        Core.inRange(scaledMask, strictLowerFilter, strictUpperFilter, scaledThresh);
 
-            Scalar strictLowerHSV = new Scalar(STRICT_LOWER_H, STRICT_LOWER_S, STRICT_LOWER_V);
-            Scalar strictHighHSV = new Scalar(STRICT_UPPER_H, STRICT_UPPER_S, STRICT_UPPER_V);
+        Core.bitwise_and(hsv, hsv, finalMat, scaledThresh);
 
-//            Core.inRange(scaledMask, strictLowerHSV, strictHighHSV, scaledThresh);
-            Core.inRange(scaledMask, strictLowerFilter, strictUpperFilter, scaledThresh);
+        Imgproc.Canny(finalMat, edges, 100, 200);
 
-            Core.bitwise_and(hsv, hsv, finalMat, scaledThresh);
 
+        //contours, apply post processing to information
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
+        //find contours, input scaledThresh because it has hard edges
+        Imgproc.findContours(scaledThresh, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+
+        Rect[] boundingBox = new Rect[contours.size()];
+        MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
+
+        for (int i = 0; i < contours.size(); i++){
+            contoursPoly[i] = new MatOfPoint2f();
+            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 2, true);
+            boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
         }
 
-        if (CANNY) {
-            Imgproc.Canny(finalMat, edges, 100, 200);
+        double xLeft = RES_WIDTH / 3.5;
+        double xRight = RES_WIDTH * 1.9 / 3;
 
+        int zone = 0;
+        int zone1Counter = 0;
+        int zone2Counter = 0;
+        int zone3Counter = 0;
 
-            //contours, apply post processing to information
-            List<MatOfPoint> contours = new ArrayList<>();
-            Mat hierarchy = new Mat();
-            //find contours, input scaledThresh because it has hard edges
-            Imgproc.findContours(scaledThresh, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-
-
-            Rect[] boundingBox = new Rect[contours.size()];
-            MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
-
-            for (int i = 0; i < contours.size(); i++){
-                contoursPoly[i] = new MatOfPoint2f();
-                Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 2, true);
-                boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
-            }
-
-            double xLeft = RES_WIDTH / 3.5;
-            double xRight = RES_WIDTH * 1.9 / 3;
-
-            int zone = 0;
-            int zone1Counter = 0;
-            int zone2Counter = 0;
-            int zone3Counter = 0;
-
-            for (int i = 0; i != boundingBox.length; i++){
-                if (boundingBox[i].x < xLeft)
-                    zone1Counter++;
-                else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight)
-                    zone2Counter++;
-                else
-                    zone3Counter++;
-
-                Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
-            }
-
-            z1Pixels = zone1Counter;
-            z2Pixels = zone2Counter;
-            z3Pixels = zone3Counter;
-
-            if (zone1Counter > zone2Counter && zone1Counter > zone3Counter)
-                zone = 1;
-            else if (zone2Counter > zone3Counter)
-                zone = 2;
+        for (int i = 0; i != boundingBox.length; i++){
+            if (boundingBox[i].x < xLeft)
+                zone1Counter++;
+            else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight)
+                zone2Counter++;
             else
-                zone = 3;
+                zone3Counter++;
+
+            Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
+        }
+
+        z1Pixels = zone1Counter;
+        z2Pixels = zone2Counter;
+        z3Pixels = zone3Counter;
+
+        if (zone1Counter > zone2Counter && zone1Counter > zone3Counter)
+            zone = 1;
+        else if (zone2Counter > zone3Counter)
+            zone = 2;
+        else
+            zone = 3;
 
 //            if (timer.milliseconds() < 1000)
-            SPIKE_ZONE = zone;
+        SPIKE_ZONE = zone;
 
-            Rect left = new Rect(1, 1, (int) xLeft, RES_HEIGHT);
-            Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), RES_HEIGHT);
-            Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 3);
-            Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 3);
+        Rect left = new Rect(1, 1, (int) xLeft, RES_HEIGHT);
+        Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), RES_HEIGHT);
+        Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 3);
+        Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 3);
 
-        }
-
-        input.release();
-        if (CANNY)
-            scaledThresh.copyTo(input);
-        else if (FILTER)
-            scaledThresh.copyTo(input);
-        else
-            thresh.copyTo(input);
+        thresh.copyTo(input);
 
 
 

@@ -62,12 +62,11 @@ public class AutoActions {
         this.y = y;
         this.heading = heading;
 
-        double[] pid = {.1775, .0016902, .002005};
         double outPutLimit = 2;
         double integralLimit = 3650;
 
-        xPID = new PID(pid);
-        yPID = new PID(pid);
+        xPID = new PID(.152, .00162824, .001674);
+        yPID = new PID(.152, .00162824, .001674);
 
         xPID.setOutputLimits(outPutLimit);
         yPID.setOutputLimits(outPutLimit);

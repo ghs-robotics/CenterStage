@@ -158,19 +158,23 @@ public class Pipeline extends OpenCvPipeline {
             }
 
             double xLeft = RES_WIDTH / 3.5;
-            double xRight = RES_WIDTH * 1.96 / 3;
+            double xRight = RES_WIDTH * 2.1 / 3;
 
             int zone = 0;
             int zone1Counter = 0;
             int zone2Counter = 0;
             int zone3Counter = 0;
 
+
             for (int i = 0; i != boundingBox.length; i++){
-                if (boundingBox[i].x < xLeft)
+                boolean isBox = boundingBox[i].width < 4 && boundingBox[i].height < 8;
+
+                if (boundingBox[i].x < xLeft && isBox)
                     zone1Counter++;
-                else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight)
+                else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight
+                        && isBox)
                     zone2Counter++;
-                else
+                else if (isBox)
                     zone3Counter++;
 
                 Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
@@ -192,9 +196,10 @@ public class Pipeline extends OpenCvPipeline {
 
             Rect left = new Rect(1, 1, (int) xLeft, RES_HEIGHT);
             Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), RES_HEIGHT);
-            Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 3);
-            Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 3);
+            Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 2);
+            Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 2);
 
+            Core.bitwise_and(hsv, hsv, finalMat, scaledThresh);
         }
 
         input.release();

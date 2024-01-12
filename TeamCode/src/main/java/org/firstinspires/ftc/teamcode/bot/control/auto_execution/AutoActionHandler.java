@@ -155,7 +155,7 @@ public class AutoActionHandler {
      * Prints the current step in the AutoRed and gives an idea of how complete the auto is.
      */
     public void status(){
-        int currentStep = getTotalActions() - actionList.size() + 1;
+        int currentStep = totalActions - actionList.size() + 1;
 
         if (current.getIdentity() != AutoActions.DONE) {
             telemetry.addLine(currentStep + " of " + totalActions + " actions");

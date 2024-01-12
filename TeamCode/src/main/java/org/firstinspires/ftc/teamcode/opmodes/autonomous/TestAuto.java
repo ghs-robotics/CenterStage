@@ -32,6 +32,10 @@ public class TestAuto extends LinearOpMode {
         actionHandler.add(MOVE, 50, 0, 0.0);
         actionHandler.add(WAIT, 1);
         actionHandler.add(MOVE, 0, 0, 0.0);
+        actionHandler.add(WAIT, 3);
+        actionHandler.add(MOVE, 0, 200, 0.0);
+        actionHandler.add(WAIT, 3);
+        actionHandler.add(MOVE, 0, 0, 0.0);
 //        actionHandler.add(WAIT, 20);
 
 

@@ -25,14 +25,14 @@ public class CVConstants {
     public static int H_STRICT_UPPER_RED = 140;
     public static int H_STRICT_LOWER_RED = 100;
     public static int S_STRICT_UPPER_RED = 255;
-    public static int S_STRICT_LOWER_RED = 70;
+    public static int S_STRICT_LOWER_RED = 50;
     public static int V_STRICT_UPPER_RED = 255;
-    public static int V_STRICT_LOWER_RED = 70;
+    public static int V_STRICT_LOWER_RED = 40;
 
     public static int H_FIRST_UPPER_RED = 125;
     public static int H_FIRST_LOWER_RED = 100;
     public static int S_FIRST_UPPER_RED = 255;
-    public static int S_FIRST_LOWER_RED = 70;
+    public static int S_FIRST_LOWER_RED = 50;
     public static int V_FIRST_UPPER_RED = 255;
-    public static int V_FIRST_LOWER_RED = 70;
+    public static int V_FIRST_LOWER_RED = 40;
 }
