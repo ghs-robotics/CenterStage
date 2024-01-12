@@ -63,15 +63,15 @@ public class AutoActions {
         endAction = there || timer.milliseconds() > 5000;
     }
 
-    private void dropPixels(){
-        resetTimer();
-
-        robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
-        if (timer.milliseconds() > 700)
-            robot.delivery.autoDropPixels(Delivery.DROPPER_INTAKING);
-
-        endAction = timer.milliseconds() > 1000;
-    }
+//    private void dropPixels(){
+//        resetTimer();
+//
+//        robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
+//        if (timer.milliseconds() > 700)
+//            robot.delivery.autoDropPixels(Delivery.DROPPER_INTAKING);
+//
+//        endAction = timer.milliseconds() > 1000;
+//    }
 
     private void runIntake(){
         robot.intake.setIntakeHeight(params.intakeLevel);
@@ -180,9 +180,9 @@ public class AutoActions {
             case WAIT:
                 waiting();
                 break;
-            case DROP:
-                dropPixels();
-                break;
+//            case DROP:
+//                dropPixels();
+//                break;
             case EXTEND:
                 extendDropper();
                 break;

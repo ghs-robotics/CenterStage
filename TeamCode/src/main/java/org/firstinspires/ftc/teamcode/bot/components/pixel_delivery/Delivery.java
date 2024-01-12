@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.teamcode.bot.control.PID;
-import org.firstinspires.ftc.teamcode.bot.control.TestPID;
+import org.firstinspires.ftc.teamcode.bot.control.LiftPID;
 
 public class Delivery {
     private final DcMotor liftMotor1;
@@ -22,13 +21,11 @@ public class Delivery {
 
     private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
 
+
     private int extendLvl = 90;
 
-    public static final double DROPPER_INTAKING = 0.1;
-    public static final double DROPPER_FIRST = 0.5;
-    public static final double DROPPER_SECOND = 0.6;
-
-    private final TestPID pid;
+    private boolean liftBackToZero = false;
+    private final LiftPID pid;
 
     public Delivery (HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotor.class, "lift1");
@@ -47,7 +44,7 @@ public class Delivery {
         dropServo.setPosition(0.15);
         extendServo.setPosition(0);
 
-        pid = new TestPID();
+        pid = new LiftPID();
     }
 
     //-------------------------------------------------------------------------------------
@@ -76,32 +73,28 @@ public class Delivery {
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        if (getLift1Position() <= 0 && power1 > 0) {
+        if (liftBackToZero) {
+            liftMotor1.setPower(power1);
+            liftMotor2.setPower(power2);
+        }
+
+        if (getLift1Position() <= 0 && power1 > 0 && !liftBackToZero) {
             liftMotor1.setPower(0);
         } else {
             liftMotor1.setPower(power1);
         }
 
-        if (getLift2Position() <= 0 && power2 > 0) {
+        power2 = pid.PID(liftMotor1.getCurrentPosition(), liftMotor2.getCurrentPosition());
+
+        if (getLift2Position() <= 0 && power2 > 0 && !liftBackToZero) {
             liftMotor2.setPower(0);
         } else {
             liftMotor2.setPower(power2);
         }
     }
 
-    public void touchSensorEncoderReset () {
-        if (getTouchSensor1Status()) {
-            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        if (getTouchSensor2Status()) {
-            liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-    }
-
     //-------------------------------------------------------------------------------------
-    //                                   Extension Functions
+    //                                   Outtake Functions
     //-------------------------------------------------------------------------------------
 
     public void changeExtensionLength (boolean decrease, boolean increase) {
@@ -113,10 +106,6 @@ public class Delivery {
         }
         setExtensionPosition();
     }
-
-    //-------------------------------------------------------------------------------------
-    //                                   Drop Functions
-    //-------------------------------------------------------------------------------------
 
     public void changeDropPosition(boolean pressing) {
             if (pressing) {
@@ -137,6 +126,33 @@ public class Delivery {
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void touchSensorEncoderReset () {
+        if (getTouchSensor1Status()) {
+            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        if (getTouchSensor2Status()) {
+            liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+    }
+
+    public boolean getTouchSensor1Status () {
+        return touchSensor1.isPressed();
+    }
+
+    public void setLiftBackToZero (boolean pressed) {
+        liftBackToZero = !liftBackToZero;
+    }
+
+    public boolean getTouchSensor2Status () {
+        return touchSensor2.isPressed();
+    }
+
+    public boolean getLiftBackToZeroStatus () {
+        return liftBackToZero;
+    }
+
     public double getLift1Position() {
         return -liftMotor1.getCurrentPosition();
     }
@@ -145,23 +161,15 @@ public class Delivery {
         return liftMotor2.getCurrentPosition();
     }
 
-    private void setExtensionPosition () {
-        extendServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
-    }
-
     public double getExtensionPosition () {
         return extendServo.getPosition();
     }
 
+    private void setExtensionPosition () {
+        extendServo.setPosition(extendServoPos[Math.abs(extendLvl % extendServoPos.length)]);
+    }
+
     public double getDropPosition () {
         return dropServo.getPosition();
-    }
-
-    public boolean getTouchSensor1Status () {
-        return touchSensor1.isPressed();
-    }
-
-    public boolean getTouchSensor2Status () {
-        return touchSensor2.isPressed();
     }
 }

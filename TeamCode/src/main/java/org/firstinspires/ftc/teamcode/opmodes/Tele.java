@@ -74,6 +74,8 @@ public class Tele extends LinearOpMode {
             // changes drop servo position - b
             robot.delivery.changeDropPosition(gp2.b.pressing());
 
+            robot.delivery.setLiftBackToZero(gp2.a.pressed());
+
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY

@@ -89,7 +89,6 @@ public class Robot {
         positionTelemetry();
         intakeTelemetry();
         deliveryTelemetry();
-        droneTelemetry();
     }
 
     private void positionTelemetry(){
@@ -109,18 +108,13 @@ public class Robot {
 
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
+        telemetry.addData("lift back to zero status: ", delivery.getLiftBackToZeroStatus());
         telemetry.addData("lift position 1: ", delivery.getLift1Position());
         telemetry.addData("lift position 2: ", delivery.getLift2Position());
         telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
         telemetry.addData("touch sensor 1 status", delivery.getTouchSensor1Status());
         telemetry.addData("touch sensor 2 status", delivery.getTouchSensor2Status());
-        telemetry.addLine();
-    }
-
-    private void droneTelemetry () {
-        telemetry.addLine("Drone System Telemetry");
-        telemetry.addData("Drone Mode Status: ", drone.getDroneMode());
         telemetry.addLine();
     }
 }
