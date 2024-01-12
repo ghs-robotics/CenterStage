@@ -2,6 +2,10 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.WAIT;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.Position.BACK_DROP;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.Position.CENTER_SPIKE;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.Position.LEFT_SPIKE;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.Position.RIGHT_SPIKE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -25,19 +29,19 @@ public class AutoRed extends LinearOpMode {
         // create list of actions to run
 //                0.0, true));
         //left
-        actionHandler.add(MOVE, -660, 0, 0.0);
+        actionHandler.add(MOVE, LEFT_SPIKE);
         actionHandler.add(WAIT, 3);
 
         //center
-        actionHandler.add(MOVE, -900, 0, 0.0);
+        actionHandler.add(MOVE, CENTER_SPIKE);
         actionHandler.add(WAIT, 3);
 
         // right
-        actionHandler.add(MOVE, -660, 490, 0.0);
+        actionHandler.add(MOVE, RIGHT_SPIKE);
         actionHandler.add(WAIT, 3);
 
         //backboard
-        actionHandler.add(MOVE, -660, -670, 0.0);
+        actionHandler.add(MOVE, BACK_DROP);
 //        actionHandler.add(MOVE, 0, 200, 0.0);
 //        actionHandler.add(WAIT, 3);
 //        actionHandler.add(MOVE, 0, 0, 0.0);

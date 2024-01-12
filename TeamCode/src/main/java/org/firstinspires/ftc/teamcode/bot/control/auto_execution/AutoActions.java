@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
-import org.firstinspires.ftc.teamcode.bot.control.PID;
+import org.firstinspires.ftc.teamcode.bot.control.NavigationPID;
 
 public class AutoActions {
     // identities
@@ -43,8 +42,8 @@ public class AutoActions {
 
     double waitTime;
 
-    private PID xPID;
-    private PID yPID;
+    private NavigationPID xPID;
+    private NavigationPID yPID;
 
     public AutoActions(int id, Robot robot){
         this.identity = id;
@@ -65,8 +64,8 @@ public class AutoActions {
         double outPutLimit = 2;
         double integralLimit = 3650;
 
-        xPID = new PID(.152, .00162824, .001674);
-        yPID = new PID(.152, .00162824, .001674);
+        xPID = new NavigationPID(.152, .00162824, .001674);
+        yPID = new NavigationPID(.152, .00162824, .001674);
 
         xPID.setOutputLimits(outPutLimit);
         yPID.setOutputLimits(outPutLimit);

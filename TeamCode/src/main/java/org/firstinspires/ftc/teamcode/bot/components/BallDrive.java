@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.bot.components.drive;
+package org.firstinspires.ftc.teamcode.bot.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
-import org.firstinspires.ftc.teamcode.bot.control.PID;
+import org.firstinspires.ftc.teamcode.bot.control.NavigationPID;
 
 public class BallDrive {
     private DcMotor leftDrive;
@@ -77,7 +77,7 @@ public class BallDrive {
         this.x = this.x + MM_PER_TICK * dx;
     }
 
-    public boolean runToPosition(PID xPID, PID yPID){
+    public boolean runToPosition(NavigationPID xPID, NavigationPID yPID){
         double xPower = -xPID.getOutput(this.x);
         double yPower = yPID.getOutput(this.y);
 
