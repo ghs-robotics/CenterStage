@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DELIVER;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.INTAKE;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.PLACE;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.PLACE_PIXEL;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.RETRACT;
 import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
 
@@ -29,7 +28,7 @@ public class AutoPresets {
 //    static int pixelStackX = 3 * TICKS_PER_TILE_X + 20;
 //    static int pixelStackY = (int) (1.2 * TICKS_PER_TILE_Y);
 
-    public static AutoActionHandler getRouteA(Robot r, Telemetry t){
+    public static AutoActionHandler getFirstRoute(Robot r, Telemetry t){
         routeA = new AutoActionHandler(r, t);
 //        routeA.add(MOVE, 20, (int) (-2.3 * TICKS_PER_TILE_Y), 0.0);
         routeA.add(LIFT, 100);
@@ -39,6 +38,43 @@ public class AutoPresets {
         routeA.add(LIFT, 0.0);
         return routeA;
     }
+
+
+    public static AutoActionHandler getLeftSpikePath(Robot r, Telemetry t){
+        beginning = new AutoActionHandler(r, t);
+        beginning.add(MOVE, -660, 0, 0.0);
+        beginning.add(PLACE_PIXEL);
+        //backboard
+        beginning.add(MOVE, -660, -690, 0.0);
+
+        return beginning;
+    }
+
+    public static AutoActionHandler getCenterSpikePath(Robot r, Telemetry t){
+        beginning = new AutoActionHandler(r, t);
+        //center spike
+        beginning.add(MOVE, -900, 0, 0.0);
+        beginning.add(PLACE_PIXEL);
+        //backboard
+        beginning.add(MOVE, -660, -690, 0.0);
+
+
+        return beginning;
+    }
+
+    public static AutoActionHandler getRightSpikePath(Robot r, Telemetry t){
+        beginning = new AutoActionHandler(r, t);
+
+        // right
+        beginning.add(MOVE, -660, 490, 0.0);
+        beginning.add(PLACE_PIXEL);
+        //backboard
+        beginning.add(MOVE, -660, -690, 0.0);
+
+
+        return beginning;
+    }
+
 
     public static AutoActionHandler getBeginningNearBackDrop(Robot r, Telemetry t){
         beginning = new AutoActionHandler(r, t);
@@ -57,7 +93,7 @@ public class AutoPresets {
         }
         beginning.add(MOVE, (int) spikePos[0], 0, 0.0);
 //        beginning.add(MOVE, (spikePos));
-        beginning.add(PLACE);
+        beginning.add(PLACE_PIXEL);
         beginning.add(MOVE,(int) backDropPos[0], (int) spikePos[1], 0.0);
 //        beginning.add(MOVE, backDropPos));
         beginning.add(DELIVER);

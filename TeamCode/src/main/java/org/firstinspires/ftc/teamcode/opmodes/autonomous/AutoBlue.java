@@ -20,7 +20,7 @@ public class AutoBlue extends LinearOpMode {
 
         // create list of actions to run
 //        actionHandler.add(AutoPresets.getBeginningNearBackDrop(robot, telemetry));
-        actionHandler.add(AutoPresets.getRouteA(robot, telemetry));
+        actionHandler.add(AutoPresets.getFirstRoute(robot, telemetry));
 //        actionHandler.add(RETRACT);
 
 

@@ -13,7 +13,7 @@ public class AutoActions {
     public static final int MOVE = 0;
     public static final int INTAKE = 1;
     public static final int LIFT = 2;
-    public static final int PLACE = 3; // spits it out the intake
+    public static final int PLACE_PIXEL = 3; // spits it out the intake
     public static final int ALIGN = 4;
     public static final int WAIT = 5;
     public static final int DROP = 6; // drops it out of the
@@ -212,7 +212,7 @@ public class AutoActions {
             case LIFT:
                 runLift();
                 break;
-            case PLACE:
+            case PLACE_PIXEL:
                 placePixel(); //spit it out the intake
                 break;
             case ALIGN:
@@ -258,7 +258,7 @@ public class AutoActions {
             case LIFT:
                 description = "Delivering pixel to backdrop";
                 break;
-            case PLACE:
+            case PLACE_PIXEL:
                 description = "Placing pixel on spike mark";
                 break;
             case ALIGN:
