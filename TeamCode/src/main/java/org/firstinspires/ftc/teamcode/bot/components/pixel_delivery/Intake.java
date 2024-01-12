@@ -45,7 +45,7 @@ public class Intake {
 
     public void pixelIn (double power) {
             intakeMotor.setPower(power / 2);
-            conveyorBeltMotor.setPower(power);
+            conveyorBeltMotor.setPower(-power);
         }
 
     public void changeIntakeHeight(boolean decrease, boolean increase) {

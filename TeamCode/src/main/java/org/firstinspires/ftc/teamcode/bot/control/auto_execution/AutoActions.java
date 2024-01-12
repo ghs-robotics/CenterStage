@@ -104,15 +104,15 @@ public class AutoActions {
         endAction = there;//||  timer.milliseconds() > 5000;
     }
 
-    private void dropPixels(){
-        resetTimer();
-
-        robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
-        if (timer.milliseconds() > 700)
-            robot.delivery.autoDropPixels(Delivery.DROPPER_INTAKING);
-
-        endAction = timer.milliseconds() > 1000;
-    }
+//    private void dropPixels(){
+//        resetTimer();
+//
+//        robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
+//        if (timer.milliseconds() > 700)
+//            robot.delivery.autoDropPixels(Delivery.DROPPER_INTAKING);
+//
+//        endAction = timer.milliseconds() > 1000;
+//    }
 
     private void runIntake(){
         robot.intake.setIntakeHeight(intakeLevel);
@@ -132,7 +132,7 @@ public class AutoActions {
 
     private void runLift(){
         // same as intake
-        robot.delivery.driveLiftToPosition(300);
+//        robot.delivery.driveLiftToPosition(300);
         resetTimer();
         endAction = timer.milliseconds() > 750;
     }
@@ -140,16 +140,16 @@ public class AutoActions {
     private void extendDropper(){
         resetTimer();
         if(timer.milliseconds() < 1400)
-            robot.delivery.setExtendPower(-1);
-        else
-            robot.delivery.setExtendPower(0);
-        endAction = timer.milliseconds() > 2000;
+//            robot.delivery.setExtendPower(-1);
+//        else
+//            robot.delivery.setExtendPower(0);
+                endAction = timer.milliseconds() > 2000;
     }
 
     private void retractDropper(){
         resetTimer();
 
-        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
+//        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
     }
 
     /**
@@ -221,9 +221,9 @@ public class AutoActions {
             case WAIT:
                 waiting();
                 break;
-            case DROP:
-                dropPixels();
-                break;
+//            case DROP:
+//                dropPixels();
+//                break;
             case EXTEND:
                 extendDropper();
                 break;
