@@ -81,7 +81,6 @@ public class BallDrive {
         double xPower = -xPID.getOutput(this.x);
         double yPower = yPID.getOutput(this.y);
 
-        // TODO Incorporate PID
 //        if (Math.abs(xPower) > .05)
 //            calculateDrivePowers(xPower, 0, 0, true);
 //        else
