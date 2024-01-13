@@ -21,7 +21,6 @@ public class Delivery {
 
     private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
 
-
     private int extendLvl = 90;
 
     private boolean liftBackToZero = false;
@@ -80,14 +79,18 @@ public class Delivery {
 
         if (getLift1Position() <= 0 && power1 > 0 && !liftBackToZero) {
             liftMotor1.setPower(0);
+        } else if (getLift1Position() < getLift2Position() - 150 && !liftBackToZero) {
+            liftMotor1.setPower(pid.PID(liftMotor2.getCurrentPosition(),
+                    liftMotor1.getCurrentPosition()));
         } else {
             liftMotor1.setPower(power1);
         }
 
-        power2 = pid.PID(liftMotor1.getCurrentPosition(), liftMotor2.getCurrentPosition());
-
         if (getLift2Position() <= 0 && power2 > 0 && !liftBackToZero) {
             liftMotor2.setPower(0);
+        } else if (getLift2Position() < getLift1Position() - 150 && !liftBackToZero) {
+            liftMotor2.setPower(pid.PID(liftMotor1.getCurrentPosition(),
+                    liftMotor2.getCurrentPosition()));
         } else {
             liftMotor2.setPower(power2);
         }
@@ -142,7 +145,9 @@ public class Delivery {
     }
 
     public void setLiftBackToZero (boolean pressed) {
-        liftBackToZero = !liftBackToZero;
+        if (pressed) {
+            liftBackToZero = !liftBackToZero;
+        }
     }
 
     public boolean getTouchSensor2Status () {
