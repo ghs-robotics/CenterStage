@@ -15,7 +15,7 @@ public class AutoActions {
     public static final int PLACE_PIXEL = 3; // spits it out the intake
     public static final int ALIGN = 4;
     public static final int WAIT = 5;
-    public static final int DROP = 6; // drops it out of the
+    public static final int DROP = 6; // drops it out of the outtake
     public static final int EXTEND = 7;
     public static final int RETRACT = 8;
     public static final int DETECT = 9;
@@ -44,6 +44,7 @@ public class AutoActions {
 
     private NavigationPID xPID;
     private NavigationPID yPID;
+    private NavigationPID liftPID;
 
     public AutoActions(int id, Robot robot){
         this.identity = id;
@@ -54,7 +55,6 @@ public class AutoActions {
 
         setDescription();
     }
-
     public AutoActions(int id, Robot r, int x, int y, double heading){
         this(id, r);
         this.x = x;
@@ -84,9 +84,18 @@ public class AutoActions {
         this(id, robot);
         if (id == INTAKE)
             this.intakeLevel = (int) value;
-        if (id == LIFT)
+        if (id == LIFT) {
             this.liftLevel = (int) (value + 100);
-        if (id == WAIT)
+            double outPutLimit = 2;
+            double integralLimit = 2500;
+
+            //todo tune values here - run test auto
+            liftPID = new NavigationPID(.152, .00162824, .001674);
+            liftPID.setOutputLimits(outPutLimit);
+            liftPID.setMaxIOutput(integralLimit);
+            liftPID.setTarget(liftLevel);
+
+        }if (id == WAIT)
             waitTime = value;
     }
     public AutoActions (int id, Robot robot, double[] pos){
@@ -131,7 +140,7 @@ public class AutoActions {
 
     private void runLift(){
         // same as intake
-//        robot.delivery.driveLiftToPosition(300);
+        robot.delivery.driveLiftToPosition(liftPID);
         resetTimer();
         endAction = timer.milliseconds() > 750;
     }

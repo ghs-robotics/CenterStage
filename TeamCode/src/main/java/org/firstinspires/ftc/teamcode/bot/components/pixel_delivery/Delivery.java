@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.bot.control.LiftPID;
+import org.firstinspires.ftc.teamcode.bot.control.NavigationPID;
 
 public class Delivery {
     private final DcMotor liftMotor1;
@@ -56,13 +57,13 @@ public class Delivery {
         return dropServo.getPosition() == targetPos;
     }
 
-//    public boolean driveLiftToPosition(int target){
-//        if (getLift1Position() < target - 5 || getLift1Position() > target + 5)
-//            driveLift((getLift1Position() - target) / 10.0);
-//        else
-//            driveLift(-0.1);
-//        return getLift1Position() < target - 5 || getLift1Position() > target + 5;
-//    }
+    public boolean driveLiftToPosition(NavigationPID pid){
+        double power = pid.getOutput(this.getLift1Position());
+
+        driveLift(power, 0);
+
+        return Math.abs(pid.getError()) < 75;
+    }
 
     //-------------------------------------------------------------------------------------
     //                                   Lift Functions
