@@ -77,22 +77,24 @@ public class Delivery {
             liftMotor2.setPower(power2);
         }
 
-        if (getLift1Position() <= 0 && power1 > 0 && !liftBackToZero) {
-            liftMotor1.setPower(0);
-        } else if (getLift1Position() < getLift2Position() - 150 && !liftBackToZero) {
-            liftMotor1.setPower(pid.PID(liftMotor2.getCurrentPosition(),
-                    liftMotor1.getCurrentPosition()));
-        } else {
-            liftMotor1.setPower(power1);
-        }
+        if (!liftBackToZero) {
+            if (getLift1Position() <= 0 && power1 > 0) {
+                liftMotor1.setPower(0);
+            } else if (getLift1Position() < getLift2Position() - 100) {
+                liftMotor1.setPower(-pid.PID(liftMotor2.getCurrentPosition(),
+                        liftMotor1.getCurrentPosition()));
+            } else {
+                liftMotor1.setPower(power1);
+            }
 
-        if (getLift2Position() <= 0 && power2 > 0 && !liftBackToZero) {
-            liftMotor2.setPower(0);
-        } else if (getLift2Position() < getLift1Position() - 150 && !liftBackToZero) {
-            liftMotor2.setPower(pid.PID(liftMotor1.getCurrentPosition(),
-                    liftMotor2.getCurrentPosition()));
-        } else {
-            liftMotor2.setPower(power2);
+            if (getLift2Position() <= 0 && power1 > 0 && !liftBackToZero) {
+                liftMotor2.setPower(0);
+            } else if (getLift2Position() < getLift1Position() - 100) {
+                liftMotor1.setPower(-pid.PID(liftMotor1.getCurrentPosition(),
+                        liftMotor2.getCurrentPosition()));
+            } else {
+                liftMotor2.setPower(power1);
+            }
         }
     }
 
@@ -163,7 +165,7 @@ public class Delivery {
     }
 
     public double getLift2Position () {
-        return liftMotor2.getCurrentPosition();
+        return liftMotor2.getCurrentPosition() - 37;
     }
 
     public double getExtensionPosition () {

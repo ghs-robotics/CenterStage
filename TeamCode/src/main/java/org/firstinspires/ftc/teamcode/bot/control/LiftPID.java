@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class LiftPID {
     private double integralSum = 0;
-    private final double kp = 0.152;
-    private final double ki = 0.00162824;
-    private final double kd = 0.001674;
+    private final double kp = 1;
+    private final double ki = 0.08;
+    private final double kd = 0.1;
     private double lastError = 0;
     ElapsedTime timer;
 
