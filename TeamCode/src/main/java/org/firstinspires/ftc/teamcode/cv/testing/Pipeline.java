@@ -167,15 +167,13 @@ public class Pipeline extends OpenCvPipeline {
 
 
             for (int i = 0; i != boundingBox.length; i++){
-                boolean isBox = boundingBox[i].width < 4 && boundingBox[i].height < 8;
 
-                if (boundingBox[i].x < xLeft && isBox)
-                    zone1Counter++;
-                else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight
-                        && isBox)
-                    zone2Counter++;
-                else if (isBox)
-                    zone3Counter++;
+                if (boundingBox[i].x < xLeft )
+                    zone1Counter ++;
+                else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight)
+                    zone2Counter ++;
+                else
+                    zone3Counter ++;
 
                 Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
             }
