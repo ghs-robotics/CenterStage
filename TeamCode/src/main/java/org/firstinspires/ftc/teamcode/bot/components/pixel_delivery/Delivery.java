@@ -74,28 +74,26 @@ public class Delivery {
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-    }
-
-        if (!liftBackToZero) {
-            if (getLift1Position() <= 0 && power1 > 0) {
+        if (!hangMode) {
+            if (getLift1Position() <= 0 && power > 0) {
                 liftMotor1.setPower(0);
             } else if (getLift1Position() < getLift2Position() - 100) {
                 liftMotor1.setPower(-pid.PID(liftMotor2.getCurrentPosition(),
                         liftMotor1.getCurrentPosition()));
             } else {
-                liftMotor1.setPower(power1);
+                liftMotor1.setPower(power);
             }
 
-            if (getLift2Position() <= 0 && power1 > 0 && !liftBackToZero) {
+            if (getLift2Position() <= 0 && power > 0) {
                 liftMotor2.setPower(0);
             } else if (getLift2Position() < getLift1Position() - 100) {
                 liftMotor1.setPower(-pid.PID(liftMotor1.getCurrentPosition(),
                         liftMotor2.getCurrentPosition()));
             } else {
-                liftMotor2.setPower(power1);
+                liftMotor2.setPower(power);
             }
         }
+
     }
 
     public void hangLift (double power1, double power2) {
