@@ -110,10 +110,4 @@ public class Robot {
 //        telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
         telemetry.addLine();
     }
-
-    private void droneTelemetry () {
-        telemetry.addLine("Drone System Telemetry");
-        telemetry.addData("Drone Mode Status: ", drone.getDroneMode());
-        telemetry.addLine();
-    }
 }

@@ -22,10 +22,10 @@ public class Delivery {
 
     private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
 
-
     private int extendLvl = 90;
 
-    private boolean liftBackToZero = false;
+    private boolean hangMode = false;
+
     private final LiftPID pid;
 
     public Delivery (HardwareMap hardwareMap) {
@@ -60,7 +60,7 @@ public class Delivery {
     public boolean driveLiftToPosition(NavigationPID pid){
         double power = pid.getOutput(this.getLift1Position());
 
-        driveLift(power, 0);
+        driveLift(power);
 
         return Math.abs(pid.getError()) < 75;
     }
@@ -69,28 +69,18 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
-    public void driveLift(double power1, double power2) {
+    public void driveLift(double power) {
         touchSensorEncoderReset();
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        if (liftBackToZero) {
-            liftMotor1.setPower(power1);
-            liftMotor2.setPower(power2);
-        }
+        
+    }
 
-        if (getLift1Position() <= 0 && power1 > 0 && !liftBackToZero) {
-            liftMotor1.setPower(0);
-        } else {
-            liftMotor1.setPower(power1);
-        }
-
-        power2 = pid.PID(liftMotor1.getCurrentPosition(), liftMotor2.getCurrentPosition());
-
-        if (getLift2Position() <= 0 && power2 > 0 && !liftBackToZero) {
-            liftMotor2.setPower(0);
-        } else {
-            liftMotor2.setPower(power2);
+    public void hangLift (double power1, double power2) {
+        if (hangMode) {
+        liftMotor1.setPower(power1);
+        liftMotor2.setPower(power2);
         }
     }
 
@@ -142,16 +132,18 @@ public class Delivery {
         return touchSensor1.isPressed();
     }
 
-    public void setLiftBackToZero (boolean pressed) {
-        liftBackToZero = !liftBackToZero;
+    public void setHangMode(boolean pressed) {
+        if (pressed) {
+            hangMode = !hangMode;
+        }
     }
 
     public boolean getTouchSensor2Status () {
         return touchSensor2.isPressed();
     }
 
-    public boolean getLiftBackToZeroStatus () {
-        return liftBackToZero;
+    public boolean getHangModeStatus() {
+        return hangMode;
     }
 
     public double getLift1Position() {
