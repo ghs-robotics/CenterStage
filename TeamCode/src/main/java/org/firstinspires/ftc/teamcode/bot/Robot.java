@@ -63,7 +63,7 @@ public class Robot {
     public void shutOff(){
 //        drive.resetCoords();
         intake.pixelIn(0);
-        delivery.driveLift(0, 0);
+        delivery.driveLift(0);
     }
 
     /**
@@ -104,11 +104,12 @@ public class Robot {
 
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
-        telemetry.addData("lift 1 position: ", delivery.getLift1Position());
-        telemetry.addData("lift 2 position: ", delivery.getLift2Position());
-//        telemetry.addData("extension position: ", delivery.getExtensionPosition());
+        telemetry.addData("hang mode status:", delivery.getHangModeStatus());
+        telemetry.addData("lift position: ", delivery.getLift1Position());
+        telemetry.addData("lift position: ", delivery.getLift2Position());
+        telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
+//        telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
         telemetry.addLine();
     }
-
 }

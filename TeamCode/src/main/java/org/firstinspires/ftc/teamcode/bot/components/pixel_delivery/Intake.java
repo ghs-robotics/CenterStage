@@ -10,7 +10,8 @@ public class Intake {
     private DcMotor intakeMotor;
     private Servo intakeServo;
 
-    double[] intakeServoPos = {0.01, 0.05, 0.08, 0.12, 0.15, 0.23};
+    // 0.17 is the five stack pos
+    double[] intakeServoPos = {0.01, 0.06, 0.12, 0.15, 0.17, 0.21};
 
     int intakeLvl = 60;
 

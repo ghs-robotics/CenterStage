@@ -19,12 +19,13 @@ public class Delivery {
 
     private final TouchSensor touchSensor2;
 
-    private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
+    // 0.4 is the pos for backboard contact (max)
+    private final double[] extendServoPos = {0, 0.2, 0.3, 0.4};
 
+    private int extendLvl = 80; // should be dividable by the number of pos
 
-    private int extendLvl = 90;
+    private boolean hangMode = false;
 
-    private boolean liftBackToZero = false;
     private final LiftPID pid;
 
     public Delivery (HardwareMap hardwareMap) {
@@ -56,14 +57,10 @@ public class Delivery {
         return dropServo.getPosition() == targetPos;
     }
 
-    public boolean driveLiftToPosition(int target, int milli){
-        if (getLift1Position() < target - 5 || getLift1Position() > target + 5 && milli < 2600)
-            autoDriveLift((target - getLift1Position()) * -.008);
-        else
-            autoDriveLift(0);
-        return getLift1Position() < target - 25 && getLift1Position() > target + 25;
-    }
+    public boolean driveLiftToPosition(NavigationPID pid){
+        double power = pid.getOutput(this.getLift1Position());
 
+        driveLift(power);
     public void autoExtend(double position){
         extendServo.setPosition(position);
     }
@@ -84,27 +81,30 @@ public class Delivery {
     //                                   Lift Functions
     //-------------------------------------------------------------------------------------
 
-    public void driveLift(double power1, double power2) {
+    public void driveLift(double power) {
         touchSensorEncoderReset();
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        if (liftBackToZero) {
-            liftMotor1.setPower(power1);
-            liftMotor2.setPower(power2);
+        if (!hangMode) {
+            if (getLift1Position() <= 0 && power > 0) {
+                liftMotor1.setPower(0);
+            } else {
+                liftMotor1.setPower(power);
+            }
+
+            if (getLift2Position() <= 0 && power > 0) {
+                liftMotor2.setPower(0);
+            } else {
+                // this is the power multiplier, lift2 is faster... too fucking fast
+                liftMotor2.setPower(power * 0.35);
+            }
         }
+    }
 
-        if (getLift1Position() <= 0 && power1 > 0 && !liftBackToZero) {
-            liftMotor1.setPower(0);
-        } else {
+    public void hangLift (double power1, double power2) {
+        if (hangMode) {
             liftMotor1.setPower(power1);
-        }
-
-        power2 = pid.PID(liftMotor1.getCurrentPosition(), liftMotor2.getCurrentPosition());
-
-        if (getLift2Position() <= 0 && power2 > 0 && !liftBackToZero) {
-            liftMotor2.setPower(0);
-        } else {
             liftMotor2.setPower(power2);
         }
     }
@@ -157,9 +157,9 @@ public class Delivery {
         return touchSensor1.isPressed();
     }
 
-    public void setLiftBackToZero (boolean pressed) {
+    public void setHangMode(boolean pressed) {
         if (pressed) {
-            liftBackToZero = !liftBackToZero;
+            hangMode = !hangMode;
         }
     }
 
@@ -167,8 +167,8 @@ public class Delivery {
         return touchSensor2.isPressed();
     }
 
-    public boolean getLiftBackToZeroStatus () {
-        return liftBackToZero;
+    public boolean getHangModeStatus() {
+        return hangMode;
     }
 
     public double getLift1Position() {
