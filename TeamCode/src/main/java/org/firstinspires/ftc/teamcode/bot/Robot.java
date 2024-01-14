@@ -54,6 +54,7 @@ public class Robot {
      */
     public void init(){
         //init cameras
+        cam.setCamera();
         gyro.resetHeading();
         drive.resetCoords();
         delivery.resetEncoders();

@@ -63,27 +63,9 @@ public class Camera {
 
     }
 
-    public void initCamera(){
-//        camera2.setPipeline(pipeline);
-
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(PIXEL_WIDTH, PIXEL_HEIGHT, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-            }
-        });
-
-    }
-
     public void closeCamera(){
         camera.stopStreaming();
-//        camera2.stopStreaming();
         camera.closeCameraDevice();
-//        camera2.closeCameraDevice();
     }
 
     public void getTelemetry(){

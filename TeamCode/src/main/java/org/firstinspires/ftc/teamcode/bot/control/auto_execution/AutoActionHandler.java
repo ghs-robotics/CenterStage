@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DELIVER;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DETECT;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
@@ -23,7 +24,7 @@ public class AutoActionHandler {
     private ElapsedTime timer;
 
     private int totalActions;
-    private int zone;
+    public int zone;
 
 
     public AutoActionHandler(Robot robot, Telemetry telemetry){
@@ -38,6 +39,7 @@ public class AutoActionHandler {
      * runs the action and calls next action in case the current action is complete.
      */
     public void run(){
+        findAndSetZone();
         current.runAction();
         checkTime();
         nextAction();
@@ -139,9 +141,10 @@ public class AutoActionHandler {
         if (actionList.isEmpty())
             return;
 
+        actionList.add(0, new AutoActions(DETECT, robot));
+        actionList.add(new AutoActions(AutoActions.DONE, robot));
         current = actionList.get(0);
         totalActions = actionList.size();
-        actionList.add(new AutoActions(AutoActions.DONE, robot));
     }
 
     /**
@@ -160,6 +163,7 @@ public class AutoActionHandler {
         if (current.getIdentity() != AutoActions.DONE) {
             telemetry.addLine(currentStep + " of " + totalActions + " actions");
             telemetry.addLine();
+            telemetry.addLine(String.valueOf(zone));
             telemetry.addLine(current.getDescription());
             troubleshooting();
         }else

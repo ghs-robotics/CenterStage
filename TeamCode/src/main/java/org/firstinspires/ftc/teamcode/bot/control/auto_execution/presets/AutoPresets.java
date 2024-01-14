@@ -17,27 +17,16 @@ public class AutoPresets {
     private static AutoActionHandler routeA;
     private static AutoActionHandler beginning;
 
-    static double[] leftSpikePos = {788, 45, 0.0};
-    static double[] centerSpikePos = {900, -131, 0.0};
-    static double[] rightSpikePos = {755, -530, 0.0};
+    public static double[] leftSpikePos = {-660, 0, 0.0};
+    public static double[] centerSpikePos = {-900, 0, 0.0};
+    public static double[] rightSpikePos = {-660, 490, 0.0};
 
-    static double[] leftBackDropPos = {744, -880, 0.0};
-    static double[] centerBackDropPos = {580, -875, 0.0};
-    static double[] rightBackDropPos = {470, -860, 0.0};
+    public static double[] leftBackDropPos = {744, -880, 0.0};
+    public static double[] centerBackDropPos = {-660, -690, 0.0};
+    public static double[] rightBackDropPos = {470, -860, 0.0};
 
 //    static int pixelStackX = 3 * TICKS_PER_TILE_X + 20;
 //    static int pixelStackY = (int) (1.2 * TICKS_PER_TILE_Y);
-
-    public static AutoActionHandler getFirstRoute(Robot r, Telemetry t){
-        routeA = new AutoActionHandler(r, t);
-//        routeA.add(MOVE, 20, (int) (-2.3 * TICKS_PER_TILE_Y), 0.0);
-        routeA.add(LIFT, 100);
-        routeA.add(EXTEND);
-        routeA.add(DROP);
-        routeA.add(RETRACT);
-        routeA.add(LIFT, 0.0);
-        return routeA;
-    }
 
 
     public static AutoActionHandler getLeftSpikePath(Robot r, Telemetry t){

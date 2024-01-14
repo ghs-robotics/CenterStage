@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
 
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.centerBackDropPos;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.centerSpikePos;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.leftBackDropPos;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.leftSpikePos;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.rightBackDropPos;
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.rightSpikePos;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
@@ -20,6 +27,8 @@ public class AutoActions {
     public static final int EXTEND = 7;
     public static final int RETRACT = 8;
     public static final int DETECT = 9;
+    public static final int MOVE_TO_SPIKE = 10;
+    public static final int MOVE_TO_BACKDROP = 11;
 
 
     private Robot robot;
@@ -38,7 +47,7 @@ public class AutoActions {
     double heading; // in degrees
 
     int intakeLevel;
-    int liftLevel;
+    int liftLevel = 600;
     int outtakeLevel;
 
     double waitTime;
@@ -62,20 +71,9 @@ public class AutoActions {
         this.y = y;
         this.heading = heading;
 
-        double outPutLimit = 2;
-        double integralLimit = 3650;
+        setNavPID();
 
-        xPID = new PID(.152, .00162824, .001674);
-        yPID = new PID(.152, .00162824, .001674);
-
-        xPID.setOutputLimits(outPutLimit);
-        yPID.setOutputLimits(outPutLimit);
-
-        xPID.setMaxIOutput(integralLimit);
-        yPID.setMaxIOutput(integralLimit);
-
-        if (!robot.RED)
-            this.x *= -1;
+        checkXSign();
 
         xPID.setTarget(x);
         yPID.setTarget(y);
@@ -84,11 +82,17 @@ public class AutoActions {
     public AutoActions(int id, Robot robot, double value){
         this(id, robot);
         if (id == INTAKE)
+            // target level should be 600
             this.intakeLevel = (int) value;
-        if (id == LIFT)
-            this.liftLevel = (int) (value + 100);
-        if (id == WAIT)
+        else if (id == LIFT)
+            this.liftLevel = (int) (value);
+        else if (id == WAIT)
             waitTime = value;
+        else if (id == MOVE_TO_SPIKE) {
+            zone = (int) value;
+        }else if (id == MOVE_TO_BACKDROP) {
+            zone = (int) value;
+        }
     }
     public AutoActions (int id, Robot robot, double[] pos){
         this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
@@ -99,9 +103,49 @@ public class AutoActions {
     private void moveTo(){
         resetTimer();
 
-//        boolean there = robot.nav.runToPosition(x, y, heading);
         boolean there = robot.drive.runToPosition(xPID, yPID);
-        endAction = there;//||  timer.milliseconds() > 5000;
+        boolean timeOut = timer.milliseconds() > 7000;
+        endAction = there || timeOut;
+    }
+
+    private void moveToSpike(){
+        setNavPID();
+        if (zone == 1){
+            x = leftSpikePos[0];
+            yPID.setTarget(leftSpikePos[1]);
+        } else if (zone == 2) {
+            x = (centerSpikePos[0]);
+            yPID.setTarget(centerSpikePos[1]);
+        } else {
+            x = (rightSpikePos[0]);
+            yPID.setTarget(rightSpikePos[1]);
+        }
+
+        checkXSign();
+
+        xPID.setTarget(x);
+
+        identity = MOVE;
+    }
+
+    private void moveToBackdrop(){
+        setNavPID();
+        if (zone == 1){
+            x = (leftBackDropPos[0]);
+            yPID.setTarget(leftBackDropPos[1]);
+        } else if (zone == 2) {
+            x = (centerBackDropPos[0]);
+            yPID.setTarget(centerBackDropPos[1]);
+        } else {
+            x = (rightBackDropPos[0]);
+            yPID.setTarget(rightBackDropPos[1]);
+        }
+
+        checkXSign();
+
+        xPID.setTarget(x);
+
+        identity = MOVE;
     }
 
     private void dropPixels(){
@@ -111,7 +155,7 @@ public class AutoActions {
         if (timer.milliseconds() > 700)
             robot.delivery.autoDropPixels(Delivery.DROPPER_INTAKING);
 
-        endAction = timer.milliseconds() > 1000;
+        endAction = timer.milliseconds() > 400;
     }
 
     private void runIntake(){
@@ -156,17 +200,21 @@ public class AutoActions {
      * drops pixel by reversing Intake
      */
     private void placePixel(){
+        robot.intake.setIntakeHeight(2);
         robot.intake.autoPixelOut();
+
         resetTimer();
-        if(timer.milliseconds() > 2500)
+        if(timer.milliseconds() > 1500) {
             endAction = true;
+            robot.intake.pixelIn(0);
+        }
     }
 
     private void detectSpikeMark(){
         if (!timerReset)
             robot.cam.detectProp();
         resetTimer();
-        endAction = timer.milliseconds() > 750;
+        endAction = timer.milliseconds() > 1000;
     }
 
     private void alignBotToTag(){
@@ -233,6 +281,13 @@ public class AutoActions {
             case DETECT:
                 detectSpikeMark();
                 break;
+            case MOVE_TO_SPIKE:
+                moveToSpike();
+                break;
+            case MOVE_TO_BACKDROP:
+                moveToBackdrop();
+                break;
+
         }
     }
 
@@ -250,6 +305,8 @@ public class AutoActions {
         description = "";
         switch (identity){
             case MOVE:
+            case MOVE_TO_SPIKE:
+            case MOVE_TO_BACKDROP:
                 description = "Driving";
                 break;
             case INTAKE:
@@ -276,6 +333,20 @@ public class AutoActions {
         }
     }
 
+    private void setNavPID(){
+        double outPutLimit = 2;
+        double integralLimit = 3650;
+
+        xPID = new PID(.152, .00165964, .001664);
+        yPID = new PID(.152, .00165964, .001664);
+
+        xPID.setOutputLimits(outPutLimit);
+        yPID.setOutputLimits(outPutLimit);
+
+        xPID.setMaxIOutput(integralLimit);
+        yPID.setMaxIOutput(integralLimit);}
+
+
     /**
      * sets the zone read by the camera
      */
@@ -295,6 +366,12 @@ public class AutoActions {
             timer.reset();
             timerReset = true;
         }
+    }
+
+    private void checkXSign(){
+        if (!robot.RED)
+            this.x *= -1;
+
     }
 
     public int getTimer() {
