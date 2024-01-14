@@ -20,9 +20,10 @@ public class Delivery {
 
     private final TouchSensor touchSensor2;
 
-    private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
+    // 0.4 is the pos for backboard contact (max)
+    private final double[] extendServoPos = {0, 0.2, 0.3, 0.4};
 
-    private int extendLvl = 90;
+    private int extendLvl = 80; // should be dividable by the number of pos
 
     private boolean hangMode = false;
 
@@ -77,20 +78,14 @@ public class Delivery {
         if (!hangMode) {
             if (getLift1Position() <= 0 && power > 0) {
                 liftMotor1.setPower(0);
-            } else if (getLift1Position() < getLift2Position() - 100) {
-                liftMotor1.setPower(-pid.PID(liftMotor2.getCurrentPosition(),
-                        liftMotor1.getCurrentPosition()));
             } else {
                 liftMotor1.setPower(power);
             }
 
             if (getLift2Position() <= 0 && power > 0) {
                 liftMotor2.setPower(0);
-            } else if (getLift2Position() < getLift1Position() - 100) {
-                liftMotor1.setPower(-pid.PID(liftMotor1.getCurrentPosition(),
-                        liftMotor2.getCurrentPosition()));
             } else {
-                liftMotor2.setPower(power);
+                liftMotor2.setPower(power * 0.35);
             }
         }
 
@@ -170,7 +165,7 @@ public class Delivery {
     }
 
     public double getLift2Position () {
-        return liftMotor2.getCurrentPosition() - 37;
+        return liftMotor2.getCurrentPosition();
     }
 
     public double getExtensionPosition () {

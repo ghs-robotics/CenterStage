@@ -39,8 +39,9 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
 
             // toggle drive mode. True is metaDrive, False is regular drive - left bumper
-            if(gp1.left_bumper.pressed())
+            if(gp1.left_bumper.pressed()) {
                 driveMode = !driveMode;
+            }
 
 
             // driving
@@ -49,7 +50,7 @@ public class Tele extends LinearOpMode {
 
 
             // launches drone - a button
-            robot.drone.launchDrone(gp1.a.pressing());
+            robot.drone.launchDrone(gp1.x.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -67,7 +68,6 @@ public class Tele extends LinearOpMode {
             robot.delivery.changeExtensionLength(gp2.dpad_left.pressed(), gp2.dpad_right.pressed());
 
 
-
             robot.delivery.driveLift(gp2.left_stick_y);
 
 
@@ -75,10 +75,10 @@ public class Tele extends LinearOpMode {
 
 
             // changes drop servo position - b
-            robot.delivery.changeDropPosition(gp2.b.pressing());
+            robot.delivery.changeDropPosition(gp2.x.pressing());
+
 
             robot.delivery.setHangMode(gp2.a.pressed());
-
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
