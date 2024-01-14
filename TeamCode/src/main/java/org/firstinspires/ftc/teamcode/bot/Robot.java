@@ -62,7 +62,7 @@ public class Robot {
     public void shutOff(){
 //        drive.resetCoords();
         intake.pixelIn(0);
-        delivery.driveLift(0,0);
+        delivery.driveLift(0);
     }
 
     /**
