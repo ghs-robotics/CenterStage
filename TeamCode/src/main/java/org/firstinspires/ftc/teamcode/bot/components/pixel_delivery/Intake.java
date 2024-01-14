@@ -28,7 +28,7 @@ public class Intake {
     //-------------------------------------------------------------------------------------
 
     public void autoPixelOut () {
-        pixelIn(0.85);
+        pixelIn(-0.85);
     }
 
     public void setIntakeHeight(int targetLevel){

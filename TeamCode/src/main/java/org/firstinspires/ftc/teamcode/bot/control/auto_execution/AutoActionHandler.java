@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActi
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.WAIT;
+import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -32,7 +33,6 @@ public class AutoActionHandler {
         this.timer = new ElapsedTime();
         this.robot = robot;
         this.telemetry = telemetry;
-        actionList.add(new AutoActions(WAIT, robot, 0.05));
     }
 
     /**
@@ -120,8 +120,6 @@ public class AutoActionHandler {
      */
     public void findAndSetZone(){
         zone = robot.cam.getSpikeZone();
-        for (AutoActions a: actionList)
-            a.setZone(zone);
     }
 
     /**
@@ -141,7 +139,6 @@ public class AutoActionHandler {
         if (actionList.isEmpty())
             return;
 
-        actionList.add(0, new AutoActions(DETECT, robot));
         actionList.add(new AutoActions(AutoActions.DONE, robot));
         current = actionList.get(0);
         totalActions = actionList.size();
@@ -163,11 +160,12 @@ public class AutoActionHandler {
         if (current.getIdentity() != AutoActions.DONE) {
             telemetry.addLine(currentStep + " of " + totalActions + " actions");
             telemetry.addLine();
-            telemetry.addLine(String.valueOf(zone));
             telemetry.addLine(current.getDescription());
             troubleshooting();
         }else
             telemetry.addLine( "Done!");
+
+        telemetry.addLine(String.valueOf(SPIKE_ZONE));
     }
 
     public void troubleshooting(){

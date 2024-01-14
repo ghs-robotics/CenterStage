@@ -24,7 +24,7 @@ public class Camera {
     private final int PIXEL_HEIGHT = 480;
     private final int PIXEL_WIDTH = 640;
 
-    public static int SPIKE_ZONE = -1;
+    public static int SPIKE_ZONE = 0;
 
     private boolean red;
 
@@ -76,6 +76,8 @@ public class Camera {
     }
 
     public int getSpikeZone(){
+        if (SPIKE_ZONE == 0)
+            SPIKE_ZONE = pipeline.getZone();
         return pipeline.getZone();
     }
 

@@ -6,11 +6,11 @@ import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.leftSpikePos;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.rightBackDropPos;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.rightSpikePos;
+import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
 import org.firstinspires.ftc.teamcode.bot.control.PID;
 
 public class AutoActions {
@@ -39,7 +39,6 @@ public class AutoActions {
     private ElapsedTime timer;
     private boolean timerReset;
 
-    private int zone;
     private String description;
 
     double x;
@@ -47,13 +46,16 @@ public class AutoActions {
     double heading; // in degrees
 
     int intakeLevel;
-    int liftLevel = 600;
+    int liftLevel = 520;
     int outtakeLevel;
 
     double waitTime;
 
     private PID xPID;
     private PID yPID;
+
+    double[] pidValues = {.152, .00165764, .0016642};
+
 
     public AutoActions(int id, Robot robot){
         this.identity = id;
@@ -86,12 +88,8 @@ public class AutoActions {
             this.intakeLevel = (int) value;
         else if (id == LIFT)
             this.liftLevel = (int) (value);
-        else if (id == WAIT)
+        else if (id == WAIT){
             waitTime = value;
-        else if (id == MOVE_TO_SPIKE) {
-            zone = (int) value;
-        }else if (id == MOVE_TO_BACKDROP) {
-            zone = (int) value;
         }
     }
     public AutoActions (int id, Robot robot, double[] pos){
@@ -110,15 +108,21 @@ public class AutoActions {
 
     private void moveToSpike(){
         setNavPID();
-        if (zone == 1){
+        if (SPIKE_ZONE == 1){
             x = leftSpikePos[0];
-            yPID.setTarget(leftSpikePos[1]);
-        } else if (zone == 2) {
+            if (robot.RED)
+                yPID.setTarget(leftSpikePos[1]);
+            else
+                yPID.setTarget(rightSpikePos[1]);
+        } else if (SPIKE_ZONE == 2) {
             x = (centerSpikePos[0]);
             yPID.setTarget(centerSpikePos[1]);
         } else {
             x = (rightSpikePos[0]);
-            yPID.setTarget(rightSpikePos[1]);
+            if (robot.RED)
+                yPID.setTarget(rightSpikePos[1]);
+            else
+                yPID.setTarget(leftSpikePos[1]);
         }
 
         checkXSign();
@@ -130,15 +134,21 @@ public class AutoActions {
 
     private void moveToBackdrop(){
         setNavPID();
-        if (zone == 1){
+        if (SPIKE_ZONE == 1){
             x = (leftBackDropPos[0]);
-            yPID.setTarget(leftBackDropPos[1]);
-        } else if (zone == 2) {
+            if (robot.RED)
+                yPID.setTarget(leftBackDropPos[1]);
+            else
+                yPID.setTarget(rightBackDropPos[1]);
+        } else if (SPIKE_ZONE == 2 && robot.RED) {
             x = (centerBackDropPos[0]);
             yPID.setTarget(centerBackDropPos[1]);
-        } else {
+        } else if (robot.RED) {
             x = (rightBackDropPos[0]);
-            yPID.setTarget(rightBackDropPos[1]);
+            if (robot.RED)
+                yPID.setTarget(rightBackDropPos[1]);
+            else
+                yPID.setTarget(leftBackDropPos[1]);
         }
 
         checkXSign();
@@ -151,9 +161,9 @@ public class AutoActions {
     private void dropPixels(){
         resetTimer();
 
-        robot.delivery.autoDropPixels(Delivery.DROPPER_SECOND);
-        if (timer.milliseconds() > 700)
-            robot.delivery.autoDropPixels(Delivery.DROPPER_INTAKING);
+        robot.delivery.autoDropPixels(0.4);
+        if (timer.milliseconds() > 300)
+            robot.delivery.autoDropPixels(0.15);
 
         endAction = timer.milliseconds() > 400;
     }
@@ -171,29 +181,32 @@ public class AutoActions {
     }
 
     /**
-     * Runs the lift
+     * Runs the lift - good to go
      */
-
     private void runLift(){
         // same as intake
-        robot.delivery.driveLiftToPosition(300);
         resetTimer();
-        endAction = timer.milliseconds() > 750;
+        boolean atPos = robot.delivery.driveLiftToPosition(liftLevel, (int) timer.milliseconds());
+        endAction = timer.milliseconds() > 2750 || atPos;
+        if (atPos)
+            robot.delivery.autoDriveLift(0);
     }
 
+    // good to go
     private void extendDropper(){
         resetTimer();
         if(timer.milliseconds() < 1400)
-            robot.delivery.setExtendPower(-1);
-        else
-            robot.delivery.setExtendPower(0);
+            robot.delivery.autoExtend(0.4);
         endAction = timer.milliseconds() > 2000;
     }
 
-    private void retractDropper(){
+    private void retractDelivery(){
         resetTimer();
 
-        endAction = robot.delivery.autoRunExtension(1, timer.milliseconds());
+        robot.delivery.autoDropPixels(0.15);
+        robot.delivery.autoExtend(0);
+        boolean atPos = robot.delivery.driveLiftToPosition(10, (int) timer.milliseconds());
+        endAction = timer.milliseconds() > 1500 || atPos;
     }
 
     /**
@@ -214,7 +227,8 @@ public class AutoActions {
         if (!timerReset)
             robot.cam.detectProp();
         resetTimer();
-        endAction = timer.milliseconds() > 1000;
+        robot.cam.getSpikeZone();
+        endAction = timer.milliseconds() > 2100;
     }
 
     private void alignBotToTag(){
@@ -276,7 +290,7 @@ public class AutoActions {
                 extendDropper();
                 break;
             case RETRACT:
-                retractDropper();
+                retractDelivery();
                 break;
             case DETECT:
                 detectSpikeMark();
@@ -337,8 +351,8 @@ public class AutoActions {
         double outPutLimit = 2;
         double integralLimit = 3650;
 
-        xPID = new PID(.152, .00165964, .001664);
-        yPID = new PID(.152, .00165964, .001664);
+        xPID = new PID(pidValues);
+        yPID = new PID(pidValues);
 
         xPID.setOutputLimits(outPutLimit);
         yPID.setOutputLimits(outPutLimit);
@@ -347,12 +361,6 @@ public class AutoActions {
         yPID.setMaxIOutput(integralLimit);}
 
 
-    /**
-     * sets the zone read by the camera
-     */
-    public void setZone(int zone){
-        this.zone = zone;
-    }
 
     /**
      * @return the identity of this action

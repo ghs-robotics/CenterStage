@@ -70,7 +70,7 @@ public class Pipeline extends OpenCvPipeline {
 
     Telemetry telemetry;
 
-    int spikeZone = -1;
+    int spikeZone = 0;
 
     Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
     Scalar darkRange = new Scalar(BLOCK_DARK_H, BLOCK_DARK_S, BLOCK_DARK_V);

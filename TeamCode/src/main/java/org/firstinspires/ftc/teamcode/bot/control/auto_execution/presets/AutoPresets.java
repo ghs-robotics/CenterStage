@@ -17,9 +17,9 @@ public class AutoPresets {
     private static AutoActionHandler routeA;
     private static AutoActionHandler beginning;
 
-    public static double[] leftSpikePos = {-660, 0, 0.0};
+    public static double[] leftSpikePos = {-680, -45, 0.0};
     public static double[] centerSpikePos = {-900, 0, 0.0};
-    public static double[] rightSpikePos = {-660, 490, 0.0};
+    public static double[] rightSpikePos = {-680, 480, 0.0};
 
     public static double[] leftBackDropPos = {744, -880, 0.0};
     public static double[] centerBackDropPos = {-660, -690, 0.0};

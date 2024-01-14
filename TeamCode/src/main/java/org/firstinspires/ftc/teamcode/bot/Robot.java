@@ -32,6 +32,7 @@ public class Robot {
         this(hardwareMap, telemetry);
         cam = new Camera(hardwareMap, telemetry, red);
         RED = red;
+        cam.setCamera();
     }
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
@@ -54,7 +55,6 @@ public class Robot {
      */
     public void init(){
         //init cameras
-        cam.setCamera();
         gyro.resetHeading();
         drive.resetCoords();
         delivery.resetEncoders();
@@ -63,7 +63,7 @@ public class Robot {
     public void shutOff(){
 //        drive.resetCoords();
         intake.pixelIn(0);
-        delivery.driveLift(0);
+        delivery.driveLift(0, 0);
     }
 
     /**
@@ -105,10 +105,10 @@ public class Robot {
 
     private void deliveryTelemetry () {
         telemetry.addLine("Delivery System Telemetry");
-        telemetry.addData("lift position: ", delivery.getLiftPosition());
+        telemetry.addData("lift 1 position: ", delivery.getLift1Position());
+        telemetry.addData("lift 2 position: ", delivery.getLift2Position());
 //        telemetry.addData("extension position: ", delivery.getExtensionPosition());
         telemetry.addData("drop position", delivery.getDropPosition());
-        telemetry.addData("touch sensor status", delivery.getTouchSensorStatus());
         telemetry.addLine();
     }
 

@@ -55,13 +55,29 @@ public class Delivery {
         return dropServo.getPosition() == targetPos;
     }
 
-//    public boolean driveLiftToPosition(int target){
-//        if (getLift1Position() < target - 5 || getLift1Position() > target + 5)
-//            driveLift((getLift1Position() - target) / 10.0);
-//        else
-//            driveLift(-0.1);
-//        return getLift1Position() < target - 5 || getLift1Position() > target + 5;
-//    }
+    public boolean driveLiftToPosition(int target, int milli){
+        if (getLift1Position() < target - 5 || getLift1Position() > target + 5 && milli < 2600)
+            autoDriveLift((target - getLift1Position()) * -.008);
+        else
+            autoDriveLift(0);
+        return getLift1Position() < target - 25 && getLift1Position() > target + 25;
+    }
+
+    public void autoExtend(double position){
+        extendServo.setPosition(position);
+    }
+
+    public void autoDriveLift(double power){
+        if (getTouchSensor1Status() && power > 0)
+            liftMotor1.setPower(0);
+        else
+            liftMotor1.setPower(power);
+
+        if (getTouchSensor2Status() && power > 0)
+            liftMotor2.setPower(0);
+        else
+            liftMotor2.setPower(power);
+    }
 
     //-------------------------------------------------------------------------------------
     //                                   Lift Functions

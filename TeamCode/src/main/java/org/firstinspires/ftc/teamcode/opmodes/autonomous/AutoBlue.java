@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DETECT;
 import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE_TO_SPIKE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActionHandler;
+import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions;
 import org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets;
 
 @Autonomous
@@ -23,6 +25,8 @@ public class AutoBlue extends LinearOpMode {
         // create list of actions to run
 //        actionHandler.add(AutoPresets.getBeginningNearBackDrop(robot, telemetry));
 //        actionHandler.add(RETRACT);
+        actionHandler.add(DETECT);
+
         actionHandler.add(MOVE_TO_SPIKE);
 
 
