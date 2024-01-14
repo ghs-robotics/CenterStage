@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot.control;
 
-public class PID {
+public class NavigationPID {
     private double P = 0;
     private double I = 0;
     private double D = 0;
@@ -28,11 +28,11 @@ public class PID {
 
     private double error;
 
-    public PID(double[] pid){
+    public NavigationPID(double[] pid){
         this(pid[0], pid[1], pid[2]);
     }
 
-    public PID (double p, double i, double d) {
+    public NavigationPID(double p, double i, double d) {
         P = p;
         I = i;
         D = d;

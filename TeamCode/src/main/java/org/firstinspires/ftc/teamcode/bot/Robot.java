@@ -82,7 +82,6 @@ public class Robot {
         positionTelemetry();
         intakeTelemetry();
         deliveryTelemetry();
-        droneTelemetry();
     }
 
     private void positionTelemetry(){
@@ -112,9 +111,4 @@ public class Robot {
         telemetry.addLine();
     }
 
-    private void droneTelemetry () {
-        telemetry.addLine("Drone System Telemetry");
-        telemetry.addData("Drone Mode Status: ", drone.getDroneMode());
-        telemetry.addLine();
-    }
 }

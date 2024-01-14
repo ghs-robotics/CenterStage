@@ -21,6 +21,7 @@ public class Delivery {
 
     private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
 
+
     private int extendLvl = 90;
 
     private boolean liftBackToZero = false;
@@ -93,24 +94,18 @@ public class Delivery {
             liftMotor2.setPower(power2);
         }
 
-        if (!liftBackToZero) {
-            if (getLift1Position() <= 0 && power1 > 0) {
-                liftMotor1.setPower(0);
-            } else if (getLift1Position() < getLift2Position() - 100) {
-                liftMotor1.setPower(-pid.PID(liftMotor2.getCurrentPosition(),
-                        liftMotor1.getCurrentPosition()));
-            } else {
-                liftMotor1.setPower(power1);
-            }
+        if (getLift1Position() <= 0 && power1 > 0 && !liftBackToZero) {
+            liftMotor1.setPower(0);
+        } else {
+            liftMotor1.setPower(power1);
+        }
 
-            if (getLift2Position() <= 0 && power1 > 0 && !liftBackToZero) {
-                liftMotor2.setPower(0);
-            } else if (getLift2Position() < getLift1Position() - 100) {
-                liftMotor1.setPower(-pid.PID(liftMotor1.getCurrentPosition(),
-                        liftMotor2.getCurrentPosition()));
-            } else {
-                liftMotor2.setPower(power1);
-            }
+        power2 = pid.PID(liftMotor1.getCurrentPosition(), liftMotor2.getCurrentPosition());
+
+        if (getLift2Position() <= 0 && power2 > 0 && !liftBackToZero) {
+            liftMotor2.setPower(0);
+        } else {
+            liftMotor2.setPower(power2);
         }
     }
 
@@ -181,7 +176,7 @@ public class Delivery {
     }
 
     public double getLift2Position () {
-        return liftMotor2.getCurrentPosition() - 37;
+        return liftMotor2.getCurrentPosition();
     }
 
     public double getExtensionPosition () {
