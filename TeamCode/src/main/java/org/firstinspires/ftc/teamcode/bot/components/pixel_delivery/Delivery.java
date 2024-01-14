@@ -85,6 +85,7 @@ public class Delivery {
             if (getLift2Position() <= 0 && power > 0) {
                 liftMotor2.setPower(0);
             } else {
+                // this is the power multiplier, lift2 is faster... too fucking fast
                 liftMotor2.setPower(power * 0.35);
             }
         }
