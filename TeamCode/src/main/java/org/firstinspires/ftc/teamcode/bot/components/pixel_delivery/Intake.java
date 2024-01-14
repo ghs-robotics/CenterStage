@@ -10,7 +10,7 @@ public class Intake {
     private DcMotor intakeMotor;
     private Servo intakeServo;
 
-    double[] intakeServoPos = {0.01, 0.05, 0.08, 0.12, 0.15, 0.2};
+    double[] intakeServoPos = {0.01, 0.05, 0.08, 0.12, 0.15, 0.23};
 
     int intakeLvl = 60;
 
@@ -44,7 +44,7 @@ public class Intake {
 
     public void pixelIn (double power) {
             intakeMotor.setPower(power / 2);
-            conveyorBeltMotor.setPower(power);
+            conveyorBeltMotor.setPower(-power);
         }
 
     public void changeIntakeHeight(boolean decrease, boolean increase) {

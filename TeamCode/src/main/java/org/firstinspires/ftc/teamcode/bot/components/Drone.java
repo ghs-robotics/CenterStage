@@ -15,12 +15,6 @@ public class Drone {
         droneServo.setPosition(0.5);
     }
 
-    public void changeDroneMode (boolean pressed) {
-        if (pressed) {
-            droneMode = !droneMode;
-        }
-    }
-
     public void launchDrone (boolean pressing) {
             if (droneMode) {
                 if (pressing) {

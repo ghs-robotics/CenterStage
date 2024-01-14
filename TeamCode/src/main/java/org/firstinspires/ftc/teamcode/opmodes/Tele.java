@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
 import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
@@ -11,6 +12,7 @@ public class Tele extends LinearOpMode {
     Robot robot;
      Controller gp1;
     Controller gp2;
+    Delivery deliver;
 
     boolean driveMode;
 
@@ -46,11 +48,8 @@ public class Tele extends LinearOpMode {
                     gp1.right_stick_x, driveMode);
 
 
-            robot.delivery.changeLiftMode(gp1.b.pressed());
-
-
-            // changes drone mode - right bumper
-            robot.drone.changeDroneMode(gp1.right_bumper.pressed());
+            // launches drone - a button
+            robot.drone.launchDrone(gp1.a.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
@@ -64,26 +63,19 @@ public class Tele extends LinearOpMode {
             robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
 
 
-//            // extends outtake - left and right dpad
-//            robot.delivery.changeExtensionLength(gp2.retractOuttake ,gp2.extendOuttake);
+            // extends outtake - left and right dpad
+            robot.delivery.changeExtensionLength(gp2.dpad_left.pressed(), gp2.dpad_right.pressed());
 
 
-            robot.delivery.setExtendPower(gp2.right_stick_y);
 
-
-            // drives lift - left joystick, y-axis
-            robot.delivery.driveLift(gp2.left_stick_y);
-
-
-            robot.delivery.tuneLiftDuringTele(gp2.left_stick_y, gp2.right_stick_y);
+            robot.delivery.driveLift(gp2.left_stick_y, gp2.right_stick_y);
 
 
             // changes drop servo position - b
             robot.delivery.changeDropPosition(gp2.b.pressing());
 
+            robot.delivery.setLiftBackToZero(gp2.a.pressed());
 
-            // launches drone - a button
-            robot.drone.launchDrone(gp2.a.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
