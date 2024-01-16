@@ -71,7 +71,7 @@ public class Robot {
      * tells the robot parts to retrieve the current information from each part to update the robot.
      */
     public void update(){
-        drive.update();
+//        drive.update();
         telemetry.update();
     }
 
