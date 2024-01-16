@@ -42,7 +42,7 @@ public class Robot {
 
         this.telemetry = telemetry;
         gyro = new Gyro(hardwareMap);
-        drive = new BallDrive(hardwareMap, gyro);
+//        drive = new BallDrive(hardwareMap, gyro);
 
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
@@ -56,12 +56,12 @@ public class Robot {
     public void init(){
         //init cameras
         gyro.resetHeading();
-        drive.resetCoords();
+//        drive.resetCoords();
         delivery.resetEncoders();
     }
 
     public void shutOff(){
-        drive.calculateDrivePowers(0,0,0);
+//        drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
         delivery.driveLift(0);
         cam.closeCamera();
@@ -87,15 +87,15 @@ public class Robot {
     }
 
     private void positionTelemetry(){
-        telemetry.addLine("Drivebase Telemetry");
-        telemetry.addData("Meta Drive Mode On: ", drive.getDriveMode());
-        telemetry.addData("x pos: ", drive.getX());
-        telemetry.addData("y pos: ", drive.getY());
-        telemetry.addLine();
-        telemetry.addData("x out", drive.getXError());
-        telemetry.addData("gyro heading: ", drive.getHeading());
-        telemetry.addLine(String.valueOf(drive.resetCounter));
-        telemetry.addLine();
+//        telemetry.addLine("Drivebase Telemetry");
+//        telemetry.addData("Meta Drive Mode On: ", drive.getDriveMode());
+//        telemetry.addData("x pos: ", drive.getX());
+//        telemetry.addData("y pos: ", drive.getY());
+//        telemetry.addLine();
+//        telemetry.addData("x out", drive.getXError());
+//        telemetry.addData("gyro heading: ", drive.getHeading());
+//        telemetry.addLine(String.valueOf(drive.resetCounter));
+//        telemetry.addLine();
     }
 
     private void intakeTelemetry(){

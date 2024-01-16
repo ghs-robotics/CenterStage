@@ -100,9 +100,9 @@ public class AutoActions {
     private void moveTo(){
         resetTimer();
 
-        boolean there = robot.drive.runToPosition(xPID, yPID);
-        boolean timeOut = timer.milliseconds() > 4250;
-        endAction = there || timeOut;
+//        boolean there = robot.drive.runToPosition(xPID, yPID);
+//        boolean timeOut = timer.milliseconds() > 4250;
+//        endAction = there || timeOut;
     }
 
     private void moveToSpike(){
@@ -241,7 +241,7 @@ public class AutoActions {
      */
     private void waiting() {
         resetTimer();
-        robot.drive.calculateDrivePowers(0,0,0);
+//        robot.drive.calculateDrivePowers(0,0,0);
         robot.intake.pixelIn(0);
         robot.delivery.driveLift(0);
 
