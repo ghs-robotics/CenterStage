@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cv;
+package org.firstinspires.ftc.teamcode.control.presets;
 
 import org.checkerframework.checker.index.qual.PolyUpperBound;
 
@@ -22,17 +22,17 @@ public class CVConstants {
 
 
     // RED
-    public static int H_STRICT_UPPER_RED = 130;
+    public static int H_STRICT_UPPER_RED = 150;
     public static int H_STRICT_LOWER_RED = 100;
     public static int S_STRICT_UPPER_RED = 255;
-    public static int S_STRICT_LOWER_RED = 50;
+    public static int S_STRICT_LOWER_RED = 10;
     public static int V_STRICT_UPPER_RED = 255;
-    public static int V_STRICT_LOWER_RED = 40;
+    public static int V_STRICT_LOWER_RED = 10;
 
-    public static int H_FIRST_UPPER_RED = 145;
+    public static int H_FIRST_UPPER_RED = 160;
     public static int H_FIRST_LOWER_RED = 100;
     public static int S_FIRST_UPPER_RED = 255;
-    public static int S_FIRST_LOWER_RED = 50;
+    public static int S_FIRST_LOWER_RED = 10;
     public static int V_FIRST_UPPER_RED = 255;
-    public static int V_FIRST_LOWER_RED = 40;
+    public static int V_FIRST_LOWER_RED = 10;
 }

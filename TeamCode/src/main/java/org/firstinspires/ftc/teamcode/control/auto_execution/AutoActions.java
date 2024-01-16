@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
+package org.firstinspires.ftc.teamcode.control.auto_execution;
 
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.centerBackDropPos;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.centerSpikePos;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.leftBackDropPos;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.leftSpikePos;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.rightBackDropPos;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.rightSpikePos;
-import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
+import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.centerBackDropPos;
+import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.centerSpikePos;
+import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.leftBackDropPos;
+import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.leftSpikePos;
+import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.rightBackDropPos;
+import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.rightSpikePos;
+import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.bot.control.PID;
+import org.firstinspires.ftc.teamcode.control.NavigationPID;
 
 public class AutoActions {
     // identities
@@ -46,15 +46,14 @@ public class AutoActions {
     double heading; // in degrees
 
     int intakeLevel;
-    int liftLevel = 520;
-    int outtakeLevel;
+    int liftLevel = 650;
 
     double waitTime;
 
-    private PID xPID;
-    private PID yPID;
+    private NavigationPID xPID;
+    private NavigationPID yPID;
 
-    double[] pidValues = {.152, .00165764, .0016642};
+    double[] pidValues = {.152, .00165765, .0016622};
 
 
     public AutoActions(int id, Robot robot){
@@ -102,7 +101,7 @@ public class AutoActions {
         resetTimer();
 
         boolean there = robot.drive.runToPosition(xPID, yPID);
-        boolean timeOut = timer.milliseconds() > 7000;
+        boolean timeOut = timer.milliseconds() > 4250;
         endAction = there || timeOut;
     }
 
@@ -143,7 +142,7 @@ public class AutoActions {
         } else if (SPIKE_ZONE == 2 && robot.RED) {
             x = (centerBackDropPos[0]);
             yPID.setTarget(centerBackDropPos[1]);
-        } else if (robot.RED) {
+        } else {
             x = (rightBackDropPos[0]);
             if (robot.RED)
                 yPID.setTarget(rightBackDropPos[1]);
@@ -187,7 +186,7 @@ public class AutoActions {
         // same as intake
         resetTimer();
         boolean atPos = robot.delivery.driveLiftToPosition(liftLevel, (int) timer.milliseconds());
-        endAction = timer.milliseconds() > 2750 || atPos;
+        endAction = timer.milliseconds() > 3750 || atPos;
         if (atPos)
             robot.delivery.autoDriveLift(0);
     }
@@ -213,11 +212,11 @@ public class AutoActions {
      * drops pixel by reversing Intake
      */
     private void placePixel(){
-        robot.intake.setIntakeHeight(2);
+        robot.intake.setIntakeHeight(3);
         robot.intake.autoPixelOut();
 
         resetTimer();
-        if(timer.milliseconds() > 1500) {
+        if(timer.milliseconds() > 2500) {
             endAction = true;
             robot.intake.pixelIn(0);
         }
@@ -242,6 +241,9 @@ public class AutoActions {
      */
     private void waiting() {
         resetTimer();
+        robot.drive.calculateDrivePowers(0,0,0);
+        robot.intake.pixelIn(0);
+        robot.delivery.driveLift(0);
 
         endAction = timer.milliseconds() > (waitTime * 1000);
     }
@@ -351,8 +353,8 @@ public class AutoActions {
         double outPutLimit = 2;
         double integralLimit = 3650;
 
-        xPID = new PID(pidValues);
-        yPID = new PID(pidValues);
+        xPID = new NavigationPID(pidValues);
+        yPID = new NavigationPID(pidValues);
 
         xPID.setOutputLimits(outPutLimit);
         yPID.setOutputLimits(outPutLimit);

@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.cv.testing;
+package org.firstinspires.ftc.teamcode.control.cv.testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.cv.Camera;
-import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
+import org.firstinspires.ftc.teamcode.control.cv.Camera;
+import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
 
 @TeleOp
 public class CameraTest extends LinearOpMode {

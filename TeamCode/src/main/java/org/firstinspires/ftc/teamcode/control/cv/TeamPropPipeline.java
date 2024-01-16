@@ -1,51 +1,35 @@
-package org.firstinspires.ftc.teamcode.cv;
+package org.firstinspires.ftc.teamcode.control.cv;
 
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_V;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_V;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.CANNY;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.FILTER;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.RES_HEIGHT;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.RES_WIDTH;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_LOWER_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_LOWER_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_LOWER_V;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_UPPER_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_UPPER_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_UPPER_V;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_FIRST_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_FIRST_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_STRICT_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_STRICT_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.H_STRICT_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_FIRST_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_FIRST_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_STRICT_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_STRICT_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.S_STRICT_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_FIRST_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_FIRST_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_FIRST_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_FIRST_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_STRICT_LOWER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_STRICT_LOWER_RED;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_STRICT_UPPER_BLUE;
+import static org.firstinspires.ftc.teamcode.control.presets.CVConstants.V_STRICT_UPPER_RED;
+import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.teamcode.control.cv.testing.TestingConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -68,8 +52,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
     int spikeZone = -1;
 
-    Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
-    Scalar darkRange = new Scalar(BLOCK_DARK_H, BLOCK_DARK_S, BLOCK_DARK_V);
+    Scalar lightRange = new Scalar(TestingConstants.BLOCK_LIGHT_H, TestingConstants.BLOCK_LIGHT_S, TestingConstants.BLOCK_LIGHT_V);
+    Scalar darkRange = new Scalar(TestingConstants.BLOCK_DARK_H, TestingConstants.BLOCK_DARK_S, TestingConstants.BLOCK_DARK_V);
 
     Scalar firstFilterLower;
     Scalar firstFilterUpper;
@@ -143,8 +127,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
             boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
         }
 
-        double xLeft = RES_WIDTH / 3.5;
-        double xRight = RES_WIDTH * 1.9 / 3;
+        double xLeft = TestingConstants.RES_WIDTH / 3.5;
+        double xRight = TestingConstants.RES_WIDTH * 1.9 / 3;
 
         int zone = 0;
         int zone1Counter = 0;
@@ -176,8 +160,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
 //            if (timer.milliseconds() < 1000)
         SPIKE_ZONE = zone;
 
-        Rect left = new Rect(1, 1, (int) xLeft, RES_HEIGHT);
-        Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), RES_HEIGHT);
+        Rect left = new Rect(1, 1, (int) xLeft, TestingConstants.RES_HEIGHT);
+        Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), TestingConstants.RES_HEIGHT);
         Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 3);
         Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 3);
 

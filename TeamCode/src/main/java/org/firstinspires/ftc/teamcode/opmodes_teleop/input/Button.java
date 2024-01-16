@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.input;
+package org.firstinspires.ftc.teamcode.opmodes_teleop.input;
 
 public class Button {
     private boolean lastState;

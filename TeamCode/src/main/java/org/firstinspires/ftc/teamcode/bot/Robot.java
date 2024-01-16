@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
-import org.firstinspires.ftc.teamcode.cv.Camera;
+import org.firstinspires.ftc.teamcode.control.cv.Camera;
 
 public class Robot {
     HardwareMap hardwareMap;
@@ -61,9 +61,10 @@ public class Robot {
     }
 
     public void shutOff(){
-//        drive.resetCoords();
+        drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
         delivery.driveLift(0);
+        cam.closeCamera();
     }
 
     /**
@@ -75,6 +76,7 @@ public class Robot {
     }
 
     public void getAutoTelemetry(){
+        cam.getTelemetry();
         positionTelemetry();
     }
 

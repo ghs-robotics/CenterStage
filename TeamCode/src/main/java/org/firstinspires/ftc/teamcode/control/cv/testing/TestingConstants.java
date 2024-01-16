@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cv.testing;
+package org.firstinspires.ftc.teamcode.control.cv.testing;
 
 import com.acmerobotics.dashboard.config.Config;
 

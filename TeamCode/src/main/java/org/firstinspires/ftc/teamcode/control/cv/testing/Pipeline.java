@@ -1,62 +1,18 @@
-package org.firstinspires.ftc.teamcode.cv.testing;
+package org.firstinspires.ftc.teamcode.control.cv.testing;
 
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_BLUE;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_FIRST_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.H_STRICT_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_FIRST_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.S_STRICT_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_FIRST_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_LOWER_RED;
-import static org.firstinspires.ftc.teamcode.cv.CVConstants.V_STRICT_UPPER_RED;
-import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_DARK_V;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.BLOCK_LIGHT_V;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.CANNY;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.FILTER;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.RES_HEIGHT;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.RES_WIDTH;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_LOWER_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_LOWER_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_LOWER_V;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_UPPER_H;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_UPPER_S;
-import static org.firstinspires.ftc.teamcode.cv.testing.TestingConstants.STRICT_UPPER_V;
-
-import android.provider.ContactsContract;
+import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.cv.Camera;
+import org.firstinspires.ftc.teamcode.control.presets.CVConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.ml.ANN_MLP;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
@@ -72,8 +28,8 @@ public class Pipeline extends OpenCvPipeline {
 
     int spikeZone = 0;
 
-    Scalar lightRange = new Scalar(BLOCK_LIGHT_H, BLOCK_LIGHT_S, BLOCK_LIGHT_V);
-    Scalar darkRange = new Scalar(BLOCK_DARK_H, BLOCK_DARK_S, BLOCK_DARK_V);
+    Scalar lightRange = new Scalar(TestingConstants.BLOCK_LIGHT_H, TestingConstants.BLOCK_LIGHT_S, TestingConstants.BLOCK_LIGHT_V);
+    Scalar darkRange = new Scalar(TestingConstants.BLOCK_DARK_H, TestingConstants.BLOCK_DARK_S, TestingConstants.BLOCK_DARK_V);
 
     Scalar firstFilterLower;
     Scalar firstFilterUpper;
@@ -119,15 +75,15 @@ public class Pipeline extends OpenCvPipeline {
 //        Core.inRange(hsv, lightRange, darkRange, thresh);
         Core.inRange(hsv, firstFilterLower, firstFilterUpper, thresh);
 
-        if (FILTER || CANNY) {
+        if (TestingConstants.FILTER || TestingConstants.CANNY) {
             Core.bitwise_and(hsv, hsv, masked, thresh);
 
             Scalar avg = Core.mean(masked, thresh);
 
             masked.convertTo(scaledMask, -1, 150 / avg.val[1], 0);
 
-            Scalar strictLowerHSV = new Scalar(STRICT_LOWER_H, STRICT_LOWER_S, STRICT_LOWER_V);
-            Scalar strictHighHSV = new Scalar(STRICT_UPPER_H, STRICT_UPPER_S, STRICT_UPPER_V);
+            Scalar strictLowerHSV = new Scalar(TestingConstants.STRICT_LOWER_H, TestingConstants.STRICT_LOWER_S, TestingConstants.STRICT_LOWER_V);
+            Scalar strictHighHSV = new Scalar(TestingConstants.STRICT_UPPER_H, TestingConstants.STRICT_UPPER_S, TestingConstants.STRICT_UPPER_V);
 
 //            Core.inRange(scaledMask, strictLowerHSV, strictHighHSV, scaledThresh);
             Core.inRange(scaledMask, strictLowerFilter, strictUpperFilter, scaledThresh);
@@ -136,7 +92,7 @@ public class Pipeline extends OpenCvPipeline {
 
         }
 
-        if (CANNY) {
+        if (TestingConstants.CANNY) {
             Imgproc.Canny(finalMat, edges, 100, 200);
 
 
@@ -157,8 +113,8 @@ public class Pipeline extends OpenCvPipeline {
                 boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
             }
 
-            double xLeft = RES_WIDTH / 3.5;
-            double xRight = RES_WIDTH * 2.1 / 3;
+            double xLeft = TestingConstants.RES_WIDTH / 3.5;
+            double xRight = TestingConstants.RES_WIDTH * 2.1 / 3;
 
             int zone = 0;
             int zone1Counter = 0;
@@ -192,8 +148,8 @@ public class Pipeline extends OpenCvPipeline {
 //            if (timer.milliseconds() < 1000)
             SPIKE_ZONE = zone;
 
-            Rect left = new Rect(1, 1, (int) xLeft, RES_HEIGHT);
-            Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), RES_HEIGHT);
+            Rect left = new Rect(1, 1, (int) xLeft, TestingConstants.RES_HEIGHT);
+            Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), TestingConstants.RES_HEIGHT);
             Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 2);
             Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 2);
 
@@ -201,9 +157,9 @@ public class Pipeline extends OpenCvPipeline {
         }
 
         input.release();
-        if (CANNY)
+        if (TestingConstants.CANNY)
             scaledThresh.copyTo(input);
-        else if (FILTER)
+        else if (TestingConstants.FILTER)
             scaledThresh.copyTo(input);
         else
             thresh.copyTo(input);
@@ -240,17 +196,17 @@ public class Pipeline extends OpenCvPipeline {
     // true is red, false is blue
     private void setRanges(boolean red){
         if (red){
-            firstFilterLower = new Scalar(H_FIRST_LOWER_RED, S_FIRST_LOWER_RED, V_FIRST_LOWER_RED);
-            firstFilterUpper = new Scalar(H_FIRST_UPPER_RED, S_FIRST_UPPER_RED, V_FIRST_UPPER_RED);
+            firstFilterLower = new Scalar(CVConstants.H_FIRST_LOWER_RED, CVConstants.S_FIRST_LOWER_RED, CVConstants.V_FIRST_LOWER_RED);
+            firstFilterUpper = new Scalar(CVConstants.H_FIRST_UPPER_RED, CVConstants.S_FIRST_UPPER_RED, CVConstants.V_FIRST_UPPER_RED);
 
-            strictLowerFilter = new Scalar(H_STRICT_LOWER_RED, S_STRICT_LOWER_RED, V_STRICT_LOWER_RED);
-            strictUpperFilter = new Scalar(H_STRICT_UPPER_RED, S_STRICT_UPPER_RED, V_STRICT_UPPER_RED);
+            strictLowerFilter = new Scalar(CVConstants.H_STRICT_LOWER_RED, CVConstants.S_STRICT_LOWER_RED, CVConstants.V_STRICT_LOWER_RED);
+            strictUpperFilter = new Scalar(CVConstants.H_STRICT_UPPER_RED, CVConstants.S_STRICT_UPPER_RED, CVConstants.V_STRICT_UPPER_RED);
         }else{
-            firstFilterLower = new Scalar(H_FIRST_LOWER_BLUE, S_FIRST_LOWER_BLUE, V_FIRST_LOWER_BLUE);
-            firstFilterUpper = new Scalar(H_FIRST_UPPER_BLUE, S_FIRST_UPPER_BLUE, V_FIRST_UPPER_BLUE);
+            firstFilterLower = new Scalar(CVConstants.H_FIRST_LOWER_BLUE, CVConstants.S_FIRST_LOWER_BLUE, CVConstants.V_FIRST_LOWER_BLUE);
+            firstFilterUpper = new Scalar(CVConstants.H_FIRST_UPPER_BLUE, CVConstants.S_FIRST_UPPER_BLUE, CVConstants.V_FIRST_UPPER_BLUE);
 
-            strictLowerFilter = new Scalar(H_STRICT_LOWER_BLUE, S_STRICT_LOWER_BLUE, V_STRICT_LOWER_BLUE);
-            strictUpperFilter = new Scalar(H_STRICT_UPPER_BLUE, S_STRICT_UPPER_BLUE, V_STRICT_UPPER_BLUE);
+            strictLowerFilter = new Scalar(CVConstants.H_STRICT_LOWER_BLUE, CVConstants.S_STRICT_LOWER_BLUE, CVConstants.V_STRICT_LOWER_BLUE);
+            strictUpperFilter = new Scalar(CVConstants.H_STRICT_UPPER_BLUE, CVConstants.S_STRICT_UPPER_BLUE, CVConstants.V_STRICT_UPPER_BLUE);
         }
     }
 

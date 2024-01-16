@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmodes.input;
+package org.firstinspires.ftc.teamcode.opmodes_teleop.input;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
-import java.util.ArrayList;
 
 public class Controller {
     private Gamepad gamepad;

@@ -1,20 +1,15 @@
-package org.firstinspires.ftc.teamcode.opmodes.autonomous;
+package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.MOVE;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.PLACE_PIXEL;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.RETRACT;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.WAIT;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets.leftSpikePos;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.RETRACT;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActionHandler;
-import org.firstinspires.ftc.teamcode.bot.control.auto_execution.presets.AutoPresets;
+import org.firstinspires.ftc.teamcode.control.auto_execution.AutoActionHandler;
 
 @Autonomous
 public class TestAuto extends LinearOpMode {

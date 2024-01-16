@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.bot.components.Gyro;
-import org.firstinspires.ftc.teamcode.bot.control.NavigationPID;
+import org.firstinspires.ftc.teamcode.control.NavigationPID;
 
 public class BallDrive {
     private DcMotor leftDrive;
@@ -77,21 +76,56 @@ public class BallDrive {
         this.x = this.x + MM_PER_TICK * dx;
     }
 
-    public boolean runToPosition(NavigationPID xPID, NavigationPID yPID){
+    public boolean runToPosition(NavigationPID xPID, NavigationPID yPID, boolean runTogether){
         double xPower = -xPID.getOutput(this.x);
         double yPower = yPID.getOutput(this.y);
 
-//        if (Math.abs(xPower) > .05)
-//            calculateDrivePowers(xPower, 0, 0, true);
-//        else
-//            calculateDrivePowers(0, yPower, 0, true);
+        if (runTogether)
+            return runToPosition(xPID, yPID);
 
-        calculateDrivePowers(xPower, yPower, 0, true);
+        if (Math.abs(xPID.getError()) > 10)
+            calculateDrivePowers(xPower, 0, 0, true);
+        else
+            calculateDrivePowers(0, yPower, 0, true);
+
 
         errorX = xPID.getError();
 
         return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 2;
     }
+
+    public boolean runToPosition(NavigationPID xPID, NavigationPID yPID){
+        double xPower = -xPID.getOutput(this.x);
+        double yPower = yPID.getOutput(this.y);
+
+        calculateDrivePowers(xPower, yPower, 0, true);
+
+
+        errorX = xPID.getError();
+
+        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 10;
+    }
+
+//    public boolean runToPosition(NavigationPID xPID, double y){
+//        double xPower = -xPID.getOutput(this.x);
+//
+//        calculateDrivePowers(xPower, y, 0, true);
+//
+//
+//        errorX = xPID.getError();
+//
+//        return Math.abs(xPID.getError()) < 2;
+//    }
+//
+//
+//    public boolean runToPosition(double x, NavigationPID yPID){
+//        double yPower = yPID.getOutput(this.y);
+//
+//        calculateDrivePowers(x, yPower, 0, true);
+//
+//
+//        return Math.abs(yPID.getError()) < 2;
+//    }
 
 
     public void calculateDrivePowers(double x, double y, double rot) {

@@ -1,12 +1,10 @@
-package org.firstinspires.ftc.teamcode.bot.control.auto_execution;
+package org.firstinspires.ftc.teamcode.control.auto_execution;
 
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DELIVER;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DETECT;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.DROP;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.EXTEND;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.LIFT;
-import static org.firstinspires.ftc.teamcode.bot.control.auto_execution.AutoActions.WAIT;
-import static org.firstinspires.ftc.teamcode.cv.Camera.SPIKE_ZONE;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
+import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
