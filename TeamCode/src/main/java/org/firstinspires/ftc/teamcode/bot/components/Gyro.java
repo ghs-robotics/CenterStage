@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.bot.components;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -28,7 +29,8 @@ public class Gyro {
     public Gyro(HardwareMap hardwareMap) {
         gyro = hardwareMap.get(IMU.class, "imu");
 
-        orientation = new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, DEGREES, 0, 0, 0, 0);
+        orientation = new Orientation(AxesReference.INTRINSIC, AxesOrder.YXZ, DEGREES,
+                0, 0, 0, 0);
 
         revOrientation = new RevHubOrientationOnRobot(orientation);
 

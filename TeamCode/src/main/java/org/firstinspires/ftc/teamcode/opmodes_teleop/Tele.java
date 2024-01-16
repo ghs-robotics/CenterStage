@@ -1,16 +1,18 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes_teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
+import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
 
 @TeleOp
 public class Tele extends LinearOpMode {
     Robot robot;
-    Controller gp1;
+     Controller gp1;
     Controller gp2;
+    Delivery deliver;
 
     boolean driveMode;
 
@@ -22,7 +24,6 @@ public class Tele extends LinearOpMode {
         gp2 = new Controller(gamepad2);
 
         driveMode = false;
-
 
         robot.init();
         waitForStart();
@@ -38,51 +39,53 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
 
             // toggle drive mode. True is metaDrive, False is regular drive - left bumper
-            if(gp1.left_bumper.pressed())
+            if(gp1.left_bumper.pressed()) {
                 driveMode = !driveMode;
+            }
+
 
             // driving
-            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x, driveMode);
+            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y,
+                    gp1.right_stick_x, driveMode);
 
-            // runs hang servos and winds the string - dpad down and dpad up
-            robot.hang.hang(gp1.dpad_down.pressing(), gp1.dpad_up.pressing());
+
+            // launches drone - a button
+            robot.drone.launchDrone(gp1.x.pressing());
 
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            // available buttons y, a, dpad_left, dpad_right
-
             // changes intake height - left bumper and right bumper
-            robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(), gp2.right_bumper.pressed());
+            robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
 
-            // runs intake and conveyor belt - x
-            robot.intake.pixelIn(gp2.x.pressing());
 
-            // runs intake analogly - left and right trigger
+            // runs intake - left and right trigger
             robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
 
-            // changes drop servo position - b
-            robot.delivery.changeDropPosition(gp2.b.pressed());
 
-            // drives lift - left joystick, y-axis
+            // extends outtake - left and right dpad
+            robot.delivery.changeExtensionLength(gp2.dpad_left.pressed(), gp2.dpad_right.pressed());
+
+
             robot.delivery.driveLift(gp2.left_stick_y);
 
-            // extends outtake - right joystick y-axis
-            robot.delivery.setExtensionPower(gp2.right_stick_y);
 
-            // runs lift to set height - dpad up
-            robot.delivery.changeLiftHeight(gp2.dpad_down.pressed(), gp2.dpad_up.pressed());
+            robot.delivery.hangLift(gp2.left_stick_y, gp2.right_stick_y);
 
-            // changes mode from driving lift to setting lift position or vice versa - dpad down
-            robot.delivery.setRunLiftToPosition(gp2.y.pressed());
+
+            // changes drop servo position - b
+            robot.delivery.changeDropPosition(gp2.x.pressing());
+
+
+            robot.delivery.setHangMode(gp2.a.pressed());
 
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
+
             robot.update();
             robot.getTeleOpTelemetry();
         }
-
     }
 }

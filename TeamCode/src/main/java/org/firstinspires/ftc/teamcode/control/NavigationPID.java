@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.bot.control;
+package org.firstinspires.ftc.teamcode.control;
 
-public class PID {
+public class NavigationPID {
     private double P = 0;
     private double I = 0;
     private double D = 0;
@@ -26,8 +26,15 @@ public class PID {
 
     private double targetRange = 0;
 
+    private double error;
 
-    public PID (double p, double i, double d) {
+    private boolean run = false;
+
+    public NavigationPID(double[] pid){
+        this(pid[0], pid[1], pid[2]);
+    }
+
+    public NavigationPID(double p, double i, double d) {
         P = p;
         I = i;
         D = d;
@@ -88,7 +95,12 @@ public class PID {
     }
 
     public void setTarget (double target) {
+        if (this.target == target)
+            return;
+
         this.target = target;
+        run = true;
+        reset();
     }
 
     public double getOutput (double actual, double target) {
@@ -103,7 +115,7 @@ public class PID {
             target = constrain(target, actual - targetRange, actual + targetRange);
         }
 
-        double error = target - actual;
+        error = target - actual;
 
         Poutput = P * error;
 
@@ -142,16 +154,12 @@ public class PID {
             output = lastOutput * outputFilter + output * (1 - outputFilter);
         }
 
-        // for testing - prints outputs
-         System.out.printf("Final output %5.2f [ %5.2f, %5.2f , %5.2f  ], eSum %.2f\n",output,Poutput, Ioutput, Doutput,errorSum );
-         System.out.printf("%5.2f\t%5.2f\t%5.2f\t%5.2f\n",output,Poutput, Ioutput, Doutput );
-
         lastOutput = output;
         return output;
     }
 
     public double getOutput (double actual) {
-        return getOutput(lastActual,target);
+        return getOutput(actual,target);
     }
 
     public void reset () {
@@ -197,5 +205,17 @@ public class PID {
             if (I < 0) {I = -I;}
             if (D < 0) {D = -D;}
         }
+    }
+
+    public double getError() {
+        return error;
+    }
+
+    public boolean isRun() {
+        return run;
+    }
+
+    public void setRun(boolean run) {
+        this.run = run;
     }
 }
