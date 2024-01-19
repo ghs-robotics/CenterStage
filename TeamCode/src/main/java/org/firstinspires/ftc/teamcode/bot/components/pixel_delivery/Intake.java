@@ -2,38 +2,49 @@ package org.firstinspires.ftc.teamcode.bot.components.pixel_delivery;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import java.util.ArrayList;
+
 public class Intake {
-    private DcMotor conveyorBeltMotor;
-    private DcMotor intakeMotor;
-    private Servo intakeServo;
+    private final DcMotor conveyorBeltMotor;
+    private final DcMotor intakeMotor;
+    private final Servo intakeServo;
+    private final DistanceSensor distance;
+    private final double[] intakeServoPos = {0.01, 0.06, 0.12, 0.15, 0.17, 0.21};
 
-    // 0.17 is the five stack pos
-    double[] intakeServoPos = {0.01, 0.06, 0.12, 0.15, 0.17, 0.21};
+    private int intakeLvl = 60;
 
-    int intakeLvl = 60;
+    private int pixels;
 
-    public Intake (HardwareMap hardwareMap) {
-        conveyorBeltMotor = hardwareMap.get(DcMotor.class,"belt");
+//    private double[] pixelDistances = ;
+
+    public Intake(HardwareMap hardwareMap) {
+        conveyorBeltMotor = hardwareMap.get(DcMotor.class, "belt");
         intakeMotor = hardwareMap.get(DcMotor.class, "intakem");
         intakeServo = hardwareMap.get(Servo.class, "intakes");
+        distance = hardwareMap.get(DistanceSensor.class, "distance");
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeServo.setPosition(0.05);
+
+        pixels = 0;
     }
 
     //-------------------------------------------------------------------------------------
     //                                   AutoRed Functions
     //-------------------------------------------------------------------------------------
 
-    public void autoPixelOut () {
+    public void autoPixelOut() {
         intakeMotor.setPower(-0.5);
         conveyorBeltMotor.setPower(-1);
     }
 
-    public void setIntakeHeight(int targetLevel){
+    public void setIntakeHeight(int targetLevel) {
         int diff = targetLevel - getIntakeLvl();
         intakeLvl += diff;
         setIntakePosition();
@@ -44,20 +55,27 @@ public class Intake {
     //                                   Intake Functions
     //-------------------------------------------------------------------------------------
 
-    public void pixelIn (double power) {
-            intakeMotor.setPower(power / 2);
-            conveyorBeltMotor.setPower(-power);
-        }
+    public void pixelIn(double power) {
+        intakeMotor.setPower(power / 2);
+        conveyorBeltMotor.setPower(-power);
+    }
 
     public void changeIntakeHeight(boolean decrease, boolean increase) {
-            if (decrease) {
-                intakeLvl -= 1;
-            }
-            if (increase) {
-                intakeLvl += 1;
-            }
-            setIntakePosition();
+        if (decrease) {
+            intakeLvl -= 1;
         }
+        if (increase) {
+            intakeLvl += 1;
+        }
+        setIntakePosition();
+    }
+
+    public int countPixels() {
+        if (distance.getDistance(DistanceUnit.CM) < 7) {
+            pixels++;
+        }
+        return pixels;
+    }
 
     //-------------------------------------------------------------------------------------
     //                                   Simple Functions
@@ -67,12 +85,20 @@ public class Intake {
         intakeServo.setPosition(intakeServoPos[Math.abs(intakeLvl % intakeServoPos.length)]);
     }
 
-    public double getIntakePosition () {
+    public double getIntakePosition() {
         return intakeServo.getPosition();
     }
 
-    private int getIntakeLvl(){
+    private int getIntakeLvl() {
         return Math.abs(intakeLvl % intakeServoPos.length);
+    }
+
+    public int getPixelNumber() {
+        return countPixels();
+    }
+
+    public double getDistanceFromPixel() {
+        return distance.getDistance(DistanceUnit.CM);
     }
 }
 

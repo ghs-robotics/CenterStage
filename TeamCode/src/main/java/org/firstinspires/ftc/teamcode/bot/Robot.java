@@ -71,6 +71,7 @@ public class Robot {
     public void update(){
         drive.update();
         telemetry.update();
+        intake.countPixels();
     }
 
     public void getAutoTelemetry(){
@@ -98,6 +99,8 @@ public class Robot {
     private void intakeTelemetry(){
         telemetry.addLine("Intake Telemetry");
         telemetry.addData("intake position: ", intake.getIntakePosition());
+        telemetry.addData("number of pixels:", intake.getPixelNumber());
+        telemetry.addData("distance from pixel:", intake.getDistanceFromPixel());
         telemetry.addLine();
     }
 
