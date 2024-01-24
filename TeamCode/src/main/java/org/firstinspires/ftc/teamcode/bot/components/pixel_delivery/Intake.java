@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Intake {
@@ -21,7 +22,7 @@ public class Intake {
 
     private int pixels;
 
-//    private double[] pixelDistances = ;
+    private double[] pixelDistances = {0, 0, 0};
 
     public Intake(HardwareMap hardwareMap) {
         conveyorBeltMotor = hardwareMap.get(DcMotor.class, "belt");
@@ -50,7 +51,6 @@ public class Intake {
         setIntakePosition();
     }
 
-
     //-------------------------------------------------------------------------------------
     //                                   Intake Functions
     //-------------------------------------------------------------------------------------
@@ -70,6 +70,12 @@ public class Intake {
         setIntakePosition();
     }
 
+    public void addDataToDistanceArray () {
+        for (int i = 0; i < 3; i++) {
+            pixelDistances[i] = getDistanceFromPixel();
+        }
+    }
+
     public int countPixels() {
         if (distance.getDistance(DistanceUnit.CM) < 7) {
             pixels++;
@@ -77,28 +83,41 @@ public class Intake {
         return pixels;
     }
 
+    public String pixelDistancesToString () {
+        String dist = "";
+        for (int i = 0; i < 2; i++) {
+            dist = dist + pixelDistances[i] + ", ";
+        }
+        dist = dist + pixelDistances[2];
+        return dist;
+    }
+
     //-------------------------------------------------------------------------------------
     //                                   Simple Functions
     //-------------------------------------------------------------------------------------
 
-    private void setIntakePosition() {
+    private void setIntakePosition () {
         intakeServo.setPosition(intakeServoPos[Math.abs(intakeLvl % intakeServoPos.length)]);
     }
 
-    public double getIntakePosition() {
+    public double getIntakePosition () {
         return intakeServo.getPosition();
     }
 
-    private int getIntakeLvl() {
+    private int getIntakeLvl () {
         return Math.abs(intakeLvl % intakeServoPos.length);
     }
 
-    public int getPixelNumber() {
+    public int getPixelNumber () {
         return countPixels();
     }
 
-    public double getDistanceFromPixel() {
+    public double getDistanceFromPixel () {
         return distance.getDistance(DistanceUnit.CM);
+    }
+
+    public String getPixelDistances () {
+        return pixelDistancesToString();
     }
 }
 
