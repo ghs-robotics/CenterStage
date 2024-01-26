@@ -22,7 +22,7 @@ public class Intake {
 
     private int pixels;
 
-    private double[] pixelDistances = {0, 0, 0};
+    private double[] pixelDistances = {0, 0, 0, 0, 0, 0};
 
     public Intake(HardwareMap hardwareMap) {
         conveyorBeltMotor = hardwareMap.get(DcMotor.class, "belt");
@@ -71,13 +71,13 @@ public class Intake {
     }
 
     public void addDataToDistanceArray () {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < pixelDistances.length; i++) {
             pixelDistances[i] = getDistanceFromPixel();
         }
     }
 
     public int countPixels() {
-        if (distance.getDistance(DistanceUnit.CM) < 7) {
+        if (pixelDistances[0] > pixelDistances[5] + 0.6) {
             pixels++;
         }
         return pixels;
@@ -85,10 +85,11 @@ public class Intake {
 
     public String pixelDistancesToString () {
         String dist = "";
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < pixelDistances.length - 1; i++) {
             dist = dist + pixelDistances[i] + ", ";
         }
-        dist = dist + pixelDistances[2];
+        dist = dist + pixelDistances[pixelDistances.length - 1];
+
         return dist;
     }
 
