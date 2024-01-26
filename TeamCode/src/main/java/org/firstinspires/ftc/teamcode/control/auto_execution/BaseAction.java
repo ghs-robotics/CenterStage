@@ -146,12 +146,6 @@ public class BaseAction {
     }
 
     // good to go
-    protected void extendDropper(){
-        resetTimer();
-        if(timer.milliseconds() < 1400)
-            robot.delivery.autoExtend(0.4);
-        endAction = timer.milliseconds() > 2000;
-    }
 
     protected void retractDelivery(){
         resetTimer();
@@ -159,7 +153,7 @@ public class BaseAction {
         robot.delivery.autoDropPixels(0.15);
         robot.delivery.autoExtend(0);
         boolean atPos = robot.delivery.driveLiftToPosition(10, (int) timer.milliseconds());
-        endAction = timer.milliseconds() > 1500 || atPos;
+        endAction = timer.milliseconds() > 2200 || atPos;
     }
 
     /**
@@ -174,6 +168,13 @@ public class BaseAction {
             endAction = true;
             robot.intake.pixelIn(0);
         }
+    }
+
+    protected void extendDropper(){
+        resetTimer();
+        if(timer.milliseconds() < 1400)
+            robot.delivery.autoExtend(0.4);
+        endAction = timer.milliseconds() > 2000;
     }
 
     protected void detectSpikeMark(){
@@ -195,7 +196,7 @@ public class BaseAction {
      */
     protected void waiting() {
         resetTimer();
-//        robot.drive.calculateDrivePowers(0,0,0);
+        robot.drive.calculateDrivePowers(0,0,0);
         robot.intake.pixelIn(0);
         robot.delivery.driveLift(0);
 
@@ -219,7 +220,6 @@ public class BaseAction {
             timerReset = true;
         }
     }
-
 
     protected void checkXSign(){
         if (!robot.RED)

@@ -85,7 +85,6 @@ import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.Time;
 import com.acmerobotics.roadrunner.TimeTrajectory;
 import com.acmerobotics.roadrunner.TimeTurn;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Twist2dDual;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -110,7 +109,7 @@ import java.util.List;
 
 @Config
 public class BallDrive {
-//    public static class Params {
+    //    public static class Params {
 //        // drive model parameters
 //        public double inPerTick = 1;
 //        public double lateralInPerTick = inPerTick;
@@ -139,7 +138,6 @@ public class BallDrive {
 //        public double lateralVelGain = 0.0;
 //        public double headingVelGain = 0.0; // shared with turn
 //    }
-
     public static Localizer.Params PARAMS = new Localizer.Params();
 
 
@@ -202,29 +200,29 @@ public class BallDrive {
         FlightRecorder.write("BALL_DRIVE_PARAMS", PARAMS);
     }
 
-
-    public void calculateDrivePowers(double x, double y, double rot) {
-        double bp = x;
-        double lp = y - rot;
-        double rp = y + rot;
-
-    }
-
-    public void calculateDrivePowers(double x, double y, double rot, boolean driveMode){
+    public void calculateDrivePowers(double x, double y, double rot, boolean driveMode) {
         metaDriveOn = driveMode;
 
         double driveX = x;
         double driveY = y;
         double heading = pose.heading.toDouble();
 
-        if(driveMode) {
-            driveX = x * Math.cos(heading) - y * Math.sin(heading) ;
+        if (driveMode) {
+            driveX = x * Math.cos(heading) - y * Math.sin(heading);
             driveY = y * Math.cos(heading) + x * Math.sin(heading);
         }
         calculateDrivePowers(driveX, driveY, rot);
     }
 
-    public void setDrivePowers(PoseVelocity2d powers) {
+    public void calculateDrivePowers(double x, double y, double rot) {
+        setMotorPowers(
+                y - rot,
+                y + rot,
+                x
+        );
+    }
+
+    public void calculateDrivePowers(PoseVelocity2d powers) {
         Kinematics.WheelVelocities wheelVels = new Kinematics(1).inverse(
                 PoseVelocity2dDual.constant(powers, 1));
 
@@ -233,13 +231,34 @@ public class BallDrive {
             maxPowerMag = Math.max(maxPowerMag, power.value());
         }
 
-        leftDrive.setPower(wheelVels.left.get(0) / maxPowerMag);
-        rightDrive.setPower(wheelVels.right.get(0) / maxPowerMag);
-        backDrive.setPower(wheelVels.back.get(0) / maxPowerMag);
+        setMotorPowers(
+                (wheelVels.left.get(0) / maxPowerMag),
+                (wheelVels.right.get(0) / maxPowerMag),
+                (wheelVels.back.get(0) / maxPowerMag));
+    }
+
+    public PoseVelocity2d updatePoseEstimate() {
+        Twist2dDual<Time> twist = localizer.update();
+        pose = pose.plus(twist.value());
+
+        poseHistory.add(pose);
+        while (poseHistory.size() > 100) {
+            poseHistory.removeFirst();
+        }
+
+        estimatedPoseWriter.write(new PoseMessage(pose));
+
+        return twist.velocity().value();
     }
 
     public boolean isMetaDriveOn() {
         return metaDriveOn;
+    }
+
+    private void setMotorPowers(double lp, double rp, double bp) {
+        leftDrive.setPower(lp);
+        rightDrive.setPower(rp);
+        backDrive.setPower(bp);
     }
 
     public final class FollowTrajectoryAction implements Action {
@@ -418,20 +437,6 @@ public class BallDrive {
         }
     }
 
-    public PoseVelocity2d updatePoseEstimate() {
-        Twist2dDual<Time> twist = localizer.update();
-        pose = pose.plus(twist.value());
-
-        poseHistory.add(pose);
-        while (poseHistory.size() > 100) {
-            poseHistory.removeFirst();
-        }
-
-        estimatedPoseWriter.write(new PoseMessage(pose));
-
-        return twist.velocity().value();
-    }
-
     private void drawPoseHistory(Canvas c) {
         double[] xPoints = new double[poseHistory.size()];
         double[] yPoints = new double[poseHistory.size()];
@@ -461,6 +466,7 @@ public class BallDrive {
         c.strokeLine(p1.x, p1.y, p2.x, p2.y);
     }
 
+}
 //    public TrajectoryActionBuilder actionBuilder(Pose2d beginPose) {
 //        return new TrajectoryActionBuilder(
 //                new TurnAction(new TimeTurn(beginPose, 0, defaultTurnConstraints)),
@@ -471,9 +477,6 @@ public class BallDrive {
 //                0.25, 0.1
 //        );
 //    }
-}
-
-
 //package org.firstinspires.ftc.teamcode.bot.components;
 //
 //import com.qualcomm.robotcore.hardware.DcMotor;

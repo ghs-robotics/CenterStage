@@ -14,13 +14,13 @@ import org.firstinspires.ftc.teamcode.bot.Robot;
 import java.util.ArrayList;
 
 public class AutoActionHandler {
-    private ArrayList<AutoActions> actionList;
+    private final ArrayList<AutoActions> actionList;
     private AutoActions current;
 
-    private Robot robot;
-    private Telemetry telemetry;
+    private final Robot robot;
+    private final Telemetry telemetry;
 
-    private ElapsedTime timer;
+    private final ElapsedTime timer;
 
     private int totalActions;
     public int zone;

@@ -47,7 +47,7 @@ public class TestTele extends LinearOpMode {
 
 
             // driving
-            robot.drive.setDrivePowers(new PoseVelocity2d
+            robot.drive.calculateDrivePowers(new PoseVelocity2d
                     (new Vector2d(-gp1.left_stick_x, -gp1.left_stick_y), gp1.right_stick_x));
 
             robot.update();
