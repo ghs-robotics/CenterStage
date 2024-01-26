@@ -12,7 +12,6 @@ public class Tele extends LinearOpMode {
     Robot robot;
      Controller gp1;
     Controller gp2;
-    Delivery deliver;
 
     boolean driveMode;
 
@@ -45,8 +44,8 @@ public class Tele extends LinearOpMode {
 
 
             // driving
-            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y,
-                    gp1.right_stick_x, driveMode);
+//            robot.drive.calculateDrivePowers(-gp1.left_stick_x, -gp1.left_stick_y,
+//                    gp1.right_stick_x, driveMode);
 
 
             // launches drone - a button
