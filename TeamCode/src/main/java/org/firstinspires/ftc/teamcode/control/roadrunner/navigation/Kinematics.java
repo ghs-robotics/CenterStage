@@ -50,7 +50,7 @@ public final class Kinematics {
         return new Twist2dDual<Time>(new Vector2dDual<Time>(
                 w.left.plus(w.right).times(0.5 / this.lateralMultiplier),
                 w.back),
-                w.left.plus(w.right).div((double)2 * this.trackWidth));
+                w.left.plus(w.right).div((double)2));// * this.trackWidth));
     }
 
     @NotNull
@@ -59,7 +59,7 @@ public final class Kinematics {
         return new WheelVelocities(
                 t.linearVel.x.minus(t.angVel.times(0.5).times(this.trackWidth)),
                 t.linearVel.x.plus(t.angVel.times(0.5).times(this.trackWidth)),
-                t.linearVel.y.times(this.lateralMultiplier).plus(t.angVel.times(this.trackWidth)));
+                t.linearVel.y/* .times(this.lateralMultiplier) */.plus(t.angVel.times(this.trackWidth)));
     }
 
 
@@ -158,9 +158,6 @@ public final class Kinematics {
 
         public WheelVelocities(@NonNull DualNum<Time> left, @NonNull DualNum<Time> right, @NonNull DualNum<Time> back) {
             super();
-//            Intrinsics.checkNotNullParameter(left, "left");
-//            Intrinsics.checkNotNullParameter(right, "right");
-//            Intrinsics.checkNotNullParameter(back, "back");
             this.left = left;
             this.right = right;
             this.back = back;
@@ -190,8 +187,6 @@ public final class Kinematics {
         public final double maxWheelVel;
 
         public double maxRobotVel(@NotNull Pose2dDual<Arclength> robotPose, @NotNull PosePath path, double s) {
-//            Intrinsics.checkNotNullParameter(robotPose, "robotPose");
-//            Intrinsics.checkNotNullParameter(path, "path");
             Pose2d txRobotWorld = robotPose.value().inverse();
             PoseVelocity2d robotVelWorld = robotPose.velocity().value();
             PoseVelocity2d robotVelRobot = txRobotWorld.times(robotVelWorld);
@@ -220,9 +215,6 @@ public final class Kinematics {
     }
 }
 
-//
-//        @NotNull
-//        public WheelIncrements copy(DualNum<Time> left, DualNum<Time> right, DualNum<Time> back) {
 //            Intrinsics.checkNotNullParameter(left, "left");
 //            Intrinsics.checkNotNullParameter(right, "right");
 //            Intrinsics.checkNotNullParameter(back, "back");

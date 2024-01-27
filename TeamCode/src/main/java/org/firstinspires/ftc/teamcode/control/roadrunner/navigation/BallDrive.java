@@ -109,43 +109,13 @@ import java.util.List;
 
 @Config
 public class BallDrive {
-    //    public static class Params {
-//        // drive model parameters
-//        public double inPerTick = 1;
-//        public double lateralInPerTick = inPerTick;
-//        public double trackWidthTicks = 0;
-//
-//        // feedforward parameters (in tick units)
-//        public double kS = 0;
-//        public double kV = 0;
-//        public double kA = 0;
-//
-//        // path profile parameters (in inches)
-//        public double maxWheelVel = 50;
-//        public double minProfileAccel = -30;
-//        public double maxProfileAccel = 50;
-//
-//        // turn profile parameters (in radians)
-//        public double maxAngVel = Math.PI; // shared with path
-//        public double maxAngAccel = Math.PI;
-//
-//        // path controller gains
-//        public double axialGain = 0.0;
-//        public double lateralGain = 0.0;
-//        public double headingGain = 0.0; // shared with turn
-//
-//        public double axialVelGain = 0.0;
-//        public double lateralVelGain = 0.0;
-//        public double headingVelGain = 0.0; // shared with turn
-//    }
     public static Localizer.Params PARAMS = new Localizer.Params();
-
 
     public final TurnConstraints defaultTurnConstraints = new TurnConstraints(
             PARAMS.maxAngVel, -PARAMS.maxAngAccel, PARAMS.maxAngAccel);
 
     public final Kinematics kinematics = new Kinematics(
-            PARAMS.inPerTick * PARAMS.trackWidthTicks, PARAMS.inPerTick / PARAMS.lateralInPerTick);
+            PARAMS.mmPerTicks * PARAMS.trackWidthTicks, PARAMS.mmPerTicks / PARAMS.lateralMMPerTick);
 
     public final VelConstraint defaultVelConstraint =
             new MinVelConstraint(Arrays.asList(
@@ -188,7 +158,6 @@ public class BallDrive {
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         backDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -223,7 +192,7 @@ public class BallDrive {
     }
 
     public void calculateDrivePowers(PoseVelocity2d powers) {
-        Kinematics.WheelVelocities wheelVels = new Kinematics(1).inverse(
+        Kinematics.WheelVelocities wheelVels = new Kinematics(PARAMS.trackWidthTicks).inverse(
                 PoseVelocity2dDual.constant(powers, 1));
 
         double maxPowerMag = 1;
@@ -251,8 +220,20 @@ public class BallDrive {
         return twist.velocity().value();
     }
 
-    public boolean isMetaDriveOn() {
+    public boolean getDriveMode() {
         return metaDriveOn;
+    }
+
+    public double getX(){
+        return pose.position.x;
+    }
+
+    public double getY(){
+        return pose.position.y;
+    }
+
+    public double getHeading(){
+        return pose.heading.toDouble();
     }
 
     private void setMotorPowers(double lp, double rp, double bp) {
@@ -316,7 +297,7 @@ public class BallDrive {
             double voltage = voltageSensor.getVoltage();
 
             final MotorFeedforward feedforward = new MotorFeedforward(PARAMS.kS,
-                    PARAMS.kV / PARAMS.inPerTick, PARAMS.kA / PARAMS.inPerTick);
+                    PARAMS.kV / PARAMS.mmPerTicks, PARAMS.kA / PARAMS.mmPerTicks);
             double leftPower = feedforward.compute(wheelVels.left) / voltage;
             double rightPower = feedforward.compute(wheelVels.right) / voltage;
             double backPower = feedforward.compute(wheelVels.back) / voltage;
@@ -403,7 +384,7 @@ public class BallDrive {
             Kinematics.WheelVelocities wheelVels = kinematics.inverse(command);
             double voltage = voltageSensor.getVoltage();
             final MotorFeedforward feedforward = new MotorFeedforward(PARAMS.kS,
-                    PARAMS.kV / PARAMS.inPerTick, PARAMS.kA / PARAMS.inPerTick);
+                    PARAMS.kV / PARAMS.mmPerTicks, PARAMS.kA / PARAMS.mmPerTicks);
             double leftPower = feedforward.compute(wheelVels.left) / voltage;
             double rightPower = feedforward.compute(wheelVels.right) / voltage;
             double backPower = feedforward.compute(wheelVels.back) / voltage;

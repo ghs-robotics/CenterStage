@@ -11,8 +11,8 @@ import com.acmerobotics.roadrunner.ftc.FlightRecorder;
 import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @Config
@@ -29,9 +29,9 @@ public class Localizer {
         final DownsampledWriter ballDriveCommandWriter = new DownsampledWriter("BALL_DRIVE_COMMAND", 50_000_000);
 
         // drive model parameters
-        public double inPerTick = 1;
-        public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double mmPerTicks = (35 * Math.PI) / 8192;;
+        public double lateralMMPerTick = mmPerTicks;
+        public double trackWidthTicks = 306.11 / mmPerTicks;
 
         // feedforward parameters (in tick units)
         public double kS = 0;
@@ -55,39 +55,36 @@ public class Localizer {
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
         public double headingVelGain = 0.0; // shared with turn
-    }
 
+    }
 
     public static Params PARAMS = new Params();
 
-    public final Encoder par0, par1, perp;
+    public final Encoder parLeft, parRight, perp;
 
-    public final double inPerTick = (35 * Math.PI) / 8192;
+    public final double mmPerTicks = (35 * Math.PI) / 8192;
 
     private int lastPar0Pos, lastPar1Pos, lastPerpPos;
 
     public Localizer(HardwareMap hardwareMap) {
-        // TODO: make sure your config has **motors** with these names (or change them)
-        //   the encoders should be plugged into the slot matching the named motor
-        //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left")));
-        par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right")));
+        parLeft = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "left")));
+        parRight = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "right")));
         perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "back")));
 
-        // TODO: reverse encoder directions if needed
-        //   par0.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        lastPar0Pos = par0.getPositionAndVelocity().position;
-        lastPar1Pos = par1.getPositionAndVelocity().position;
+        lastPar0Pos = parLeft.getPositionAndVelocity().position;
+        lastPar1Pos = parRight.getPositionAndVelocity().position;
         lastPerpPos = perp.getPositionAndVelocity().position;
 
+        parLeft.setDirection(DcMotor.Direction.REVERSE);
+        parRight.setDirection(DcMotor.Direction.FORWARD);
+        perp.setDirection(DcMotor.Direction.REVERSE);
 
-        FlightRecorder.write("THREE_DEAD_WHEEL_PARAMS", PARAMS);
+       FlightRecorder.write("THREE_DEAD_WHEEL_PARAMS", PARAMS);
     }
 
     public Twist2dDual<Time> update() {
-        PositionVelocityPair par0PosVel = par0.getPositionAndVelocity();
-        PositionVelocityPair par1PosVel = par1.getPositionAndVelocity();
+        PositionVelocityPair par0PosVel = parLeft.getPositionAndVelocity();
+        PositionVelocityPair par1PosVel = parRight.getPositionAndVelocity();
         PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
 
         int par0PosDelta = par0PosVel.position - lastPar0Pos;
@@ -99,11 +96,11 @@ public class Localizer {
                         new DualNum<Time>(new double[] {
                                 (PARAMS.par0YTicks * par1PosDelta - PARAMS.par1YTicks * par0PosDelta) / (PARAMS.par0YTicks - PARAMS.par1YTicks),
                                 (PARAMS.par0YTicks * par1PosVel.velocity - PARAMS.par1YTicks * par0PosVel.velocity) / (PARAMS.par0YTicks - PARAMS.par1YTicks),
-                        }).times(inPerTick),
+                        }).times(mmPerTicks),
                         new DualNum<Time>(new double[] {
                                 (PARAMS.perpXTicks / (PARAMS.par0YTicks - PARAMS.par1YTicks) * (par1PosDelta - par0PosDelta) + perpPosDelta),
                                 (PARAMS.perpXTicks / (PARAMS.par0YTicks - PARAMS.par1YTicks) * (par1PosVel.velocity - par0PosVel.velocity) + perpPosVel.velocity),
-                        }).times(inPerTick)
+                        }).times(mmPerTicks)
                 ),
                 new DualNum<>(new double[] {
                         (par0PosDelta - par1PosDelta) / (PARAMS.par0YTicks - PARAMS.par1YTicks),
@@ -115,6 +112,19 @@ public class Localizer {
         lastPar1Pos = par1PosVel.position;
         lastPerpPos = perpPosVel.position;
 
+//        double ds = (deltaR + deltaL) * .5;
+//
+//        double dx1 = ds * Math.cos(deltaH / 2);
+//        double dy1 = ds * Math.sin(deltaH / 2);
+//
+//        double dx2 = deltaB * Math.sin(deltaH / 2);
+//        double dy2 = deltaB * Math.cos(deltaH / 2);
+//
+//        double dy = dx1 * Math.cos(heading) + dx2 * Math.sin(heading);
+//        double dx = - dy1 * Math.sin(heading) + dy2 * Math.cos(heading);
+//
+//        this.y = this.y + MM_PER_TICK * dy;
+//        this.x = this.x + MM_PER_TICK * dx;
         return twist;
     }
 }
