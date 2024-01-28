@@ -212,8 +212,6 @@ public class BallDrive {
         lastR = right;
         lastH = heading;
     }
-
-
 //    private class PID{
 //        private double lastError;
 //        private double lastIntegral;
@@ -292,10 +290,7 @@ public class BallDrive {
 //        }
 //
 //    }
-
 }
-
-
 
 
 
