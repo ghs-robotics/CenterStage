@@ -1,11 +1,5 @@
 package org.firstinspires.ftc.teamcode.control.auto_execution;
 
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.centerBackDropPos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.centerSpikePos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.leftBackDropPos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.leftSpikePos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.rightBackDropPos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.rightSpikePos;
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -59,12 +53,10 @@ public class AutoActions extends BaseAction {
             waitTime = value;
         }
     }
-    public AutoActions (int id, Robot robot, double[] pos){
+    public AutoActions (int id, Robot robot, double[] pos) {
         this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
     }
-    /**
-     * Driving the rob
-     */
+
     /**
      * determines the action and what this specific action will do.
      */

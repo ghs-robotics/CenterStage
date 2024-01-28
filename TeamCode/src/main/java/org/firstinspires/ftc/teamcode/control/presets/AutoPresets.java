@@ -1,6 +1,12 @@
 package org.firstinspires.ftc.teamcode.control.presets;
 
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.CENTER_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.CENTER_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.LEFT_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.LEFT_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.RIGHT_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.RIGHT_SPIKE_POS;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.Robot;
@@ -10,14 +16,6 @@ import org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions;
 public class AutoPresets {
     private static AutoActionHandler routeA;
     private static AutoActionHandler beginning;
-
-    public static double[] leftSpikePos = {-630, -5, 0.0};
-    public static double[] centerSpikePos = {-850, 0, 0.0};
-    public static double[] rightSpikePos = {-630, 480, 0.0};
-
-    public static double[] leftBackDropPos = {744, -880, 0.0};
-    public static double[] centerBackDropPos = {-660, -690, 0.0};
-    public static double[] rightBackDropPos = {470, -860, 0.0};
 
 //    static int pixelStackX = 3 * TICKS_PER_TILE_X + 20;
 //    static int pixelStackY = (int) (1.2 * TICKS_PER_TILE_Y);
@@ -79,14 +77,14 @@ public class AutoPresets {
         double[] backDropPos = new double[3];
 
         if (SPIKE_ZONE == 1){
-            spikePos = leftSpikePos;
-            backDropPos = leftBackDropPos;
+            spikePos = LEFT_SPIKE_POS;
+            backDropPos = LEFT_BACKDROP_POS;
         } else if (SPIKE_ZONE == 2) {
-            spikePos = centerSpikePos;
-            backDropPos = centerBackDropPos;
+            spikePos = CENTER_SPIKE_POS;
+            backDropPos = CENTER_BACKDROP_POS;
         }else{
-            spikePos = rightSpikePos;
-            backDropPos = rightBackDropPos;
+            spikePos = RIGHT_SPIKE_POS;
+            backDropPos = RIGHT_BACKDROP_POS;
         }
         beginning.add(AutoActions.MOVE, (int) spikePos[0], 0, 0.0);
 //        beginning.add(MOVE, (spikePos));
@@ -105,14 +103,14 @@ public class AutoPresets {
         double[] backDropPos = new double[3];
 
         if (SPIKE_ZONE == 1){
-            spikePos = leftSpikePos;
-            backDropPos = leftBackDropPos;
+            spikePos = LEFT_SPIKE_POS;
+            backDropPos = LEFT_BACKDROP_POS;
         } else if (SPIKE_ZONE == 2) {
-            spikePos = centerSpikePos;
-            backDropPos = centerBackDropPos;
+            spikePos = CENTER_SPIKE_POS;
+            backDropPos = CENTER_BACKDROP_POS;
         }else{
-            spikePos = rightSpikePos;
-            backDropPos = rightBackDropPos;
+            spikePos = RIGHT_SPIKE_POS;
+            backDropPos = RIGHT_BACKDROP_POS;
         }
 //        backDropPos[1] -= 2 * TICKS_PER_TILE_Y;
 //

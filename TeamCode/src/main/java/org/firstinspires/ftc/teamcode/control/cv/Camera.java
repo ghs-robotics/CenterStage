@@ -12,21 +12,21 @@ import org.openftc.easyopencv.OpenCvSwitchableWebcam;
 
 public class Camera {
 
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
     public Pipeline pipeline;
 
     public OpenCvSwitchableWebcam camera;
 
-    private WebcamName camLeft;
-    private WebcamName camRight;
+    private final WebcamName camLeft;
+    private final WebcamName camRight;
 
     private final int PIXEL_HEIGHT = 480;
     private final int PIXEL_WIDTH = 640;
 
     public static int SPIKE_ZONE = 0;
 
-    private boolean red;
+    private final boolean red;
 
     public Camera(HardwareMap hardwareMap, Telemetry telemetry, boolean color){
         this.telemetry = telemetry;

@@ -43,7 +43,8 @@ public class Robot {
 
         this.telemetry = telemetry;
         gyro = new Gyro(hardwareMap);
-        drive = new BallDrive(hardwareMap, new Pose2d(0, 0, 0));
+//        drive = new BallDrive(hardwareMap, new Pose2d(0, 0, 0));
+        drive = new BallDrive(hardwareMap, gyro);
 
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
@@ -72,7 +73,7 @@ public class Robot {
      * tells the robot parts to retrieve the current information from each part to update the robot.
      */
     public void update(){
-        drive.updatePoseEstimate();
+        drive.update();
         telemetry.update();
     }
 

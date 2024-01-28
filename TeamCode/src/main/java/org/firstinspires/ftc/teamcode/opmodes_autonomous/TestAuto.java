@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.RETRACT;
+import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,6 +26,7 @@ public class TestAuto extends LinearOpMode {
 
 
         // create list of actions to run
+        actionHandler.add(MOVE, 800, 20, 0.0, true);
         actionHandler.add(LIFT);
         actionHandler.add(EXTEND);
         actionHandler.add(DROP);
@@ -37,6 +40,13 @@ public class TestAuto extends LinearOpMode {
         actionHandler.init();
         waitForStart();
         //actionHandler.findAndSetZone();
+
+        while (!opModeIsActive() && !isStopRequested()){
+            telemetry.addLine("Initializing");
+            robot.cam.detectProp();
+            telemetry.addData("ZONE", SPIKE_ZONE);
+        }
+
 
         while (opModeIsActive()){
             actionHandler.run();

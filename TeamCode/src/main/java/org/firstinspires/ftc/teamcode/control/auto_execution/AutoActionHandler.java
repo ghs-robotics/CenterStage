@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode.control.auto_execution;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DETECT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_SPIKE;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.HALF_TO_MARK;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -31,6 +36,10 @@ public class AutoActionHandler {
         this.timer = new ElapsedTime();
         this.robot = robot;
         this.telemetry = telemetry;
+
+        add(DETECT);
+        add(MOVE, HALF_TO_MARK);
+        add(MOVE_TO_SPIKE);
     }
 
     /**
@@ -61,6 +70,27 @@ public class AutoActionHandler {
 
     public void add (int action, int x, int y, double heading){
         actionList.add(new AutoActions(action, robot, x, y, heading));
+        add(WAIT, 0.2);
+    }
+
+    public void add (int action, double[] pos){
+        actionList.add(new AutoActions(action, robot, pos));
+        add(WAIT, 0.2);
+    }
+
+    public void add (int action, int x, int y, double heading, boolean split){
+        if (split){
+            add(action, x, 0, heading);
+            add(action, 0, y, heading);
+        }else
+            add(action, x, y, heading);
+    }
+
+    public void add (int action, double[] pos, boolean split){
+        if (split){
+            add(action, (int) pos[0], (int) pos[1], pos[2], split);
+        }else
+            add(action, pos);
     }
 
     public void add(int action, double value) {
@@ -70,13 +100,6 @@ public class AutoActionHandler {
     public void add(int action, int value){
         actionList.add(new AutoActions(action, robot, value));
     }
-
-    public void add (int action, double[] pos){
-        actionList.add(new AutoActions(action, robot, pos));
-    }
-
-
-
     /**
      * @param action the identity of the action (see the public static constant in AutoActions)
      *               This one is for actions that do not require parameters
