@@ -38,7 +38,7 @@ public class TestAuto extends LinearOpMode {
         robot.getAutoTelemetry();
 
         actionHandler.init();
-        waitForStart();
+//        waitForStart();
         //actionHandler.findAndSetZone();
 
         while (!opModeIsActive() && !isStopRequested()){

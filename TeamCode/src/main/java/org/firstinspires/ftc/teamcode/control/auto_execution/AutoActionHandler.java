@@ -70,12 +70,12 @@ public class AutoActionHandler {
 
     public void add (int action, int x, int y, double heading){
         actionList.add(new AutoActions(action, robot, x, y, heading));
-        add(WAIT, 0.2);
+        add(WAIT, .25);
     }
 
     public void add (int action, double[] pos){
         actionList.add(new AutoActions(action, robot, pos));
-        add(WAIT, 0.2);
+        add(WAIT, .25);
     }
 
     public void add (int action, int x, int y, double heading, boolean split){

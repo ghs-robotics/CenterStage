@@ -29,6 +29,9 @@ public class BallDrive {
     private double deltaL, deltaR, deltaB, deltaH;
     private double lastH;
 
+    private double lastXError;
+    private double lastYError;
+
     private final double MM_PER_TICK = (35 * Math.PI) / 8192;
 
     public double resetCounter;
@@ -76,35 +79,40 @@ public class BallDrive {
         this.y = this.y + MM_PER_TICK * dy;
         this.x = this.x + MM_PER_TICK * dx;
     }
-
-    public boolean runToPosition(NavigationPID xPID, NavigationPID yPID, boolean runTogether){
-        double xPower = -xPID.getOutput(this.x);
-        double yPower = yPID.getOutput(this.y);
-
-        if (runTogether)
-            return runToPosition(xPID, yPID);
-
-        if (Math.abs(xPID.getError()) > 10)
-            calculateDrivePowers(xPower, 0, 0, true);
-        else
-            calculateDrivePowers(0, yPower, 0, true);
-
-
-        errorX = xPID.getError();
-
-        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 2;
-    }
+//
+//    public boolean runToPosition(NavigationPID xPID, NavigationPID yPID, boolean runTogether){
+//        double xPower = -xPID.getOutput(this.x);
+//        double yPower = yPID.getOutput(this.y);
+//
+//        if (runTogether)
+//            return runToPosition(xPID, yPID);
+//
+//        if (Math.abs(xPID.getError()) > 10)
+//            calculateDrivePowers(xPower, 0, 0, true);
+//        else
+//            calculateDrivePowers(0, yPower, 0, true);
+//
+//
+//        errorX = xPID.getError();
+//
+//        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 2;
+//    }
 
     public boolean runToPosition(NavigationPID xPID, NavigationPID yPID){
         double xPower = -xPID.getOutput(this.x);
         double yPower = yPID.getOutput(this.y);
 
-        calculateDrivePowers(xPower, yPower, 0, true);
+        if (Math.abs(lastXError - xPID.getError()) < 2)
+            xPower = 0;
 
+        if (Math.abs(lastYError - yPID.getError()) < 2)
+            yPower = 0;
+
+        calculateDrivePowers(xPower, yPower, 0, true);
 
         errorX = xPID.getError();
 
-        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 10;
+        return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 10 || xPower + yPower == 1;
     }
 
 //    public boolean runToPosition(NavigationPID xPID, double y){
@@ -127,8 +135,6 @@ public class BallDrive {
 //
 //        return Math.abs(yPID.getError()) < 2;
 //    }
-
-
     public void calculateDrivePowers(double x, double y, double rot) {
         bp = x;
         lp = y - rot;

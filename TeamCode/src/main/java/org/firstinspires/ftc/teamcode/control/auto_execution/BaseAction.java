@@ -32,7 +32,7 @@ public class BaseAction {
     double heading; // in degrees
 
     int intakeLevel;
-    int liftLevel = 650;
+    int liftLevel = 500;
 
     double waitTime;
     boolean moveXAxis;
@@ -55,9 +55,14 @@ public class BaseAction {
 
     protected void moveTo(){
         resetTimer();
+        if (x == 0){
+            xPID.setError(0);
+        }
+        if (y == 0)
+            yPID.setError(0);
 
         boolean there = robot.drive.runToPosition(xPID, yPID);
-        boolean timeOut = timer.milliseconds() > 4250;
+        boolean timeOut = timer.milliseconds() > 4550;
         endAction = there || timeOut;
     }
 
@@ -97,10 +102,10 @@ public class BaseAction {
         resetTimer();
 
         robot.delivery.autoDropPixels(0.4);
-        if (timer.milliseconds() > 300)
+        if (timer.milliseconds() > 550)
             robot.delivery.autoDropPixels(0.15);
 
-        endAction = timer.milliseconds() > 400;
+        endAction = timer.milliseconds() > 600;
     }
 
     protected void runIntake(){
@@ -122,8 +127,8 @@ public class BaseAction {
         // same as intake
         resetTimer();
         boolean atPos = robot.delivery.driveLiftToPosition(liftLevel, (int) timer.milliseconds());
-        endAction = timer.milliseconds() > 3750 || atPos;
-        if (atPos)
+        endAction = timer.milliseconds() > 2550 || atPos;
+        if (endAction)
             robot.delivery.autoDriveLift(0);
     }
 
@@ -133,7 +138,7 @@ public class BaseAction {
 
         robot.delivery.autoDropPixels(0.15);
         robot.delivery.autoExtend(0);
-        boolean atPos = robot.delivery.driveLiftToPosition(10, (int) timer.milliseconds());
+        boolean atPos = robot.delivery.driveLiftToPosition(12, (int) timer.milliseconds());
         endAction = timer.milliseconds() > 2200 || atPos;
     }
 
@@ -144,8 +149,10 @@ public class BaseAction {
         robot.intake.setIntakeHeight(3);
         robot.intake.autoPixelOut();
 
+        robot.drive.calculateDrivePowers(0,0,0);
+
         resetTimer();
-        if(timer.milliseconds() > 2500) {
+        if(timer.milliseconds() > 750) {
             endAction = true;
             robot.intake.pixelIn(0);
         }
@@ -163,7 +170,7 @@ public class BaseAction {
             robot.cam.detectProp();
         resetTimer();
         robot.cam.getSpikeZone();
-        endAction = timer.milliseconds() > 2100;
+        endAction = timer.milliseconds() > 500;
     }
 
     protected void alignBotToTag(){

@@ -51,7 +51,7 @@ public class Delivery {
     }
 
     public boolean driveLiftToPosition(int target, int milli){
-        if (getLift1Position() < target - 5 || getLift1Position() > target + 5 && milli < 2600)
+        if (getLift1Position() < target - 5 || getLift1Position() > target + 5 && milli < 2200)
             autoDriveLift((target - getLift1Position()) * -.008);
         else
             autoDriveLift(0);

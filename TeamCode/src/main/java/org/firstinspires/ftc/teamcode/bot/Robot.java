@@ -58,7 +58,7 @@ public class Robot {
     public void init(){
         //init cameras
         gyro.resetHeading();
-//        drive.resetCoords();
+        drive.resetCoords();
         delivery.resetEncoders();
     }
 
@@ -66,7 +66,7 @@ public class Robot {
         drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
         delivery.driveLift(0);
-        cam.closeCamera();
+//        cam.closeCamera();
     }
 
     /**
@@ -95,7 +95,7 @@ public class Robot {
         telemetry.addData("y pos: ", drive.getY());
         telemetry.addLine();
 //        telemetry.addData("x out", drive.getXError());
-        telemetry.addData("gyro heading: ", Math.toDegrees(drive.getHeading()));
+        telemetry.addData("gyro heading: ", drive.getHeading());
 //        telemetry.addLine(String.valueOf(drive.resetCounter));
 //        telemetry.addLine();
     }

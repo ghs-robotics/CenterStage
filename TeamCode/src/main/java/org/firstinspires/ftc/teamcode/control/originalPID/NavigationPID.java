@@ -207,6 +207,10 @@ public class NavigationPID {
         }
     }
 
+    public void setError(double e){
+        error = e;
+    }
+
     public double getError() {
         return error;
     }

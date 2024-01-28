@@ -16,7 +16,6 @@ public class TestTele extends LinearOpMode {
     Robot robot;
     Controller gp1;
     Controller gp2;
-    Delivery deliver;
 
     boolean driveMode;
 
