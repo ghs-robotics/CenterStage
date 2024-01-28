@@ -59,7 +59,7 @@ public final class Kinematics {
         return new WheelVelocities(
                 t.linearVel.x.minus(t.angVel.times(0.5).times(this.trackWidth)),
                 t.linearVel.x.plus(t.angVel.times(0.5).times(this.trackWidth)),
-                t.linearVel.y/* .times(this.lateralMultiplier) */.plus(t.angVel.times(this.trackWidth)));
+                t.linearVel.y.times(this.lateralMultiplier).plus(t.angVel.times(this.trackWidth)));
     }
 
 

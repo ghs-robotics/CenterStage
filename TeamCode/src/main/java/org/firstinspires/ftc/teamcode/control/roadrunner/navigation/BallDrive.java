@@ -193,7 +193,7 @@ public class BallDrive {
 
     public void calculateDrivePowers(PoseVelocity2d powers) {
         Kinematics.WheelVelocities wheelVels = new Kinematics(PARAMS.trackWidthTicks).inverse(
-                PoseVelocity2dDual.constant(powers, 1));
+                PoseVelocity2dDual.constant(powers, 4));
 
         double maxPowerMag = 1;
         for (DualNum power : wheelVels.all()) {
