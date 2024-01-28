@@ -43,7 +43,8 @@ public class Robot {
 
         this.telemetry = telemetry;
         gyro = new Gyro(hardwareMap);
-        drive = new BallDrive(hardwareMap, new Pose2d(0, 0, 0));
+//        drive = new BallDrive(hardwareMap, new Pose2d(0, 0, 0));
+        drive = new BallDrive(hardwareMap, gyro);
 
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
@@ -57,7 +58,7 @@ public class Robot {
     public void init(){
         //init cameras
         gyro.resetHeading();
-//        drive.resetCoords();
+        drive.resetCoords();
         delivery.resetEncoders();
     }
 
@@ -65,14 +66,14 @@ public class Robot {
         drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
         delivery.driveLift(0);
-        cam.closeCamera();
+//        cam.closeCamera();
     }
 
     /**
      * tells the robot parts to retrieve the current information from each part to update the robot.
      */
     public void update(){
-        drive.updatePoseEstimate();
+        drive.update();
         telemetry.update();
     }
 
@@ -94,7 +95,7 @@ public class Robot {
         telemetry.addData("y pos: ", drive.getY());
         telemetry.addLine();
 //        telemetry.addData("x out", drive.getXError());
-        telemetry.addData("gyro heading: ", Math.toDegrees(drive.getHeading()));
+        telemetry.addData("gyro heading: ", drive.getHeading());
 //        telemetry.addLine(String.valueOf(drive.resetCounter));
 //        telemetry.addLine();
     }

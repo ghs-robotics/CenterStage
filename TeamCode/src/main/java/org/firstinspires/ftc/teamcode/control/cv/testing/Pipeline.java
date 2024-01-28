@@ -139,14 +139,14 @@ public class Pipeline extends OpenCvPipeline {
             z3Pixels = zone3Counter;
 
             if (zone1Counter > zone2Counter && zone1Counter > zone3Counter)
-                zone = 1;
+                zone = 0;
             else if (zone2Counter > zone3Counter)
-                zone = 2;
+                zone = 1;
             else
-                zone = 3;
+                zone = 2;
 
-//            if (timer.milliseconds() < 1000)
-            SPIKE_ZONE = zone;
+            if (timer.milliseconds() < 250)
+                SPIKE_ZONE = zone;
 
             Rect left = new Rect(1, 1, (int) xLeft, TestingConstants.RES_HEIGHT);
             Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), TestingConstants.RES_HEIGHT);

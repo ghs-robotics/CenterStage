@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DETECT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_SPIKE;
@@ -27,25 +28,15 @@ public class AutoBlue extends LinearOpMode {
         robot.init();
 
         // create list of actions to run
-        actionHandler.add(DETECT);
-        actionHandler.add(MOVE_TO_SPIKE);
         actionHandler.add(PLACE_PIXEL);
         actionHandler.add(WAIT, 1.5);
         actionHandler.add(MOVE, 600, 700, 0);
         actionHandler.add(LIFT);
+        actionHandler.add(EXTEND);
         actionHandler.add(DROP);
         actionHandler.add(RETRACT);
-        actionHandler.add(MOVE, 200, 705, 0);
-
-//        actionHandler.add(AutoPresets.getBeginningNearBackDrop(robot, telemetry));
-//        actionHandler.add(DETECT);
-//        actionHandler.add(MOVE_TO_SPIKE);
-//        actionHandler.add(PLACE_PIXEL);
-//        actionHandler.add(MOVE_TO_BACKDROP);
-//        actionHandler.add(LIFT);
-//        actionHandler.add(DELIVER);
-//        actionHandler.add(RETRACT);
-
+        actionHandler.add(WAIT, 0.2);
+        actionHandler.add(MOVE, 200, 775, 0);
 
         telemetry.addLine("queuing actions");
         telemetry.addLine(actionHandler.getTotalActions() + " total actions");

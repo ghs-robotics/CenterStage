@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.control.auto_execution;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.centerBackDropPos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.centerSpikePos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.leftBackDropPos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.leftSpikePos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.rightBackDropPos;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.rightSpikePos;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.BLUE_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.CENTER_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.CENTER_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.LEFT_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.LEFT_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.RED_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.RIGHT_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.control.presets.Position.RIGHT_SPIKE_POS;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -29,18 +32,17 @@ public class BaseAction {
     double heading; // in degrees
 
     int intakeLevel;
-    int liftLevel = 650;
+    int liftLevel = 500;
 
     double waitTime;
+    boolean moveXAxis;
 
     protected NavigationPID xPID;
     protected NavigationPID yPID;
 
     double[] pidValues = {.152, .00165765, .0016622};
 
-
     protected Robot robot;
-
 
     public BaseAction(int id, Robot robot) {
 
@@ -53,29 +55,27 @@ public class BaseAction {
 
     protected void moveTo(){
         resetTimer();
+        if (x == 0){
+            xPID.setError(0);
+        }
+        if (y == 0)
+            yPID.setError(0);
 
-//        boolean there = robot.drive.runToPosition(xPID, yPID);
-//        boolean timeOut = timer.milliseconds() > 4250;
-//        endAction = there || timeOut;
+        boolean there = robot.drive.runToPosition(xPID, yPID);
+        boolean timeOut = timer.milliseconds() > 4550;
+        endAction = there || timeOut;
     }
 
     protected void moveToSpike(){
         setNavPID();
-        if (SPIKE_ZONE == 1){
-            x = leftSpikePos[0];
-            if (robot.RED)
-                yPID.setTarget(leftSpikePos[1]);
-            else
-                yPID.setTarget(rightSpikePos[1]);
-        } else if (SPIKE_ZONE == 2) {
-            x = (centerSpikePos[0]);
-            yPID.setTarget(centerSpikePos[1]);
-        } else {
-            x = (rightSpikePos[0]);
-            if (robot.RED)
-                yPID.setTarget(rightSpikePos[1]);
-            else
-                yPID.setTarget(leftSpikePos[1]);
+
+        if (robot.RED){
+            x = RED_SPIKE_POS[SPIKE_ZONE][0];
+            y = RED_SPIKE_POS[SPIKE_ZONE][1];
+
+        }else {
+            x = BLUE_SPIKE_POS[SPIKE_ZONE][0];
+            y = BLUE_SPIKE_POS[SPIKE_ZONE][1];
         }
 
         checkXSign();
@@ -87,22 +87,9 @@ public class BaseAction {
 
     protected void moveToBackdrop(){
         setNavPID();
-        if (SPIKE_ZONE == 1){
-            x = (leftBackDropPos[0]);
-            if (robot.RED)
-                yPID.setTarget(leftBackDropPos[1]);
-            else
-                yPID.setTarget(rightBackDropPos[1]);
-        } else if (SPIKE_ZONE == 2 && robot.RED) {
-            x = (centerBackDropPos[0]);
-            yPID.setTarget(centerBackDropPos[1]);
-        } else {
-            x = (rightBackDropPos[0]);
-            if (robot.RED)
-                yPID.setTarget(rightBackDropPos[1]);
-            else
-                yPID.setTarget(leftBackDropPos[1]);
-        }
+
+        x = BACKDROP_POS[SPIKE_ZONE][0];
+        y = BACKDROP_POS[SPIKE_ZONE][1];
 
         checkXSign();
 
@@ -115,10 +102,10 @@ public class BaseAction {
         resetTimer();
 
         robot.delivery.autoDropPixels(0.4);
-        if (timer.milliseconds() > 300)
+        if (timer.milliseconds() > 550)
             robot.delivery.autoDropPixels(0.15);
 
-        endAction = timer.milliseconds() > 400;
+        endAction = timer.milliseconds() > 600;
     }
 
     protected void runIntake(){
@@ -140,19 +127,18 @@ public class BaseAction {
         // same as intake
         resetTimer();
         boolean atPos = robot.delivery.driveLiftToPosition(liftLevel, (int) timer.milliseconds());
-        endAction = timer.milliseconds() > 3750 || atPos;
-        if (atPos)
+        endAction = timer.milliseconds() > 2550 || atPos;
+        if (endAction)
             robot.delivery.autoDriveLift(0);
     }
 
     // good to go
-
     protected void retractDelivery(){
         resetTimer();
 
         robot.delivery.autoDropPixels(0.15);
         robot.delivery.autoExtend(0);
-        boolean atPos = robot.delivery.driveLiftToPosition(10, (int) timer.milliseconds());
+        boolean atPos = robot.delivery.driveLiftToPosition(12, (int) timer.milliseconds());
         endAction = timer.milliseconds() > 2200 || atPos;
     }
 
@@ -163,8 +149,10 @@ public class BaseAction {
         robot.intake.setIntakeHeight(3);
         robot.intake.autoPixelOut();
 
+        robot.drive.calculateDrivePowers(0,0,0);
+
         resetTimer();
-        if(timer.milliseconds() > 2500) {
+        if(timer.milliseconds() > 750) {
             endAction = true;
             robot.intake.pixelIn(0);
         }
@@ -182,7 +170,7 @@ public class BaseAction {
             robot.cam.detectProp();
         resetTimer();
         robot.cam.getSpikeZone();
-        endAction = timer.milliseconds() > 2100;
+        endAction = timer.milliseconds() > 500;
     }
 
     protected void alignBotToTag(){
@@ -222,7 +210,7 @@ public class BaseAction {
     }
 
     protected void checkXSign(){
-        if (!robot.RED)
+        if (robot.RED)
             this.x *= -1;
 
     }
