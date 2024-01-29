@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.control.auto_execution;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.BACKDROP_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.BLUE_SPIKE_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.RED_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.presets.Position.BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.presets.Position.BLUE_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.presets.Position.RED_SPIKE_POS;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 

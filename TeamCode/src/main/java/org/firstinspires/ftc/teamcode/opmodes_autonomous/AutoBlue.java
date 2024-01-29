@@ -1,16 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
-import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DETECT;
-import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
-import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
-import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
-import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_SPIKE;
-import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.PLACE_PIXEL;
-import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.RETRACT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
-import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.goToSpikeMark;
+import static org.firstinspires.ftc.teamcode.presets.AutoPresets.goToSpikeMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

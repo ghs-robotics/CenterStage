@@ -5,7 +5,7 @@ import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.control.presets.CVConstants;
+import org.firstinspires.ftc.teamcode.presets.CVConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
