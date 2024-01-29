@@ -30,9 +30,12 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
             //                                  GAMEPAD 1
             //-------------------------------------------------------------------------------------
-            robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
+            //robot.drive.calculateDrivePowers(gp1.left_stick_x, gp1.left_stick_y, gp1.right_stick_x);
 
-
+            robot.blinkin.runLeds();
+            robot.blinkin.numPixels1(gp1.a.pressed());
+            robot.blinkin.numPixels2(gp1.b.pressed());
+            robot.blinkin.numPixelsReset(gp1.x.pressed());
 
 
 
@@ -41,12 +44,10 @@ public class Tele extends LinearOpMode {
             //-------------------------------------------------------------------------------------
 
 
-
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
-            //-------------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------------
             telemetry.update();
-
         }
 
     }
