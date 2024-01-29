@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
 @TeleOp
 public class Tele extends LinearOpMode {
     Robot robot;
-     Controller gp1;
+    Controller gp1;
     Controller gp2;
 
     boolean driveMode;

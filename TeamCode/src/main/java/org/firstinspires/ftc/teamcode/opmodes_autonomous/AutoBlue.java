@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DETECT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
@@ -9,6 +10,7 @@ import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.PLACE_PIXEL;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.RETRACT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
+import static org.firstinspires.ftc.teamcode.control.presets.AutoPresets.goToSpikeMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -27,29 +29,27 @@ public class AutoBlue extends LinearOpMode {
         actionHandler = new AutoActionHandler(robot, telemetry);
         robot.init();
 
-        // create list of actions to run
-        actionHandler.add(PLACE_PIXEL);
-        actionHandler.add(WAIT, 1.5);
+        // create list of actions to run  ------------------------------------------------------------
+        actionHandler.add(goToSpikeMark(robot, telemetry));
+        actionHandler.add(WAIT, 0.1);
         actionHandler.add(MOVE, 600, 700, 0);
-        actionHandler.add(LIFT);
-        actionHandler.add(EXTEND);
-        actionHandler.add(DROP);
-        actionHandler.add(RETRACT);
-        actionHandler.add(WAIT, 0.2);
+        actionHandler.add(DELIVER);
+        actionHandler.add(WAIT, 0.1);
         actionHandler.add(MOVE, 200, 775, 0);
 
-        telemetry.addLine("queuing actions");
-        telemetry.addLine(actionHandler.getTotalActions() + " total actions");
-
-        waitForStart();
-        //actionHandler.findAndSetZone();
+        // don't queue past this line. ---------------------------------------------------------------
         actionHandler.init();
+        waitForStart();
+
+        while (!opModeIsActive() && !isStopRequested()) {
+            telemetry.addLine("queuing actions");
+            telemetry.addLine(actionHandler.getTotalActions() + " total actions");
+            telemetry.update();
+        }
 
         while (opModeIsActive()){
             actionHandler.run();
             actionHandler.status();
-            robot.update();
-//            robot.getTelemetry();
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.control.originalPID;
+package org.firstinspires.ftc.teamcode.control.PIDControllers;
 
 public class NavigationPID {
     private double P = 0;
@@ -223,3 +223,81 @@ public class NavigationPID {
         this.run = run;
     }
 }
+//    private class PID{
+//        private double lastError;
+//        private double lastIntegral;
+//
+//        private double error;
+//        private double integral;
+//        private double derivative;
+//
+//        private double kp = .6;
+//        private double ki = 1.2;
+//        private double kd = 0.05;
+//        private double bias = 0;
+//
+//        private double target;
+//
+//        private ElapsedTime timer;
+//
+//        private double lastIterationTime;
+//
+//        private double maxIntegral;
+//
+//        PID(double p, double i, double d){
+//            this();
+//            kp = p;
+//            ki = i;
+//            kd = d;
+//        }
+//
+//        PID(){
+//            timer = new ElapsedTime();
+//        }
+//
+//        double getOutput(double current){
+//            double iterationTime = timer.milliseconds() - lastIterationTime;
+//            lastIterationTime += iterationTime;
+//
+//            error = target - current;
+//            integral = lastIntegral + error * iterationTime;
+//            derivative = (error - lastError) / iterationTime;
+//
+//            constrain();
+//
+//            double out = (kp * error) + (ki * integral) + (kd * derivative) + bias;
+//
+//            lastError = error;
+//            lastIntegral = integral;
+//
+//            return out;
+//        }
+//
+//        double getError(){
+//            return error;
+//        }
+//
+//        void setMaxError(double max){
+//            maxIntegral = max;
+//        }
+//
+//        void constrain(){
+//            if (Math.abs(integral) > maxIntegral)
+//                integral = maxIntegral * (integral / Math.abs(integral));
+//        }
+//
+//        void setTarget(double target){
+//            if (this.target == target)
+//                return;
+//
+//            this.target = target;
+//            lastError = 0;
+//            lastIntegral = 0;
+//            error = 0;
+//            integral = 0;
+//            derivative = 0;
+//            timer.reset();
+//            lastIterationTime = 0;
+//        }
+//
+//    }

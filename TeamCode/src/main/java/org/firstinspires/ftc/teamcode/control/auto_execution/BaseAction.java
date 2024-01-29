@@ -4,18 +4,12 @@ import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 import static org.firstinspires.ftc.teamcode.control.presets.Position.BACKDROP_POS;
 import static org.firstinspires.ftc.teamcode.control.presets.Position.BLUE_SPIKE_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.CENTER_BACKDROP_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.CENTER_SPIKE_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.LEFT_BACKDROP_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.LEFT_SPIKE_POS;
 import static org.firstinspires.ftc.teamcode.control.presets.Position.RED_SPIKE_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.RIGHT_BACKDROP_POS;
-import static org.firstinspires.ftc.teamcode.control.presets.Position.RIGHT_SPIKE_POS;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.control.originalPID.NavigationPID;
+import org.firstinspires.ftc.teamcode.control.PIDControllers.NavigationPID;
 
 public class BaseAction {
 

@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_SPIKE;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.RETRACT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
 import static org.firstinspires.ftc.teamcode.control.presets.Position.HALF_TO_MARK;
@@ -25,31 +26,21 @@ public class AutoActionHandler {
     private final Robot robot;
     private final Telemetry telemetry;
 
-    private final ElapsedTime timer;
-
     private int totalActions;
-    public int zone;
-
 
     public AutoActionHandler(Robot robot, Telemetry telemetry){
         this.actionList = new ArrayList<AutoActions>();
-        this.timer = new ElapsedTime();
         this.robot = robot;
         this.telemetry = telemetry;
-
-        add(DETECT);
-        add(MOVE, HALF_TO_MARK);
-        add(MOVE_TO_SPIKE);
     }
 
     /**
      * runs the action and calls next action in case the current action is complete.
      */
     public void run(){
-        findAndSetZone();
         current.runAction();
-        checkTime();
         nextAction();
+        robot.update();
     }
 
     /**
@@ -59,7 +50,6 @@ public class AutoActionHandler {
         actionList.addAll(actionSet);
     }
 
-
     /**
      * @param actionHandler gets a pre-existing set of actions to add to this list from a pre-built
      *                      AutoActionHandler
@@ -68,16 +58,36 @@ public class AutoActionHandler {
         actionList.addAll(actionHandler.getActions());
     }
 
+    /**
+     * Built for moving
+     * @param action id of the action but for this specific function, most likely MOVE
+     * @param x target x position
+     * @param y target y position
+     * @param heading target heading (usually 0)
+     */
     public void add (int action, int x, int y, double heading){
         actionList.add(new AutoActions(action, robot, x, y, heading));
-        add(WAIT, .25);
+        add(WAIT, .1);
     }
 
+    /**
+     * Built for moving
+     * @param action id of the action but for this specific function, most likely MOVE
+     * @param pos target position array
+     */
     public void add (int action, double[] pos){
         actionList.add(new AutoActions(action, robot, pos));
-        add(WAIT, .25);
+        add(WAIT, .1);
     }
 
+    /**
+     * Built for moving, used if you want to make the bot drive along x and then y
+     * @param action id of the action but for this specific function, most likely MOVE
+     * @param x target x position
+     * @param y target y position
+     * @param heading target heading (usually 0)
+     * @param split whether or not you want to split the move function to move x and then y
+     */
     public void add (int action, int x, int y, double heading, boolean split){
         if (split){
             add(action, x, 0, heading);
@@ -86,21 +96,30 @@ public class AutoActionHandler {
             add(action, x, y, heading);
     }
 
+    /**
+     * Built for moving, used if you want to make the bot drive along x and then y
+     * @param action id of the action
+     * @param pos target position array
+     * @param split whether or not you want to split the move function to move x and then y
+     */
     public void add (int action, double[] pos, boolean split){
-        if (split){
-            add(action, (int) pos[0], (int) pos[1], pos[2], split);
-        }else
-            add(action, pos);
+        add(action, (int) pos[0], (int) pos[1], pos[2], split);
+
     }
 
+    /**
+     * Standard add function with one parameter
+     *
+     * @param action the id of the action queued
+     * @param value any parameters the action requires
+     */
     public void add(int action, double value) {
         actionList.add(new AutoActions(action, robot, value));
     }
 
-    public void add(int action, int value){
-        actionList.add(new AutoActions(action, robot, value));
-    }
     /**
+     * The basic add function for any actions that don't require parameters
+     *
      * @param action the identity of the action (see the public static constant in AutoActions)
      *               This one is for actions that do not require parameters
      */
@@ -109,21 +128,11 @@ public class AutoActionHandler {
             add(LIFT);
             add(EXTEND);
             add(DROP);
+            add(RETRACT);
         } else {
             actionList.add(new AutoActions(action, robot));
         }
     }
-
-    /**
-     * Helper function that checks if we are close to the time ending and if we need to
-     * change course and park
-     */
-    private void checkTime(){
-        if (timer.milliseconds() > 25000 && actionList.size() > 2){
-
-        }
-    }
-
     /**
      * Checks the status of the current action and removes the action from queue if isFinished
      * returns true.
@@ -134,13 +143,6 @@ public class AutoActionHandler {
             actionList.remove(0);
             current = actionList.get(0);
         }
-    }
-
-    /**
-     * Gets the zone (spike mark) that was detected by the camera.
-     */
-    public void findAndSetZone(){
-        zone = robot.cam.getSpikeZone();
     }
 
     /**
@@ -178,24 +180,15 @@ public class AutoActionHandler {
     public void status(){
         int currentStep = totalActions - actionList.size() + 1;
 
+        telemetry.addLine(currentStep + " of " + totalActions + " actions");
+        telemetry.addLine();
+
         if (current.getIdentity() != AutoActions.DONE) {
-            telemetry.addLine(currentStep + " of " + totalActions + " actions");
-            telemetry.addLine();
             telemetry.addLine(current.getDescription());
-            troubleshooting();
         }else
             telemetry.addLine( "Done!");
 
-        telemetry.addLine(String.valueOf(SPIKE_ZONE));
-    }
-
-    public void troubleshooting(){
         telemetry.addLine();
-        telemetry.addLine("Troubleshooting");
-        //put troubleshooting telemetry here.
-        telemetry.addLine(String.valueOf(current.isFinished()));
-
-        telemetry.addLine();
+        robot.getAutoTelemetry();
     }
-
 }

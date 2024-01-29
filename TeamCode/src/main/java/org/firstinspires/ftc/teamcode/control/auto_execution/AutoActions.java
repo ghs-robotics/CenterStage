@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.control.auto_execution;
 
-import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
-
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.bot.Robot;
-import org.firstinspires.ftc.teamcode.control.originalPID.NavigationPID;
 
 public class AutoActions extends BaseAction {
     // identities
