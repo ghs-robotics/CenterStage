@@ -1,16 +1,19 @@
-package org.firstinspires.ftc.teamcode.opmodes_teleop;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
-import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
+import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
 public class Tele extends LinearOpMode {
     Robot robot;
-     Controller gp1;
+
+    Intake intake;
+    Controller gp1;
     Controller gp2;
     Delivery deliver;
 

@@ -47,7 +47,6 @@ public class Robot {
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
         drone = new Drone(hardwareMap);
-
     }
 
     /**
@@ -73,6 +72,8 @@ public class Robot {
     public void update(){
         drive.update();
         telemetry.update();
+        intake.countPixels();
+        intake.addDataToDistanceArray();
     }
 
     public void getAutoTelemetry(){
@@ -101,6 +102,9 @@ public class Robot {
     private void intakeTelemetry(){
         telemetry.addLine("Intake Telemetry");
         telemetry.addData("intake position: ", intake.getIntakePosition());
+        telemetry.addData("number of pixels:", intake.getPixelNumber());
+        telemetry.addData("distance from pixel:", intake.getDistanceFromPixel());
+        telemetry.addData("pixel distances:", intake.getPixelDistances());
         telemetry.addLine();
     }
 
