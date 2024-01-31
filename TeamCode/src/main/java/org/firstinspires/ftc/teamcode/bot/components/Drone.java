@@ -10,16 +10,20 @@ public class Drone {
 
     public Drone (HardwareMap hardwareMap) {
         droneServo = hardwareMap.get(Servo.class, "drone");
-        droneServo.setPosition(0.5);
+        droneServo.setPosition(0.7);
     }
 
     public void launchDrone (boolean pressing) {
-                if (pressing) {
-                    droneServo.setPosition(0.8);
-                } else {
-                    droneServo.setPosition(0.5);
-                }
-            }
+        if (pressing) {
+            droneServo.setPosition(1);
+        } else {
+            droneServo.setPosition(0.7);
+        }
+    }
+
+    public double getDronePosition () {
+        return droneServo.getPosition();
+    }
 }
 
 
