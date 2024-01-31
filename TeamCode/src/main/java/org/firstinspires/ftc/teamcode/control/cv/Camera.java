@@ -14,7 +14,7 @@ public class Camera {
 
     private final Telemetry telemetry;
 
-    public Pipeline pipeline;
+    public TeamPropPipeline pipeline;
 
     public OpenCvSwitchableWebcam camera;
 
@@ -24,7 +24,7 @@ public class Camera {
     private final int PIXEL_HEIGHT = 480;
     private final int PIXEL_WIDTH = 640;
 
-    public static int SPIKE_ZONE = 0;
+    public static int SPIKE_ZONE = -1;
 
     private final boolean red;
 
@@ -58,7 +58,7 @@ public class Camera {
             }
         });
 
-        pipeline = new Pipeline(camera, telemetry, color);
+        pipeline = new TeamPropPipeline(camera, telemetry, color);
         camera.setPipeline(pipeline);
 
     }
@@ -76,7 +76,7 @@ public class Camera {
     }
 
     public int getSpikeZone(){
-        if (SPIKE_ZONE == 0)
+        if (SPIKE_ZONE == -1)
             SPIKE_ZONE = pipeline.getZone();
         return pipeline.getZone();
     }

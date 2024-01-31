@@ -50,6 +50,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
     Telemetry telemetry;
 
+    int spikeZone = 0;
+
     Scalar firstFilterLower;
     Scalar firstFilterUpper;
 
@@ -75,9 +77,11 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+
         Mat hsv = new Mat();
 
         Imgproc.cvtColor(input, hsv, Imgproc.COLOR_BGR2HSV);
+
 
         if (hsv.empty())
             return input;
@@ -89,7 +93,6 @@ public class TeamPropPipeline extends OpenCvPipeline {
         Mat finalMat = new Mat();
         Mat edges = new Mat();
 
-//        Core.inRange(hsv, lightRange, darkRange, thresh);
         Core.inRange(hsv, firstFilterLower, firstFilterUpper, thresh);
 
         Core.bitwise_and(hsv, hsv, masked, thresh);
@@ -97,6 +100,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
         Scalar avg = Core.mean(masked, thresh);
 
         masked.convertTo(scaledMask, -1, 150 / avg.val[1], 0);
+
         Core.inRange(scaledMask, strictLowerFilter, strictUpperFilter, scaledThresh);
 
         Core.bitwise_and(hsv, hsv, finalMat, scaledThresh);
@@ -116,25 +120,28 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
         for (int i = 0; i < contours.size(); i++){
             contoursPoly[i] = new MatOfPoint2f();
-            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 2, true);
+            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i],
+                    2, true);
             boundingBox[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
         }
 
         double xLeft = TestingConstants.RES_WIDTH / 3.5;
-        double xRight = TestingConstants.RES_WIDTH * 1.9 / 3;
+        double xRight = TestingConstants.RES_WIDTH * 2.1 / 3;
 
         int zone = 0;
         int zone1Counter = 0;
         int zone2Counter = 0;
         int zone3Counter = 0;
 
+
         for (int i = 0; i != boundingBox.length; i++){
-            if (boundingBox[i].x < xLeft)
-                zone1Counter++;
+
+            if (boundingBox[i].x < xLeft )
+                zone1Counter ++;
             else if (boundingBox[i].x > xLeft && boundingBox[i].x + boundingBox[i].width < xRight)
-                zone2Counter++;
+                zone2Counter ++;
             else
-                zone3Counter++;
+                zone3Counter ++;
 
             Imgproc.rectangle(scaledThresh, boundingBox[i], new Scalar(0.5, 76.9, 89.8));
         }
@@ -150,15 +157,19 @@ public class TeamPropPipeline extends OpenCvPipeline {
         else
             zone = 2;
 
-        if (timer.milliseconds() < 700)
+        if (timer.milliseconds() < 250)
             SPIKE_ZONE = zone;
 
         Rect left = new Rect(1, 1, (int) xLeft, TestingConstants.RES_HEIGHT);
         Rect center = new Rect((int) xLeft, 1, (int) (xRight - xLeft), TestingConstants.RES_HEIGHT);
-        Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 3);
-        Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 3);
+        Imgproc.rectangle(scaledThresh, left, new Scalar(255, 0, 0), 2);
+        Imgproc.rectangle(scaledThresh, center, new Scalar(255, 0, 0), 2);
 
-        thresh.copyTo(input);
+        Core.bitwise_and(hsv, hsv, finalMat, scaledThresh);
+
+        input.release();
+
+        scaledThresh.copyTo(input);
 
         hsv.release();
         thresh.release();
@@ -166,6 +177,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
         scaledMask.release();
         finalMat.release();
         edges.release();
+
 
         return input;
     }
@@ -179,6 +191,10 @@ public class TeamPropPipeline extends OpenCvPipeline {
         else
             cam.resumeViewport();
 
+    }
+
+    public int getZone() {
+        return spikeZone;
     }
 
     // true is red, false is blue

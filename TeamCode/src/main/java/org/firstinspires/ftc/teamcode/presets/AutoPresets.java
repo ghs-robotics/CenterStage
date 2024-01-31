@@ -22,7 +22,7 @@ public class AutoPresets {
         beginning = new AutoActionHandler(r, t);
 
         beginning.add(DETECT);
-        beginning.add(MOVE, Position.HALF_TO_MARK);
+        beginning.add(MOVE, AutoPositionPresets.HALF_TO_MARK);
         beginning.add(MOVE_TO_SPIKE);
         beginning.add(PLACE_PIXEL);
 

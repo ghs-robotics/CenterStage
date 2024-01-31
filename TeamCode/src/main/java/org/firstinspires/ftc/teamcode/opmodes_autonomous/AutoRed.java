@@ -55,8 +55,6 @@ public class AutoRed extends LinearOpMode {
 
         while (opModeIsActive()){
             actionHandler.run();
-            robot.update();
-            robot.getAutoTelemetry();
             telemetry.addLine();
             actionHandler.status();
             //robot.getAutoTelemetry();

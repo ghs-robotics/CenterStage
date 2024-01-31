@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_BACKDROP;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CENTER_PARKING;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CORNER_PARKING;
 import static org.firstinspires.ftc.teamcode.presets.AutoPresets.goToSpikeMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -25,10 +28,11 @@ public class AutoBlue extends LinearOpMode {
         // create list of actions to run  ------------------------------------------------------------
         actionHandler.add(goToSpikeMark(robot, telemetry));
         actionHandler.add(WAIT, 0.1);
-        actionHandler.add(MOVE, 600, 700, 0);
+        actionHandler.add(MOVE_TO_BACKDROP);
         actionHandler.add(DELIVER);
         actionHandler.add(WAIT, 0.1);
-        actionHandler.add(MOVE, 200, 775, 0);
+        actionHandler.add(MOVE, CORNER_PARKING);
+        actionHandler.add(MOVE, CENTER_PARKING);
 
         // don't queue past this line. ---------------------------------------------------------------
         actionHandler.init();
@@ -43,6 +47,8 @@ public class AutoBlue extends LinearOpMode {
         while (opModeIsActive()){
             actionHandler.run();
             actionHandler.status();
+
+
         }
     }
 }

@@ -78,11 +78,11 @@ public class BallDrive {
         double xPower = -xPID.getOutput(this.x);
         double yPower = yPID.getOutput(this.y);
 
-        if (Math.abs(lastXError - xPID.getError()) < 3)
-            xPower = 0;
-
-        if (Math.abs(lastYError - yPID.getError()) < 3)
-            yPower = 0;
+//        if (Math.abs(lastXError - xPID.getError()) < 1)
+//            xPower = 0;
+//
+//        if (Math.abs(lastYError - yPID.getError()) < 1)
+//            yPower = 0;
 
         calculateDrivePowers(xPower, yPower, 0, true);
 

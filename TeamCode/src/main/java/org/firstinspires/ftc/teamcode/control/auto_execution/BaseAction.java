@@ -2,9 +2,10 @@ package org.firstinspires.ftc.teamcode.control.auto_execution;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
-import static org.firstinspires.ftc.teamcode.presets.Position.BACKDROP_POS;
-import static org.firstinspires.ftc.teamcode.presets.Position.BLUE_SPIKE_POS;
-import static org.firstinspires.ftc.teamcode.presets.Position.RED_SPIKE_POS;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BLUE_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BLUE_SPIKE;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.RED_BACKDROP_POS;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.RED_SPIKE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,15 +22,18 @@ public class BaseAction {
 
     protected String description;
 
+    private boolean farStart;
+
     double x;
     double y;
     double heading; // in degrees
 
     int intakeLevel;
-    int liftLevel = 500;
+    int liftLevel = 600;
 
     double waitTime;
-    boolean moveXAxis;
+
+    boolean setIndividualAxis = false;
 
     protected NavigationPID xPID;
     protected NavigationPID yPID;
@@ -49,14 +53,16 @@ public class BaseAction {
 
     protected void moveTo(){
         resetTimer();
-        if (x == 0){
-            xPID.setError(0);
+        if (x == 0 && !setIndividualAxis){
+            xPID.setTarget(robot.drive.getX());
+            setIndividualAxis = true;
+        }else if (y == 0 && !setIndividualAxis) {
+            yPID.setError(robot.drive.getY());
+            setIndividualAxis = true;
         }
-        if (y == 0)
-            yPID.setError(0);
 
         boolean there = robot.drive.runToPosition(xPID, yPID);
-        boolean timeOut = timer.milliseconds() > 4550;
+        boolean timeOut = timer.milliseconds() > 4500;
         endAction = there || timeOut;
     }
 
@@ -64,17 +70,18 @@ public class BaseAction {
         setNavPID();
 
         if (robot.RED){
-            x = RED_SPIKE_POS[SPIKE_ZONE][0];
-            y = RED_SPIKE_POS[SPIKE_ZONE][1];
+            x = RED_SPIKE[SPIKE_ZONE][0];
+            y = RED_SPIKE[SPIKE_ZONE][1];
 
         }else {
-            x = BLUE_SPIKE_POS[SPIKE_ZONE][0];
-            y = BLUE_SPIKE_POS[SPIKE_ZONE][1];
+            x = BLUE_SPIKE[SPIKE_ZONE][0];
+            y = BLUE_SPIKE[SPIKE_ZONE][1];
         }
 
         checkXSign();
 
         xPID.setTarget(x);
+        yPID.setTarget(y);
 
         identity = MOVE;
     }
@@ -82,12 +89,18 @@ public class BaseAction {
     protected void moveToBackdrop(){
         setNavPID();
 
-        x = BACKDROP_POS[SPIKE_ZONE][0];
-        y = BACKDROP_POS[SPIKE_ZONE][1];
+        if (robot.RED){
+            x = RED_BACKDROP_POS[SPIKE_ZONE][0];
+            y = RED_BACKDROP_POS[SPIKE_ZONE][1];
 
+        }else {
+            x = BLUE_BACKDROP_POS[SPIKE_ZONE][0];
+            y = BLUE_BACKDROP_POS[SPIKE_ZONE][1];
+        }
         checkXSign();
 
         xPID.setTarget(x);
+        yPID.setTarget(y);
 
         identity = MOVE;
     }
@@ -193,6 +206,8 @@ public class BaseAction {
      * @return whether or not this action has been completed
      */
     public boolean isFinished(){
+        if (endAction)
+            robot.drive.calculateDrivePowers(0,0,0);
         return endAction;
     }
 

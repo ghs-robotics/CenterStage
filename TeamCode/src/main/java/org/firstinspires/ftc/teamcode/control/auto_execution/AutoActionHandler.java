@@ -21,6 +21,8 @@ public class AutoActionHandler {
 
     private int totalActions;
 
+    private boolean farStart;
+
     public AutoActionHandler(Robot robot, Telemetry telemetry){
         this.actionList = new ArrayList<AutoActions>();
         this.robot = robot;
@@ -59,6 +61,8 @@ public class AutoActionHandler {
      * @param heading target heading (usually 0)
      */
     public void add (int action, int x, int y, double heading){
+        if (x == 0 && y == 0)
+            return;
         actionList.add(new AutoActions(action, robot, x, y, heading));
         add(WAIT, .1);
     }
@@ -82,7 +86,7 @@ public class AutoActionHandler {
      * @param split whether or not you want to split the move function to move x and then y
      */
     public void add (int action, int x, int y, double heading, boolean split){
-        if (split){
+        if (split && x != 0 || y != 0){
             add(action, x, 0, heading);
             add(action, 0, y, heading);
         }else
@@ -183,5 +187,9 @@ public class AutoActionHandler {
 
         telemetry.addLine();
         robot.getAutoTelemetry();
+    }
+
+    public void setStartingAwayFromStage(){
+        farStart = true;
     }
 }
