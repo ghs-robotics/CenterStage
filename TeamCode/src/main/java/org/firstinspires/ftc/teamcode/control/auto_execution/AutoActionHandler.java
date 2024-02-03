@@ -144,6 +144,10 @@ public class AutoActionHandler {
      * returns true.
      */
     private void nextAction(){
+        if (current.isEmergencyStop()){
+            actionList.clear();
+            telemetry.addLine("EMERGENCY STOP");
+        }
         if (current.isFinished()) {
             current = null;
             actionList.remove(0);

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.bot;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -63,8 +62,8 @@ public class Robot {
         gyro.resetHeading();
         drive.resetCoords();
         delivery.resetEncoders();
-        led.init();
-//        distance.addInitialDataToDistanceArray();
+        led.ledsOff();
+        distance.addInitialDataToDistanceArray();
     }
 
     public void shutOff(){
@@ -72,6 +71,7 @@ public class Robot {
         intake.pixelIn(0);
         delivery.driveLift(0);
 //        cam.closeCamera();
+        led.ledsOff();
     }
 
     /**
@@ -80,7 +80,9 @@ public class Robot {
     public void update(){
         drive.update();
         telemetry.update();
-        distance.countPixels();
+        distance.countPixels(intake);
+        led.setNumPixels(distance.getPixelNumber());
+        led.runLeds();
     }
 
     public void getAutoTelemetry(){
@@ -90,8 +92,8 @@ public class Robot {
 
     public void getTeleOpTelemetry(){
         positionTelemetry();
-//        intakeTelemetry();
-//        deliveryTelemetry();
+        intakeTelemetry();
+        deliveryTelemetry();
         droneTelemetry();
     }
 
@@ -110,9 +112,9 @@ public class Robot {
     private void intakeTelemetry(){
         telemetry.addLine("Intake Telemetry");
         telemetry.addData("intake position: ", intake.getIntakePosition());
-//        telemetry.addData("number of pixels:", intake.getPixelNumber());
-//        telemetry.addData("distance from pixel:", intake.getDistanceFromPixel());
-//        telemetry.addData("pixel distances:", intake.getPixelDistances());
+        telemetry.addData("number of pixels:", distance.getPixelNumber());
+        telemetry.addData("distance from pixel:", distance.getDistanceFromPixel());
+        telemetry.addData("pixel distances:", distance.getPixelDistances());
         telemetry.addLine();
     }
 

@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.bot.components;
 
 
-import android.util.Log;
-
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Led {
     RevBlinkinLedDriver blinkin;
     int numPixels = 0;
+
+    private boolean ledTurnOff = false;
 
     public Led(HardwareMap hardwaremap) {
 
@@ -43,7 +43,7 @@ public class Led {
         numPixels = n;
     }
 
-    public void init(){
+    public void ledsOff(){
         blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
     }
 
@@ -53,17 +53,25 @@ public class Led {
     */
     public void runLeds() {
 
-            if(numPixels == 0){
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-            } else if (numPixels == 2) {
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-            } else if (numPixels < 2) {
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+        if (ledTurnOff) {
+            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            return;
+        }
+        if(numPixels == 0){
+            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        } else if (numPixels == 2) {
+            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+        } else if (numPixels < 2) {
+            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
 
-            }
-            else
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }
+        else
+            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
     }
 
-
+    public void switchLedOnState(boolean pressed) {
+        if (pressed) {
+            ledTurnOff = !ledTurnOff;
+        }
+    }
 }

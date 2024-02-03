@@ -246,4 +246,10 @@ public class BaseAction {
         xPID.setMaxIOutput(integralLimit);
         yPID.setMaxIOutput(integralLimit);
     }
+
+    public boolean isEmergencyStop(){
+        if (endAction && identity == MOVE && xPID.getError() + yPID.getError() > 100)
+            return true;
+        return false;
+    }
 }

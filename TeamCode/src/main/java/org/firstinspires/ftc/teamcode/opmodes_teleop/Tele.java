@@ -79,6 +79,9 @@ public class Tele extends LinearOpMode {
 
             robot.delivery.setHangMode(gp2.a.pressed());
 
+
+            robot.led.switchLedOnState(gp2.y.pressed());
+
             //-------------------------------------------------------------------------------------
             //                                  TELEMETRY
             //-------------------------------------------------------------------------------------
