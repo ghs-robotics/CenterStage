@@ -1,17 +1,21 @@
-package org.firstinspires.ftc.teamcode.opmodes_teleop;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.bot.Robot;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
-import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
+import org.firstinspires.ftc.teamcode.opmodes.input.Controller;
 
 @TeleOp
 public class Tele extends LinearOpMode {
     Robot robot;
+
+    Intake intake;
     Controller gp1;
     Controller gp2;
+    Delivery deliver;
 
     boolean driveMode;
 
@@ -55,15 +59,12 @@ public class Tele extends LinearOpMode {
             //                                  GAMEPAD 2
             //-------------------------------------------------------------------------------------
 
-            // changes intake height - left bumper and right bumper
             robot.intake.changeIntakeHeight(gp2.left_bumper.pressed(),gp2.right_bumper.pressed());
 
 
-            // runs intake - left and right trigger
             robot.intake.pixelIn(gp2.right_trigger - gp2.left_trigger);
 
 
-            // extends outtake - left and right dpad
             robot.delivery.changeExtensionLength(gp2.dpad_left.pressed(), gp2.dpad_right.pressed());
 
 
@@ -73,7 +74,6 @@ public class Tele extends LinearOpMode {
             robot.delivery.hangLift(gp2.left_stick_y, gp2.right_stick_y);
 
 
-            // changes drop servo position - b
             robot.delivery.changeDropPosition(gp2.x.pressing());
 
 
