@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CENTER_PARKING;
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CORNER_PARKING;
+import static org.firstinspires.ftc.teamcode.presets.AutoPresets.basicShort;
 import static org.firstinspires.ftc.teamcode.presets.AutoPresets.goToSpikeMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -26,6 +27,10 @@ public class AutoBlue extends LinearOpMode {
         robot.init();
 
         // create list of actions to run  ------------------------------------------------------------
+        actionHandler.add(basicShort(robot, telemetry));
+
+//        actionHandler.add(MOVE, CORNER_PARKING);
+        actionHandler.add(MOVE, CENTER_PARKING);
 
 
         // don't queue past this line. ---------------------------------------------------------------

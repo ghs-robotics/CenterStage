@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BACK_ADJUST_Y;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CENTER_PARKING;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CORNER_PARKING;
+import static org.firstinspires.ftc.teamcode.presets.AutoPresets.basicLong;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -19,7 +24,10 @@ public class AutoBlueLong extends LinearOpMode {
 
         // create list of actions to run
 //        actionHandler.add(RETRACT);
+        actionHandler.add(basicLong(robot, telemetry));
 
+        actionHandler.add(MOVE, (int) CORNER_PARKING[0], (int) (CORNER_PARKING[1] + BACK_ADJUST_Y), 0.0);
+//        actionHandler.add(MOVE, (int) CENTER_PARKING[0], (int) (CENTER_PARKING[1] + BACK_ADJUST_Y), 0.0);
 
 
 

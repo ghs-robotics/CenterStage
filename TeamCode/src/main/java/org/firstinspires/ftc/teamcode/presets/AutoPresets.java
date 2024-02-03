@@ -44,9 +44,6 @@ public class AutoPresets {
         actionHandler.add(MOVE_TO_BACKDROP);
         actionHandler.add(DELIVER);
         actionHandler.add(WAIT, 0.1);
-        actionHandler.add(MOVE, CORNER_PARKING);
-        actionHandler.add(MOVE, CENTER_PARKING);
-
         return actionHandler;
     }
 
@@ -59,10 +56,6 @@ public class AutoPresets {
         actionHandler.add(MOVE_TO_BACKDROP);
         actionHandler.add(DELIVER);
         actionHandler.add(WAIT, 0.1);
-        actionHandler.add(MOVE, (int) CORNER_PARKING[0], (int) (CORNER_PARKING[1] + BACK_ADJUST_Y), 0.0);
-        actionHandler.add(MOVE, (int) CENTER_PARKING[0], (int) (CENTER_PARKING[1] + BACK_ADJUST_Y), 0.0);
-        actionHandler.add(MOVE, CENTER_PARKING);
-
         return actionHandler;
     }
 
