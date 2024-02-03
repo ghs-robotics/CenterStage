@@ -1,9 +1,15 @@
 package org.firstinspires.ftc.teamcode.presets;
 
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DETECT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_BACKDROP;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_SPIKE;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.PLACE_PIXEL;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BACK_ADJUST_Y;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CENTER_PARKING;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CORNER_PARKING;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.Robot;
@@ -29,6 +35,37 @@ public class AutoPresets {
         return beginning;
     }
 
+    public static AutoActionHandler basicShort(Robot r, Telemetry t){
+        actionHandler = null;
+        actionHandler = new AutoActionHandler(r, t);
+
+        actionHandler.add(goToSpikeMark(r, t));
+        actionHandler.add(WAIT, 0.1);
+        actionHandler.add(MOVE_TO_BACKDROP);
+        actionHandler.add(DELIVER);
+        actionHandler.add(WAIT, 0.1);
+        actionHandler.add(MOVE, CORNER_PARKING);
+        actionHandler.add(MOVE, CENTER_PARKING);
+
+        return actionHandler;
+    }
+
+    public static AutoActionHandler basicLong(Robot r, Telemetry t){
+        actionHandler = null;
+        actionHandler = new AutoActionHandler(r, t);
+
+        actionHandler.add(goToSpikeMark(r, t));
+        actionHandler.add(WAIT, 0.1);
+        actionHandler.add(MOVE_TO_BACKDROP);
+        actionHandler.add(DELIVER);
+        actionHandler.add(WAIT, 0.1);
+        actionHandler.add(MOVE, (int) CORNER_PARKING[0], (int) (CORNER_PARKING[1] + BACK_ADJUST_Y), 0.0);
+        actionHandler.add(MOVE, (int) CENTER_PARKING[0], (int) (CENTER_PARKING[1] + BACK_ADJUST_Y), 0.0);
+        actionHandler.add(MOVE, CENTER_PARKING);
+
+        return actionHandler;
+    }
+
     public static AutoActionHandler toBackDropAlongWall(Robot r, Telemetry t){
         actionHandler = null;
         actionHandler = new AutoActionHandler(r, t);
@@ -36,4 +73,5 @@ public class AutoPresets {
         actionHandler.add(MOVE, 15, 0, 0.0);
         return actionHandler;
     }
+
 }

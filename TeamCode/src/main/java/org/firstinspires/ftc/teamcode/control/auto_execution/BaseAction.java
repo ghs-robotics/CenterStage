@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.control.auto_execution;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.cv.Camera.SPIKE_ZONE;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BACK_ADJUST_Y;
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BLUE_BACKDROP_POS;
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BLUE_SPIKE;
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.RED_BACKDROP_POS;
@@ -22,7 +23,7 @@ public class BaseAction {
 
     protected String description;
 
-    private boolean farStart;
+    protected boolean farStart;
 
     double x;
     double y;
@@ -79,6 +80,7 @@ public class BaseAction {
         }
 
         checkXSign();
+        checkFarSide();
 
         xPID.setTarget(x);
         yPID.setTarget(y);
@@ -98,6 +100,7 @@ public class BaseAction {
             y = BLUE_BACKDROP_POS[SPIKE_ZONE][1];
         }
         checkXSign();
+        checkFarSide();
 
         xPID.setTarget(x);
         yPID.setTarget(y);
@@ -219,9 +222,15 @@ public class BaseAction {
     }
 
     protected void checkXSign(){
-        if (robot.RED)
+        if (robot.RED) {
             this.x *= -1;
+        }
+    }
 
+    protected void checkFarSide(){
+        if (farStart){
+            y += BACK_ADJUST_Y;
+        }
     }
 
     protected void setNavPID(){

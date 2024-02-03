@@ -24,8 +24,6 @@ public class Robot {
     public Delivery delivery;
     public Drone drone;
 
-    FtcDashboard dashboard;
-
     public boolean RED;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
@@ -37,8 +35,6 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
-//        dashboard = FtcDashboard.getInstance();
-//        this.telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         this.telemetry = telemetry;
         gyro = new Gyro(hardwareMap);

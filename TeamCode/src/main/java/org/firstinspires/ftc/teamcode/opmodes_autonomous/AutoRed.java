@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.RETRACT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.WAIT;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.HALF_TO_MARK;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -29,19 +30,7 @@ public class AutoRed extends LinearOpMode {
 //                0.0, true));
         //left
 //        actionHandler.add(DETECT);
-        actionHandler.add(MOVE, -600, 725, 0);
-        actionHandler.add(WAIT, 2);
-        actionHandler.add(LIFT);
-        actionHandler.add(EXTEND);
-        actionHandler.add(DROP);
-        actionHandler.add(RETRACT);
-        actionHandler.add(MOVE, -200, 730, 0);
-
-//        actionHandler.add(LIFT);
-//        actionHandler.add(DELIVER);
-//        actionHandler.add(RETRACT);
-//        actionHandler.add(MOVE, -100, -600, 0);
-
+        actionHandler.add(MOVE, -200, 0, 0.0);
 
 //        telemetry.addLine("queuing actions");
 //        telemetry.addLine(actionHandler.getTotalActions() + " total actions");
@@ -54,9 +43,7 @@ public class AutoRed extends LinearOpMode {
         //actionHandler.findAndSetZone();
 
         while (opModeIsActive()){
-            actionHandler.run();
-            telemetry.addLine();
-            actionHandler.status();
+            actionHandler.update();
             //robot.getAutoTelemetry();
         }
     }

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.presets;
 
 public class AutoPositionPresets {
     //
-    private static final double SIDE_SPIKE_X = 665;
+    private static final double SIDE_SPIKE_X = 685;
     private static final double IN_FRONT_OF_BACKDROP = 820;
 
     static final double X_TO_MM = 1.045553699;
@@ -41,6 +41,6 @@ public class AutoPositionPresets {
     public static double[][] BLUE_SPIKE = {BLUE_LEFT_SPIKE_POS, BLUE_CENTER_SPIKE_POS, BLUE_RIGHT_SPIKE_POS};
     public static double[][] RED_SPIKE = {RED_LEFT_SPIKE_POS, RED_CENTER_SPIKE_POS, RED_RIGHT_SPIKE_POS};
 
-    public static final double[] HALF_TO_MARK = {SIDE_SPIKE_X, 0, 0.0};
+    public static final double[] HALF_TO_MARK = {SIDE_SPIKE_X, 1, 0.0};
 
 }

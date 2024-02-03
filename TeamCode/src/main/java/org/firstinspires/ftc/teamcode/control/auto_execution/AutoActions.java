@@ -29,9 +29,10 @@ public class AutoActions extends BaseAction {
         this.y = y;
         this.heading = heading;
 
-        setNavPID();
+        if (robot.RED)
+            this.x *= -1;
 
-        checkXSign();
+        setNavPID();
 
         xPID.setTarget(x);
         yPID.setTarget(y);
@@ -50,6 +51,10 @@ public class AutoActions extends BaseAction {
     }
     public AutoActions (int id, Robot robot, double[] pos) {
         this(id, robot, (int) pos[0], (int) pos[1], (int) pos[2]);
+    }
+
+    public void setFarStart(boolean farStart){
+        this.farStart = farStart;
     }
 
     /**

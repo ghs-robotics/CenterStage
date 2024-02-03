@@ -55,9 +55,7 @@ public class TestAuto extends LinearOpMode {
 
 
         while (opModeIsActive()){
-            actionHandler.run();
-            telemetry.addLine();
-            actionHandler.status();
+            actionHandler.update();
             //robot.getAutoTelemetry();
         }
 

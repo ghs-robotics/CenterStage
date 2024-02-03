@@ -29,6 +29,15 @@ public class AutoActionHandler {
         this.telemetry = telemetry;
     }
 
+
+    public AutoActionHandler(Robot robot, Telemetry telemetry, boolean farStart){
+        this.actionList = new ArrayList<AutoActions>();
+        this.robot = robot;
+        this.farStart = farStart;
+        this.telemetry = telemetry;
+    }
+
+
     /**
      * runs the action and calls next action in case the current action is complete.
      */
@@ -159,6 +168,10 @@ public class AutoActionHandler {
         if (actionList.isEmpty())
             return;
 
+        for (AutoActions a: actionList){
+            a.setFarStart(farStart);
+        }
+
         actionList.add(new AutoActions(AutoActions.DONE, robot));
         current = actionList.get(0);
         totalActions = actionList.size();
@@ -189,7 +202,9 @@ public class AutoActionHandler {
         robot.getAutoTelemetry();
     }
 
-    public void setStartingAwayFromStage(){
-        farStart = true;
+    public void update(){
+        run();
+        status();
     }
+
 }

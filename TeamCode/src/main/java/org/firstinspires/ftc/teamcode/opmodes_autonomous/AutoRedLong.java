@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes_autonomous;
 
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DETECT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
+import static org.firstinspires.ftc.teamcode.presets.AutoPresets.goToSpikeMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,13 +18,11 @@ public class AutoRedLong extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry, true);
-        actionHandler = new AutoActionHandler(robot, telemetry);
+        actionHandler = new AutoActionHandler(robot, telemetry, true);
         robot.init();
 
         // create list of actions to run
-        actionHandler.add(DROP);
-//        actionHandler.add(RETRACT);
-
+        actionHandler.add(goToSpikeMark(robot, telemetry));
 
 
 
@@ -34,9 +34,7 @@ public class AutoRedLong extends LinearOpMode {
         actionHandler.init();
 
         while (opModeIsActive()){
-            actionHandler.run();
-            actionHandler.status();
-//            robot.getTelemetry();
+            actionHandler.update();
         }
     }
 }

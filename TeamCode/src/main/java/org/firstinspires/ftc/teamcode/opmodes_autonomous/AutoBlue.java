@@ -26,13 +26,7 @@ public class AutoBlue extends LinearOpMode {
         robot.init();
 
         // create list of actions to run  ------------------------------------------------------------
-        actionHandler.add(goToSpikeMark(robot, telemetry));
-        actionHandler.add(WAIT, 0.1);
-        actionHandler.add(MOVE_TO_BACKDROP);
-        actionHandler.add(DELIVER);
-        actionHandler.add(WAIT, 0.1);
-        actionHandler.add(MOVE, CORNER_PARKING);
-        actionHandler.add(MOVE, CENTER_PARKING);
+
 
         // don't queue past this line. ---------------------------------------------------------------
         actionHandler.init();
@@ -45,10 +39,7 @@ public class AutoBlue extends LinearOpMode {
         }
 
         while (opModeIsActive()){
-            actionHandler.run();
-            actionHandler.status();
-
-
+            actionHandler.update();
         }
     }
 }

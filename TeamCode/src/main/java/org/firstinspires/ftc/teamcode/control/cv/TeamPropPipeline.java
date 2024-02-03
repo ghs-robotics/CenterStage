@@ -157,7 +157,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
         else
             zone = 2;
 
-        if (timer.milliseconds() < 250)
+        if (timer.milliseconds() < 550)
             SPIKE_ZONE = zone;
 
         Rect left = new Rect(1, 1, (int) xLeft, TestingConstants.RES_HEIGHT);
