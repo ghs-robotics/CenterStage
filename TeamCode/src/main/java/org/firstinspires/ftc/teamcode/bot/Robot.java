@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.components.Drone;
 import org.firstinspires.ftc.teamcode.bot.components.Led;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.DistanceSensor;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
@@ -23,6 +24,8 @@ public class Robot {
 
     public Intake intake;
     public Delivery delivery;
+
+    public DistanceSensor distance;
     public Drone drone;
 
     public Led led;
@@ -46,6 +49,7 @@ public class Robot {
 
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
+        distance = new DistanceSensor(hardwareMap);
         drone = new Drone(hardwareMap);
 
         led = new Led(hardwareMap);
@@ -60,6 +64,7 @@ public class Robot {
         drive.resetCoords();
         delivery.resetEncoders();
         led.init();
+//        distance.addInitialDataToDistanceArray();
     }
 
     public void shutOff(){
@@ -75,8 +80,7 @@ public class Robot {
     public void update(){
         drive.update();
         telemetry.update();
-        intake.countPixels();
-        intake.addDataToDistanceArray();
+        distance.countPixels();
     }
 
     public void getAutoTelemetry(){

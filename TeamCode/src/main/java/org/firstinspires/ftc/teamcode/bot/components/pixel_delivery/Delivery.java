@@ -17,8 +17,7 @@ public class Delivery {
 
     private final TouchSensor touchSensor2;
 
-    // 0.4 is the pos for backboard contact (max)
-    private final double[] extendServoPos = {0, 0.2, 0.3, 0.4};
+    private final double[] extendServoPos = {0, 0.5, 0.1, 0.15, 0.2};
 
     private int extendLvl = 80; // should be dividable by the number of pos
 
@@ -38,7 +37,7 @@ public class Delivery {
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        dropServo.setPosition(0.15);
+        dropServo.setPosition(0.55);
         extendServo.setPosition(0);
     }
 
@@ -124,9 +123,9 @@ public class Delivery {
 
         public void changeDropPosition ( boolean pressing){
             if (pressing) {
-                dropServo.setPosition(0.4);
+                dropServo.setPosition(0.75);
             } else {
-                dropServo.setPosition(0.15);
+                dropServo.setPosition(0.55);
             }
         }
 
