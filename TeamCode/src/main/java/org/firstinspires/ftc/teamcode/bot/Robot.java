@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.components.Drone;
+import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.DistanceSensor;
 import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Intake;
 import org.firstinspires.ftc.teamcode.bot.components.BallDrive;
 import org.firstinspires.ftc.teamcode.bot.components.Gyro;
@@ -22,6 +23,8 @@ public class Robot {
 
     public Intake intake;
     public Delivery delivery;
+
+    public DistanceSensor distance;
     public Drone drone;
 
     FtcDashboard dashboard;
@@ -45,6 +48,7 @@ public class Robot {
 
         intake = new Intake(hardwareMap);
         delivery = new Delivery(hardwareMap);
+        distance = new DistanceSensor(hardwareMap);
         drone = new Drone(hardwareMap);
     }
 
@@ -56,6 +60,7 @@ public class Robot {
         gyro.resetHeading();
         drive.resetCoords();
         delivery.resetEncoders();
+//        distance.addInitialDataToDistanceArray();
     }
 
     public void shutOff(){
@@ -70,8 +75,7 @@ public class Robot {
     public void update(){
         drive.update();
         telemetry.update();
-        intake.countPixels();
-        intake.addDataToDistanceArray();
+        distance.countPixels();
     }
 
     public void getAutoTelemetry(){
@@ -99,9 +103,9 @@ public class Robot {
     private void intakeTelemetry(){
         telemetry.addLine("Intake Telemetry");
         telemetry.addData("intake position: ", intake.getIntakePosition());
-        telemetry.addData("number of pixels:", intake.getPixelNumber());
-        telemetry.addData("distance from pixel:", intake.getDistanceFromPixel());
-        telemetry.addData("pixel distances:", intake.getPixelDistances());
+        telemetry.addData("number of pixels:", distance.getPixelNumber());
+        telemetry.addData("distance from pixel:", distance.getDistanceFromPixel());
+        telemetry.addData("pixel distances:", distance.getPixelDistances());
         telemetry.addLine();
     }
 
