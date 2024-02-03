@@ -39,17 +39,30 @@ public class Led {
         }
     }
 
+    public void setNumPixels(int n){
+        numPixels = n;
+    }
+
+    public void init(){
+        blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+    }
+
     /**
      * constantly run the leds to default purple if number of pixels is less than two and turn white
      * once there are two pixels.
     */
     public void runLeds() {
 
-            if (numPixels < 2) {
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+            if(numPixels == 0){
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             } else if (numPixels == 2) {
                 blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            } else if (numPixels < 2) {
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+
             }
+            else
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
     }
 
 

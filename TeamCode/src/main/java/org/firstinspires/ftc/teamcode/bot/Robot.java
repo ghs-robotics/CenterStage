@@ -59,7 +59,7 @@ public class Robot {
         gyro.resetHeading();
         drive.resetCoords();
         delivery.resetEncoders();
-        led.
+        led.init();
     }
 
     public void shutOff(){
@@ -75,8 +75,8 @@ public class Robot {
     public void update(){
         drive.update();
         telemetry.update();
-//        intake.countPixels();
-//        intake.addDataToDistanceArray();
+        intake.countPixels();
+        intake.addDataToDistanceArray();
     }
 
     public void getAutoTelemetry(){
