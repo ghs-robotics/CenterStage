@@ -28,7 +28,7 @@ public class Intake {
 
     public void autoPixelOut() {
         intakeMotor.setPower(-0.5);
-        conveyorBeltMotor.setPower(-1);
+        conveyorBeltMotor.setPower(1);
     }
 
     public void setIntakeHeight(int targetLevel) {

@@ -23,6 +23,11 @@ public class Controller {
     public double left_trigger;
     public double right_trigger;
 
+    /**
+     * This class patches a small problem with the gamepad class
+     *
+     * @param gamepad the basic controller class from the ftc library
+     */
     public Controller(Gamepad gamepad){
         this.gamepad = gamepad;
         update();

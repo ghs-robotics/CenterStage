@@ -27,9 +27,9 @@ public class AutoRedLong extends LinearOpMode {
         robot.init();
 
         // create list of actions to run
-        actionHandler.add(basicLong(robot, telemetry));
-
-        actionHandler.add(MOVE, (int) CORNER_PARKING[0], (int) (CORNER_PARKING[1] + BACK_ADJUST_Y), 0.0);
+//        actionHandler.add(basicLong(robot, telemetry));
+        actionHandler.add(goToSpikeMark(robot, telemetry));
+//        actionHandler.add(MOVE, (int) CORNER_PARKING[0], (int) (CORNER_PARKING[1] + BACK_ADJUST_Y), 0.0);
 //        actionHandler.add(MOVE, (int) CENTER_PARKING[0], (int) (CENTER_PARKING[1] + BACK_ADJUST_Y), 0.0);
 
 

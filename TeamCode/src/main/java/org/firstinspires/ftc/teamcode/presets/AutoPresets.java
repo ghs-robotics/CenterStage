@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.presets;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DETECT;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.INTAKE;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_BACKDROP;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.MOVE_TO_SPIKE;
@@ -10,6 +11,7 @@ import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.BACK_ADJUST_Y;
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CENTER_PARKING;
 import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.CORNER_PARKING;
+import static org.firstinspires.ftc.teamcode.presets.AutoPositionPresets.TILE;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.bot.Robot;
@@ -53,8 +55,12 @@ public class AutoPresets {
 
         actionHandler.add(goToSpikeMark(r, t));
         actionHandler.add(WAIT, 0.1);
+        actionHandler.add(MOVE, 0, (int) (-1.5 * TILE), 0.0);
+        actionHandler.add(INTAKE, 5);
+        actionHandler.add(MOVE, (int) 2.3 * TILE, (int) 3 * TILE, 0.0, true);
         actionHandler.add(MOVE_TO_BACKDROP);
         actionHandler.add(DELIVER);
+        
         actionHandler.add(WAIT, 0.1);
         return actionHandler;
     }

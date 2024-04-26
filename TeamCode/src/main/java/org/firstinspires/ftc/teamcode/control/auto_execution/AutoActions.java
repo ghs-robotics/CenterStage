@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.bot.Robot;
 
 public class AutoActions extends BaseAction {
     // identities
+    public static final int ERROR = -3;
     public static final int DELIVER = -2; // not used here, used in Handler to add a series of actions
     public static final int DONE = -1;
     public static final int MOVE = 0;
@@ -63,6 +64,7 @@ public class AutoActions extends BaseAction {
     public void runAction(){
         switch (identity){
             case DONE:
+            case ERROR:
                 shutOffBot();
                 break;
             case MOVE:
@@ -101,6 +103,7 @@ public class AutoActions extends BaseAction {
             case MOVE_TO_BACKDROP:
                 moveToBackdrop();
                 break;
+
 
         }
     }

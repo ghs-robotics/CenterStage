@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.bot;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -31,6 +32,13 @@ public class Robot {
 
     public boolean RED;
 
+    /**
+     * This one is built for auto because teleop doesn't care about which side we start on
+     *
+     * @param hardwareMap gets the locations of the parts from the hub
+     * @param telemetry for display on driver hub
+     * @param red which alliance we are on
+     */
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
         this(hardwareMap, telemetry);
         cam = new Camera(hardwareMap, telemetry, red);
@@ -38,6 +46,12 @@ public class Robot {
         cam.setCamera();
     }
 
+    /**
+     * This one is built for teleop, and is the more basic one, it does not init camera.
+     *
+     * @param hardwareMap gets the locations of the parts from the hub
+     * @param telemetry for display on driver hub
+     */
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
 
@@ -66,6 +80,9 @@ public class Robot {
         distance.addInitialDataToDistanceArray();
     }
 
+    /**
+     * Sets all robot components to off or the 0 power and 0 position
+     */
     public void shutOff(){
         drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);
@@ -73,6 +90,7 @@ public class Robot {
 //        cam.closeCamera();
         led.ledsOff();
     }
+
 
     /**
      * tells the robot parts to retrieve the current information from each part to update the robot.

@@ -12,6 +12,7 @@ public class Led {
     public Led(HardwareMap hardwaremap) {
 
         blinkin = hardwaremap.get(RevBlinkinLedDriver.class, "blinkin");
+        ledsOff();
     }
 
     /**
@@ -63,10 +64,9 @@ public class Led {
             blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
         } else if (numPixels < 2) {
             blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
-
         }
         else
-            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
     }
 
     public void switchLedOnState(boolean pressed) {

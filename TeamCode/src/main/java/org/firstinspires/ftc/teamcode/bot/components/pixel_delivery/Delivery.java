@@ -17,7 +17,7 @@ public class Delivery {
 
     private final TouchSensor touchSensor2;
 
-    private final double[] extendServoPos = {0, 0.5, 0.1, 0.15, 0.2};
+    private final double[] extendServoPos = {0, 0.1, 0.2, 0.3, 0.4};
 
     private int extendLvl = 80; // should be dividable by the number of pos
 
@@ -121,11 +121,11 @@ public class Delivery {
             setExtensionPosition();
         }
 
-        public void changeDropPosition ( boolean pressing){
+        public void changeDropPosition (boolean pressing) {
             if (pressing) {
                 dropServo.setPosition(0.75);
             } else {
-                dropServo.setPosition(0.55);
+                dropServo.setPosition(0.35);
             }
         }
 

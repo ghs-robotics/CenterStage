@@ -23,14 +23,14 @@ public class BallDrive {
     private double y;
     private double heading;
 
-    // the following variables are only for the use
+    // for recording the last positions of the robot
     private double lastL, lastR, lastB, lastH;
+    // for he current positions
     private double left, right, back;
+    // the calculated change between current and last state
     private double deltaL, deltaR, deltaB, deltaH;
 
-    private double lastXError;
-    private double lastYError;
-
+    // constant multiplier to convert ticks to a usable unit (in this case MM but its a little off)
     private final double MM_PER_TICK = (35 * Math.PI) / 8192;
 
     public BallDrive(HardwareMap hardwareMap, Gyro gyro) {
@@ -58,6 +58,10 @@ public class BallDrive {
         updatePosition();
     }
 
+    /**
+     * helper method that does the math to track how far the robot has travelled since the last
+     * recorded position.
+     */
     private void updatePosition(){
         double ds = (deltaR + deltaL) * .5;
 
@@ -74,6 +78,11 @@ public class BallDrive {
         this.x = this.x + MM_PER_TICK * dx;
     }
 
+    /**
+     * @param xPID the x-axis pid controller that already has a set target position.
+     * @param yPID the y-axis pid controller that already has a set target position.
+     * @return whether or not we have arrived within an acceptable range of the target position
+     */
     public boolean runToPosition(NavigationPID xPID, NavigationPID yPID){
         double xPower = -xPID.getOutput(this.x);
         double yPower = yPID.getOutput(this.y);
@@ -86,12 +95,17 @@ public class BallDrive {
 
         calculateDrivePowers(xPower, yPower, 0, true);
 
-        lastXError = xPID.getError();
-        lastYError = yPID.getError();
+//        double lastXError = xPID.getError();
+//        double lastYError = yPID.getError();
 
         return Math.abs(xPID.getError()) + Math.abs(yPID.getError()) < 6 || xPower + yPower == 1;
     }
 
+    /**
+     * @param x how much you want the robot to strafe (drive sideways)
+     * @param y how much you want the robot to drive forward and backward
+     * @param rot how much you want the robot to rotate
+     */
     public void calculateDrivePowers(double x, double y, double rot) {
         bp = x;
         lp = y - rot;
@@ -100,6 +114,17 @@ public class BallDrive {
         setMotorPowers();
     }
 
+    /**
+     * In 4042 field centric drive is known as meta drive for some reason. :/
+     * Field-centric drive uses the field to define the x and y axis instead of the robot. When using
+     * meta drive y axis is always going to be the initial direction of the robot, no matter what
+     * orientation the robot ends up in.
+     *
+     * @param x how much you want the robot to strafe (drive sideways)
+     * @param y how much you want the robot to drive forward and backward
+     * @param rot how much you want the robot to rotate
+     * @param driveMode whether or not the robot is in meta drive
+     */
     public void calculateDrivePowers(double x, double y, double rot, boolean driveMode){
         metaDriveOn = driveMode;
 

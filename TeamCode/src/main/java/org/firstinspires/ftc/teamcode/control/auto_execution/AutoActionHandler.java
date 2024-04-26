@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.control.auto_execution;
 
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DELIVER;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.DROP;
+import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.ERROR;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.EXTEND;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.LIFT;
 import static org.firstinspires.ftc.teamcode.control.auto_execution.AutoActions.RETRACT;
@@ -146,6 +147,8 @@ public class AutoActionHandler {
     private void nextAction(){
         if (current.isEmergencyStop()){
             actionList.clear();
+            add(ERROR);
+
             telemetry.addLine("EMERGENCY STOP");
         }
         if (current.isFinished()) {
@@ -197,10 +200,13 @@ public class AutoActionHandler {
         telemetry.addLine(currentStep + " of " + totalActions + " actions");
         telemetry.addLine();
 
-        if (current.getIdentity() != AutoActions.DONE) {
+        if (current.getIdentity() == AutoActions.ERROR) {
+            telemetry.addLine("Emergency stop initiated. Bad wheels :c");
+        }else if(current.getIdentity() != AutoActions.DONE)
             telemetry.addLine(current.getDescription());
-        }else
-            telemetry.addLine( "Done!");
+        else {
+            telemetry.addLine("Done!");
+        }
 
         telemetry.addLine();
         robot.getAutoTelemetry();

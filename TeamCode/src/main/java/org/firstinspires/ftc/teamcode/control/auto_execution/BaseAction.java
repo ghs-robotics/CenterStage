@@ -248,7 +248,7 @@ public class BaseAction {
     }
 
     public boolean isEmergencyStop(){
-        if (endAction && identity == MOVE && xPID.getError() + yPID.getError() > 100)
+        if (endAction && identity == MOVE && Math.abs(xPID.getError()) + Math.abs(yPID.getError()) > 100)
             return true;
         return false;
     }
