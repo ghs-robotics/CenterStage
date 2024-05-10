@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.bot.components.pixel_delivery.Delivery;
 import org.firstinspires.ftc.teamcode.opmodes_teleop.input.Controller;
 
 @TeleOp
+// As the name suggests, this is a testing Opmode
 public class TestTele extends LinearOpMode {
     Robot robot;
     Controller gp1;

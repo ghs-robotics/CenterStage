@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.bot.Robot;
 public class AutoActions extends BaseAction {
     // identities
     public static final int DELIVER = -2; // not used here, used in Handler to add a series of actions
-    public static final int DONE = -1;
+    public static final int DONE = -1; // Action to prevent the Queue Arraylist from throwing an error
     public static final int MOVE = 0;
     public static final int INTAKE = 1;
     public static final int LIFT = 2;
@@ -16,8 +16,8 @@ public class AutoActions extends BaseAction {
     public static final int EXTEND = 7;
     public static final int RETRACT = 8;
     public static final int DETECT = 9;
-    public static final int MOVE_TO_SPIKE = 10;
-    public static final int MOVE_TO_BACKDROP = 11;
+    public static final int MOVE_TO_SPIKE = 10; // combo identity that will be changed once the targets are set
+    public static final int MOVE_TO_BACKDROP = 11; // combo identity that will be changed once the targets are set
 
     public AutoActions(int id, Robot robot){
         super(id, robot);
@@ -101,7 +101,6 @@ public class AutoActions extends BaseAction {
             case MOVE_TO_BACKDROP:
                 moveToBackdrop();
                 break;
-
         }
     }
 

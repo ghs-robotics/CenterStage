@@ -31,6 +31,13 @@ public class Robot {
 
     public boolean RED;
 
+    /**
+     * Overloaded Robot constructor built for Auto because it will initialize teh camera.
+     *
+     * @param hardwareMap Access to the rev hub
+     * @param telemetry Access to display info on the driver hub
+     * @param red Which side of the field we start on
+     */
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean red){
         this(hardwareMap, telemetry);
         cam = new Camera(hardwareMap, telemetry, red);
@@ -66,6 +73,9 @@ public class Robot {
         distance.addInitialDataToDistanceArray();
     }
 
+    /**
+     * Sets all motors and devices to 0 power, effectively stopping all robot movement.
+     */
     public void shutOff(){
         drive.calculateDrivePowers(0,0,0);
         intake.pixelIn(0);

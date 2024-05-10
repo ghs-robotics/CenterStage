@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.control.PIDControllers.NavigationPID;
 
 public class BaseAction {
 
+    // All the protected variables and functions in this class can be accessed in the AutoActions
+    // class.
     protected int identity;
     protected boolean endAction;
 
@@ -25,10 +27,12 @@ public class BaseAction {
 
     protected boolean farStart;
 
+    // properties for MOVE
     double x;
     double y;
     double heading; // in degrees
 
+    // properties for INTAKE and LIFT
     int intakeLevel;
     int liftLevel = 600;
 
@@ -36,15 +40,17 @@ public class BaseAction {
 
     boolean setIndividualAxis = false;
 
+    // controllers for MOVE
     protected NavigationPID xPID;
     protected NavigationPID yPID;
 
+    // default PID values
     double[] pidValues = {.152, .00165765, .0016622};
 
     protected Robot robot;
 
+    // Basic constructor for this class
     public BaseAction(int id, Robot robot) {
-
         this.identity = id;
         this.robot = robot;
         timerReset = false;
@@ -54,6 +60,7 @@ public class BaseAction {
 
     protected void moveTo(){
         resetTimer();
+        // Allows the robot to move one axis at a time.
         if (x == 0 && !setIndividualAxis){
             xPID.setTarget(robot.drive.getX());
             setIndividualAxis = true;
@@ -62,14 +69,26 @@ public class BaseAction {
             setIndividualAxis = true;
         }
 
+        // Has the robot run to position and once it is within the range of error then the action
+        // may end.
         boolean there = robot.drive.runToPosition(xPID, yPID);
         boolean timeOut = timer.milliseconds() > 4500;
+        // the timeout boolean is a safety in-case it starts trying to get infinitely closer to
+        // the target position.
         endAction = there || timeOut;
     }
 
+    /**
+     * Grabs the corresponding X and Y coordinates from the AutoPositionPresets class's arrays
+     * based on what the camera saw and which side we start on. Once the coordinate is set the
+     * action changes itself to move.
+     */
     protected void moveToSpike(){
+        // initializes the PIDs so they aren't null.
         setNavPID();
 
+        // grabs targets, the targets are stored in arrays because it makes it easy to grab w/
+        // a spike zone number
         if (robot.RED){
             x = RED_SPIKE[SPIKE_ZONE][0];
             y = RED_SPIKE[SPIKE_ZONE][1];
@@ -79,15 +98,21 @@ public class BaseAction {
             y = BLUE_SPIKE[SPIKE_ZONE][1];
         }
 
+        // checks if we need to make any adjustments
         checkXSign();
         checkFarSide();
 
+        // sets targets
         xPID.setTarget(x);
         yPID.setTarget(y);
 
+        // switches itself to move so it can move to target.
         identity = MOVE;
     }
 
+    /**
+     * Basically the same as moveToSpike but with a different set of arrays
+     */
     protected void moveToBackdrop(){
         setNavPID();
 
@@ -159,11 +184,13 @@ public class BaseAction {
         robot.intake.setIntakeHeight(3);
         robot.intake.autoPixelOut();
 
+        // safety feature to ensure the robot isn't driving across the field into another bot
         robot.drive.calculateDrivePowers(0,0,0);
 
         resetTimer();
         if(timer.milliseconds() > 750) {
             endAction = true;
+            // another safety feature, but mostly to ensure power isn't being wasted.
             robot.intake.pixelIn(0);
         }
     }
@@ -175,14 +202,22 @@ public class BaseAction {
         endAction = timer.milliseconds() > 2000;
     }
 
+    /**
+     * Runs the camera for half a second and sets the number for SPIKE_MARK.
+     */
     protected void detectSpikeMark(){
         if (!timerReset)
             robot.cam.detectProp();
         resetTimer();
+
+        // detection function
         robot.cam.getSpikeZone();
         endAction = timer.milliseconds() > 500;
     }
 
+    /**
+     * Was meant to be implemented if AprilTags were implemented.
+     */
     protected void alignBotToTag(){
         // looks for the required tag
         // requires the use of moving to align itself
@@ -190,7 +225,8 @@ public class BaseAction {
     }
 
     /**
-     * waits out timer until timer is greater than or equal to the parameter wait time
+     * waits out timer until timer is greater than or equal to the parameter wait time. Pauses all
+     * robot functions while stopped
      */
     protected void waiting() {
         resetTimer();
@@ -206,7 +242,8 @@ public class BaseAction {
     }
 
     /**
-     * @return whether or not this action has been completed
+     * @return whether or not this action has been completed. If completed the ActionQueue will
+     * replace the 0 item (current action) with the next one
      */
     public boolean isFinished(){
         if (endAction)
@@ -233,6 +270,10 @@ public class BaseAction {
         }
     }
 
+    /**
+     * Initializes the PID controllers so they don't throw a NullPointerException when
+     * interacted with
+     */
     protected void setNavPID(){
         double outPutLimit = 2;
         double integralLimit = 3650;
@@ -247,6 +288,10 @@ public class BaseAction {
         yPID.setMaxIOutput(integralLimit);
     }
 
+    /**
+     * Was meant to be a safety feature but I forgot what for.
+     * @return Whether or not to stop.
+     */
     public boolean isEmergencyStop(){
         if (endAction && identity == MOVE && xPID.getError() + yPID.getError() > 100)
             return true;
